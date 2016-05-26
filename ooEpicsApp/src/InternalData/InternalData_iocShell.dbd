@@ -1,0 +1,10 @@
+#==========================================================
+# InternalData_iocShell.dbd
+#
+# Register the exported stuff in this folder
+#
+# Created by: Zheqiao Geng, gengzq@slac.stanford.edu
+# Created on: 2011.06.30
+#==========================================================
+registrar(INTD_IOCShellRegister)
+registrar(INTD_initHooksRegister)

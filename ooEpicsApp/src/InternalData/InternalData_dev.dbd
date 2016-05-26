@@ -1,0 +1,23 @@
+#=====================================================================
+# InternalData_dev.dbd
+#
+# Definitions of the device support
+#
+# Created by: Zheqiao Geng
+# Created on: 2011.05.17
+# Description: Initial creation
+#======================================================================
+device(ao,       INST_IO, devAo_internalData,   "InternalData")
+device(bo,       INST_IO, devBo_internalData,   "InternalData")
+device(longout,  INST_IO, devLo_internalData,   "InternalData")
+device(waveform, INST_IO, devWf_internalData,   "InternalData")
+device(ai,       INST_IO, devAi_internalData,   "InternalData")
+device(bi,       INST_IO, devBi_internalData,   "InternalData")
+device(longin,   INST_IO, devLi_internalData,   "InternalData")
+device(mbbi,     INST_IO, devMbbi_internalData, "InternalData")
+device(mbbo,     INST_IO, devMbbo_internalData, "InternalData")
+device(stringout,INST_IO, devSo_internalData,   "InternalData")
+device(stringin, INST_IO, devSi_internalData,   "InternalData")
+
+
+
