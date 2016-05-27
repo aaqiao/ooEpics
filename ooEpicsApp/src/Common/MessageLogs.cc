@@ -22,15 +22,15 @@ namespace OOEPICS {
 //-----------------------------------------------
 MessageLogs::MessageLogs(const char *modNameIn)
 {
-	int i;
+    int i;
 
     // init variables
     strncpy(modName, modNameIn, MSGLOG_STR_LEN);
-	curStr = 0;
+    curStr = 0;
 
-	for(i = 0; i < MSGLOG_MAX_NUM; i ++) {
+    for(i = 0; i < MSGLOG_MAX_NUM; i ++) {
         strcpy(message[i], "");
-		msgStr[i].assign("");	
+        msgStr[i].assign("");    
     }
 
     // init the mutex
@@ -50,31 +50,31 @@ MessageLogs::~MessageLogs()
 //-----------------------------------------------
 void MessageLogs::postMessage(char *msg)
 {
-	int i, strId;
+    int i, strId;
     char timeStr[20];
 
     EPICSLIB_func_mutexMustLock(var_lockMsgBuf);
 
-	// get the current message
+    // get the current message
     getTimeString(timeStr, 1, "%4d%2d%2d%2d%2d%2d");
     stringReplace(timeStr, ' ', '0');
-	
-	if(curStr >= 0 && curStr < MSGLOG_MAX_NUM) {
-		msgStr[curStr].assign("[");
-		msgStr[curStr] += timeStr;
+    
+    if(curStr >= 0 && curStr < MSGLOG_MAX_NUM) {
+        msgStr[curStr].assign("[");
+        msgStr[curStr] += timeStr;
 //      msgStr[curStr] += "][";                 // make it shorter
 //      msgStr[curStr] += modName;
-		msgStr[curStr] += "]: ";
-		msgStr[curStr] += msg;
-	}
+        msgStr[curStr] += "]: ";
+        msgStr[curStr] += msg;
+    }
 
-	// update the pointer
-	curStr ++;
-	if(curStr >= MSGLOG_MAX_NUM)
-		curStr = 0;
+    // update the pointer
+    curStr ++;
+    if(curStr >= MSGLOG_MAX_NUM)
+        curStr = 0;
 
-	// generate the message block
-	memset((void *)message, 0, MSGLOG_MAX_LEN * MSGLOG_MAX_NUM * sizeof(char));
+    // generate the message block
+    memset((void *)message, 0, MSGLOG_MAX_LEN * MSGLOG_MAX_NUM * sizeof(char));
     strId = curStr;
 
     for(i = 0; i < MSGLOG_MAX_NUM; i++) {        
@@ -83,8 +83,8 @@ void MessageLogs::postMessage(char *msg)
 
         // - get the string id
         strId ++;      
-	    if(strId >= MSGLOG_MAX_NUM)
-		    strId = 0;
+        if(strId >= MSGLOG_MAX_NUM)
+            strId = 0;
     }
 
     EPICSLIB_func_mutexUnlock(var_lockMsgBuf);
@@ -112,10 +112,10 @@ void MessageLogs::printMessage()
 {
     int i;
 
-	cout << "----------------------- Message (raw string) -----------------------" << endl;
+    cout << "----------------------- Message (raw string) -----------------------" << endl;
     EPICSLIB_func_mutexMustLock(var_lockMsgBuf);
     for(i = 0; i < MSGLOG_MAX_NUM; i++) {
-//    	cout << message[i] << endl;
+//        cout << message[i] << endl;
         cout << msgStr[i] << endl;
     }
     EPICSLIB_func_mutexUnlock(var_lockMsgBuf);

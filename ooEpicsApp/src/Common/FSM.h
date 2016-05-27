@@ -52,22 +52,22 @@
 namespace OOEPICS {
 
 #define FSM_MAX_NUM_STATES          256
-#define FSM_MAX_NUM_JOBS		    256
+#define FSM_MAX_NUM_JOBS            256
 #define FSM_STRING_LEN              256
 
 #define FSM_EV_OK                   0
 #define FSM_EV_ERR                  1
 #define FSM_EV_TIMEOUT              2
 
-#define FSM_EXE_SUCCESS			    0					// execution successfully
+#define FSM_EXE_SUCCESS                0                    // execution successfully
 #define FSM_EXE_ERR_ENTRY_FAIL      1                   // entry function execution is failed
-#define FSM_EXE_ERR_NOTRANS		    2					// dest state is invalid, do not transfer
-#define FSM_EXE_ERR_TODEFAULT	    3					// dest/prev state are all invalid, transfer to default state
-#define FSM_EXE_ERR_TO1STVALID	    4					// dest/prev/default state are all invalid, transfer to the first valid state in the set
+#define FSM_EXE_ERR_NOTRANS            2                    // dest state is invalid, do not transfer
+#define FSM_EXE_ERR_TODEFAULT        3                    // dest/prev state are all invalid, transfer to default state
+#define FSM_EXE_ERR_TO1STVALID        4                    // dest/prev/default state are all invalid, transfer to the first valid state in the set
 #define FSM_EXE_ERR_TRANS_FAIL      5
 
-#define FSM_EVENT_MAX_MSG_NUM	    32					// maximum number of message in the queue
-#define FSM_EVENT_MAX_MSG_LEN	    32					// maximum length of message in the queue
+#define FSM_EVENT_MAX_MSG_NUM        32                    // maximum number of message in the queue
+#define FSM_EVENT_MAX_MSG_LEN        32                    // maximum length of message in the queue
 
 #define FSM_MIN_TICK_TIME           0.1                 // minimum time to pull the FSM, second
 
@@ -109,7 +109,7 @@ public:
 
 private:
     EPICSLIB_type_eventId   eventId;
-	EPICSLIB_type_msgQ		msgQ;
+    EPICSLIB_type_msgQ        msgQ;
     EPICSLIB_type_mutexId   mutexId; 
     epicsEventWaitStatus    status;
 };
@@ -163,11 +163,11 @@ public:
     void printFSM               ();
     int  registerState          (State *state, int stateCode);  // register the state
     int  initCurrentState       (int stateCode, int sel);
-	int  setDefaultState        (int stateCode);
-	int  getCurrentStateCode    ();
+    int  setDefaultState        (int stateCode);
+    int  getCurrentStateCode    ();
 
-	void registerJob            (Job *job, int jobCode);        // register the job
-	int  executeJob             (int jobCode, int flag);        // execute the job
+    void registerJob            (Job *job, int jobCode);        // register the job
+    int  executeJob             (int jobCode, int flag);        // execute the job
     void enableAllJobs          (int enabled);                  // enable or disable all jobs
     void enableJob              (int jobCode, int enabled);     // enable or disable a job
 
@@ -182,7 +182,7 @@ public:
     virtual int initFSM         () = 0;                         // init the FSM, normally put the FSM to some default state
     virtual int executeExtFunc  () = 0;                         // extend the execution function
 
-	char modName[FSM_STRING_LEN];
+    char modName[FSM_STRING_LEN];
     char fsmName[FSM_STRING_LEN];
 
 private:
@@ -190,14 +190,14 @@ private:
     State *stateSet[FSM_MAX_NUM_STATES];                        // state set, maintain the pointer of all states
     State *curState;                                            // current state
     State *preState;                                            // previous state
-	State *defaultState;									    // default state avoid dead lock
+    State *defaultState;                                        // default state avoid dead lock
 
     int nextStateCode;
 
-	State *getFirstValidState();
+    State *getFirstValidState();
 
     // jobs (optional, the FSM can also be used as engine for job executions)
-	Job *jobSet[FSM_MAX_NUM_JOBS];						        // job set, mainain the pointer of all jobs that will be exectued by this FSM
+    Job *jobSet[FSM_MAX_NUM_JOBS];                                // job set, mainain the pointer of all jobs that will be exectued by this FSM
 
     // event for this FSM
     FSMEvent var_event;

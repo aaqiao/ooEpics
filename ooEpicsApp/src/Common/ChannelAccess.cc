@@ -42,7 +42,7 @@ ChannelAccess::ChannelAccess(string                    pvNameIn,
                              CAUSR_CALLBACK            wtUserCallbackIn,
                              void                     *dataPtrIn,
                              void                     *userPtrIn,
-							 EPICSLIB_type_mutexId     mutexIdIn,
+                             EPICSLIB_type_mutexId     mutexIdIn,
                              EPICSLIB_type_eventId     connEventIn,
                              EPICSLIB_type_eventId     rdEventIn,
                              EPICSLIB_type_eventId     wtEventIn,  
@@ -64,7 +64,7 @@ ChannelAccess::ChannelAccess(string                    pvNameIn,
     wtUserCallback      = wtUserCallbackIn;
     dataBufMonitor      = dataPtrIn;
     userPtr             = userPtrIn;
-	mutexId				= mutexIdIn;
+    mutexId                = mutexIdIn;
     connEvent           = connEventIn;
     rdEvent             = rdEventIn;
     wtEvent             = wtEventIn;
@@ -111,59 +111,6 @@ ChannelAccess::~ChannelAccess()
     // clear the buffers
     if(dataBufRead)
         free(dataBufRead);
-}
-
-//-----------------------------------------------
-// get the PV value (old interface, do not use in new development)
-// this is used for the mode CA_READ_PULL
-// return:
-//    0 - success; 1 - failed
-//-----------------------------------------------
-int ChannelAccess::getValue(void *dataBuf)
-{
-    // check the input
-    if(!dataBuf || ca_state(channelID) != cs_conn) 
-        return 1;
-
-    // get the data with pulling
-    if(rdCtrl == CA_READ_PULL) {
-        caStatus = ca_array_get(dbrTypeWrite, reqElemsRead, channelID, dataBuf);    // the DBR type use the naked type same as for writing
-    } else {
-        return 1;
-    }
-
-    // check the return
-    if(caStatus == ECA_NORMAL) {
-        return 0;
-    } else {
-        return 1;
-    }
-}
-
-//-----------------------------------------------
-// put the PV value (old interface, do not use in new development)
-// this is used for the mode of CA_WRITE_PULL
-// return:
-//    0 - success; 1 - failed
-//-----------------------------------------------
-int ChannelAccess::putValue(void *dataBuf)
-{
-    // check the input
-    if(!dataBuf || ca_state(channelID) != cs_conn) 
-        return 1;
-
-    // put the data with different style
-    if(wtCtrl == CA_WRITE_PULL) {
-        caStatus = ca_array_put(dbrTypeWrite, nElems, channelID, dataBuf);          // write the number of element as remote PV
-    } else {
-        return 1;
-    }
-
-    // check the return
-    if(caStatus == ECA_NORMAL)
-        return 0;
-    else 
-        return 1;
 }
 
 //-----------------------------------------------
@@ -762,9 +709,9 @@ void ChannelAccess::callBackFunc_readAndMonitor(struct event_handler_args arg)
         pv -> nElems  = arg.count;
 
         if(pv -> dataBufRead) {
-			if(pv -> mutexId) EPICSLIB_func_mutexMustLock(pv -> mutexId);
+            if(pv -> mutexId) EPICSLIB_func_mutexMustLock(pv -> mutexId);
             memcpy(pv -> dataBufRead, arg.dbr, dbr_size_n(arg.type, arg.count));
-			if(pv -> mutexId) EPICSLIB_func_mutexUnlock(pv -> mutexId);
+            if(pv -> mutexId) EPICSLIB_func_mutexUnlock(pv -> mutexId);
         }
     }
 

@@ -33,8 +33,8 @@
 
 #include "ooEpicsMisc.h"
 
-#define OOEPICS_MAX_MODULE_NUM  	1024
-#define OOEPICS_MAX_CMD_DATA_NUM 	16
+#define OOEPICS_MAX_MODULE_NUM      1024
+#define OOEPICS_MAX_CMD_DATA_NUM    16
 
 //******************************************************
 // NAME SPACE OOEPICS

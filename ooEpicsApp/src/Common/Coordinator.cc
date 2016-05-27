@@ -26,11 +26,11 @@ Coordinator::Coordinator(const char *modNameIn, const char *crdNameIn)
         cout << "ERROR:Coordinator::Coordinator: Wrong Coordinator name!\n";
 
     // remember the input
-	strncpy(modName, modNameIn, CRD_STRING_LEN);
+    strncpy(modName, modNameIn, CRD_STRING_LEN);
     strncpy(crdName, crdNameIn, CRD_STRING_LEN);
  
-	for(i = 0; i < CRD_MAX_NUM_JOBS; i ++)
-		jobSet[i] = NULL;
+    for(i = 0; i < CRD_MAX_NUM_JOBS; i ++)
+        jobSet[i] = NULL;
 }
 
 Coordinator::~Coordinator() {}
@@ -40,16 +40,16 @@ Coordinator::~Coordinator() {}
 //-----------------------------------------------
 void Coordinator::registerJob(Job *job, int jobCode) 
 {
-	if(jobCode >= 0 && jobCode < CRD_MAX_NUM_JOBS) 
-		jobSet[jobCode] = job;
+    if(jobCode >= 0 && jobCode < CRD_MAX_NUM_JOBS) 
+        jobSet[jobCode] = job;
 }
 
 int  Coordinator::executeJob(int jobCode, int flag) 
 {
-	if(jobCode >= 0 && jobCode < CRD_MAX_NUM_JOBS && jobSet[jobCode]) 
-		return jobSet[jobCode] -> execute(flag);
-	else 
-		return -1;
+    if(jobCode >= 0 && jobCode < CRD_MAX_NUM_JOBS && jobSet[jobCode]) 
+        return jobSet[jobCode] -> execute(flag);
+    else 
+        return -1;
 }
 
 void Coordinator::enableAllJobs(int enabled)

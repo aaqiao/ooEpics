@@ -385,21 +385,21 @@ static const iocshArg        setModule_Arg15   = {"data14", iocshArgString};
 static const iocshArg        setModule_Arg16   = {"data15", iocshArgString};
 static const iocshArg        setModule_Arg17   = {"data16", iocshArgString};
 static const iocshArg *const setModule_Args[18] = {&setModule_Arg0,  &setModule_Arg1,  &setModule_Arg2,  &setModule_Arg3,  &setModule_Arg4,  &setModule_Arg5,
-												   &setModule_Arg6,  &setModule_Arg7,  &setModule_Arg8,  &setModule_Arg9,  &setModule_Arg10, &setModule_Arg11,
-												   &setModule_Arg12, &setModule_Arg13, &setModule_Arg14, &setModule_Arg15, &setModule_Arg16, &setModule_Arg17};
+                                                   &setModule_Arg6,  &setModule_Arg7,  &setModule_Arg8,  &setModule_Arg9,  &setModule_Arg10, &setModule_Arg11,
+                                                   &setModule_Arg12, &setModule_Arg13, &setModule_Arg14, &setModule_Arg15, &setModule_Arg16, &setModule_Arg17};
 static const iocshFuncDef    setModule_FuncDef  = {"setModule", 18, setModule_Args};
 static void  setModule_CallFunc(const iocshArgBuf *args) 
 {
-	int i, arg_num;
-	char *data[OOEPICS_MAX_CMD_DATA_NUM];
+    int i, arg_num;
+    char *data[OOEPICS_MAX_CMD_DATA_NUM];
 
-	if(OOEPICS_MAX_CMD_DATA_NUM < 16) arg_num = OOEPICS_MAX_CMD_DATA_NUM;
-	else 					  	      arg_num = 16;
+    if(OOEPICS_MAX_CMD_DATA_NUM < 16) arg_num = OOEPICS_MAX_CMD_DATA_NUM;
+    else                                 arg_num = 16;
 
-	for(i = 0; i < arg_num; i ++)
-		data[i] = args[i+2].sval;
-	
-	setModule(args[0].sval, args[1].sval, data);
+    for(i = 0; i < arg_num; i ++)
+        data[i] = args[i+2].sval;
+    
+    setModule(args[0].sval, args[1].sval, data);
 }
 
 static const iocshFuncDef   printModuleType_FuncDef = {"printModuleType", 0, NULL};

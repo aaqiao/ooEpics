@@ -22,6 +22,9 @@
 //  - PV name passed by string
 //  - Read time stamp and alarm info
 //  - Provide function to do datatype conversion
+//
+// Modified by Zheqiao Geng on 27.05.2016
+// Deleted the old interfaces
 //=========================================================
 #ifndef CHANNELACCESS_H
 #define CHANNELACCESS_H
@@ -96,17 +99,13 @@ public:
                   CAUSR_CALLBACK            wtUserCallbackIn,           // user callback when writing is done if the writing callback is enabled
                   void                     *dataPtrIn,                  // this is used for the PV with monitring reading
                   void                     *userPtrIn,                  // user pointer that will be passed to the user callback functions
-				  EPICSLIB_type_mutexId     mutexIdIn,					// used to lock the data buffer when monitoring or callback reading have data arrived
+                  EPICSLIB_type_mutexId     mutexIdIn,                  // used to lock the data buffer when monitoring or callback reading have data arrived
                   EPICSLIB_type_eventId     connEventIn,                // optional event that will be fired with the connection callback
                   EPICSLIB_type_eventId     rdEventIn,                  // optional event that will be fired with the reading callback
                   EPICSLIB_type_eventId     wtEventIn,                  // optional event that will be fired with the writing callback
                   int                       callBackPriorityIn);
 
    ~ChannelAccess();
-
-    // old interfaces, should not be used in new development
-    int  getValue(void *dataBuf);
-    int  putValue(void *dataBuf);    
 
     // PV access routines
     void connect            ();                                                     // setup the connection which is managed by the general callback function
@@ -170,7 +169,7 @@ private:
     CAUSR_CALLBACK          rdUserCallback;         // see up
     CAUSR_CALLBACK          wtUserCallback;         // see up
 
-	EPICSLIB_type_mutexId   mutexId;
+    EPICSLIB_type_mutexId   mutexId;
     EPICSLIB_type_eventId   connEvent;              // user connection event
     EPICSLIB_type_eventId   rdEvent;                // user read event
     EPICSLIB_type_eventId   wtEvent;                // user write event

@@ -37,6 +37,9 @@
  * Modified by Zheqiao Geng on 18.12.2015
  * Added the function to generate save/restore request file and archiver conf file with different
  * module name string
+ *
+ * Modified by Zheqiao Geng on 27.05.2016
+ * Deleted the "oldstring" type because it is obsolete
  ****************************************************/
 #ifndef INTERNAL_DATA_H
 #define INTERNAL_DATA_H
@@ -75,8 +78,7 @@ typedef enum {
     INTD_LONG,
     INTD_ULONG,
     INTD_FLOAT,
-    INTD_DOUBLE,
-    INTD_OLDSTRING
+    INTD_DOUBLE
 } INTD_enum_dataType;
 
 /**

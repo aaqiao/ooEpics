@@ -21,6 +21,9 @@
 //
 // Modified by Zheqiao Geng on 21.03.2016
 // Extended the implementation to provide the possibility with internal data buffers
+//
+// Modified by Zheqiao Geng on 27.05.2016
+// Deleted the old interfaces
 //=========================================================
 #ifndef LOCALPV_H
 #define LOCALPV_H
@@ -46,19 +49,7 @@ namespace OOEPICS {
 class LocalPV
 {
 public:
-    LocalPV();
-    
-    // these are old interfaces, do not use them for the new design
-    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsInt8       *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
-    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsUInt8      *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
-    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsInt16      *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
-    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsUInt16     *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
-    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsInt32      *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
-    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsUInt32     *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
-    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsFloat32    *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
-    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsFloat64    *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
-    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsOldString  *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
-
+    LocalPV();    
    ~LocalPV();
 
     // force the value of the output PV (AO, BO, LO, MBBO, WFO) to change (also process the PV)

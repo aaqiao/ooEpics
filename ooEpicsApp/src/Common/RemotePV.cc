@@ -107,8 +107,8 @@ int RemotePVList::getPVNameList(string fileName, string localMacros)
     MAC_HANDLE *macHandle = NULL;
     char       **macPairs = NULL;
 
-	char strMacroed1[256];
-	char strMacroed2[256];
+    char strMacroed1[256];
+    char strMacroed2[256];
 
     // test if the filename is Ok or not
     if(fileName.empty()) {
@@ -124,19 +124,19 @@ int RemotePVList::getPVNameList(string fileName, string localMacros)
         return 1;
     }
 
-	// make up the macro for this mapping file (study if there is memory leakge or not! 20150914)
-	if(!localMacros.empty()) {
+    // make up the macro for this mapping file (study if there is memory leakge or not! 20150914)
+    if(!localMacros.empty()) {
         if(macCreateHandle(&macHandle, NULL) == 0) {
             macParseDefns(macHandle, localMacros.c_str(), &macPairs);
             if(macPairs == NULL) {
-	    		macDeleteHandle(macHandle);
-	    		macHandle = NULL;
-			} else {
-				macInstallMacros(macHandle, macPairs);
-				free((void *)macPairs);
-			}
-        }		
-	}
+                macDeleteHandle(macHandle);
+                macHandle = NULL;
+            } else {
+                macInstallMacros(macHandle, macPairs);
+                free((void *)macPairs);
+            }
+        }        
+    }
 
     cout << "INFO:RemotePVList::getPVNameList: load from file " << fileName << ", with specific macros of " << localMacros << endl;
     //cout << "-----------------------------------------------------------" << endl;
@@ -196,11 +196,11 @@ int RemotePVList::getPVNameList(string fileName, string localMacros)
         }
     }
 
-	// close the file
+    // close the file
     sourceFile.close();  
 
-	// delete the macro staff
-	if(macHandle) macDeleteHandle(macHandle);
+    // delete the macro staff
+    if(macHandle) macDeleteHandle(macHandle);
 
     return 0;
 }
@@ -251,22 +251,22 @@ int RemotePVList::mapPVNodeNames(string macros)
     MAC_HANDLE *macHandle = NULL;
     char       **macPairs = NULL;
 
-	char strMacroed1[256];
-	char strMacroed2[256];
+    char strMacroed1[256];
+    char strMacroed2[256];
 
-	// make up the macro (study if there is memory leakge or not! 20150914)
-	if(!macros.empty()) {
+    // make up the macro (study if there is memory leakge or not! 20150914)
+    if(!macros.empty()) {
         if(macCreateHandle(&macHandle, NULL) == 0) {
             macParseDefns(macHandle, macros.c_str(), &macPairs);
             if(macPairs == NULL) {
-	    		macDeleteHandle(macHandle);
-	    		macHandle = NULL;
-			} else {
-				macInstallMacros(macHandle, macPairs);
-				free((void *)macPairs);
-			}
-        }		
-	}
+                macDeleteHandle(macHandle);
+                macHandle = NULL;
+            } else {
+                macInstallMacros(macHandle, macPairs);
+                free((void *)macPairs);
+            }
+        }        
+    }
 
     // apply the macro to the pvNameList
     if(macHandle) {
@@ -292,8 +292,8 @@ int RemotePVList::mapPVNodeNames(string macros)
         }
     }
 
-	// delete the macro staff
-	if(macHandle) macDeleteHandle(macHandle);
+    // delete the macro staff
+    if(macHandle) macDeleteHandle(macHandle);
 
     // clean the map counter
     cntRemotePVMapped = 0;
@@ -644,12 +644,12 @@ int RemotePV::createCA(unsigned long             reqElemsReadIn,
                                         CA_DEFAULT_PRIORITY);
 
         if(pvCAChannel) {
-	        pvCAChannel -> connect();	   
+            pvCAChannel -> connect();       
             return 0;
         } else {
             cout << "ERROR:RemotePV::createCA: Failed to create " << pvLocalIdStr << " / " << pvNameStr << "!" << endl;
             return 1;
-	    }
+        }
     }
     else
         cout<< "ERROR:RemotePV::createCA: Empty PV name for " << pvLocalIdStr << endl;
@@ -687,12 +687,12 @@ int RemotePV::createCA  (unsigned long             reqElemsReadIn,
                                         CA_DEFAULT_PRIORITY);
 
         if(pvCAChannel) {
-	        pvCAChannel -> connect();	   
+            pvCAChannel -> connect();       
             return 0;
         } else {
             cout << "ERROR:RemotePV::createCA: Failed to create " << pvLocalIdStr << " / " << pvNameStr << "!" << endl;
             return 1;
-	    }
+        }
     }
     else
         cout<< "ERROR:RemotePV::createCA: Empty PV name for " << pvLocalIdStr << endl;
@@ -710,12 +710,6 @@ void RemotePV::deleteCA()
         pvCAChannel = NULL;
     }
 }
-
-//-----------------------------------------------
-// Old interface for CA access, should not be used in new applications
-//-----------------------------------------------
-int RemotePV::getValue(void *dataBuf) {if(!pvCAChannel) return 1; return pvCAChannel -> getValue(dataBuf);}
-int RemotePV::putValue(void *dataBuf) {if(!pvCAChannel) return 1; return pvCAChannel -> putValue(dataBuf);}
 
 //-----------------------------------------------
 // Interface for CA access (direct wrapper of Channel Access class)

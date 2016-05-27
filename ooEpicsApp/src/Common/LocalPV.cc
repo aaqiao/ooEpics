@@ -28,7 +28,6 @@ namespace OOEPICS {
 // construction for LocalPV 
 // The data node will be deleted by the INTD module when EPICS exits
 //-----------------------------------------------
-//~~~~~~~~~~~~~~~~~~~~~~~
 LocalPV::LocalPV()
 {
     // init all variables
@@ -56,61 +55,6 @@ LocalPV::LocalPV()
     ptr_dataBuf         = NULL; 
 
     var_onceCreated     = 0;
-}
-
-//~~~~~~~~~~~~~~~~~~~~~~~
-LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsInt8 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
-{
-    fun_maniCallback(recordType, callback); 
-    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_CHAR, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
-}
-//~~~~~~~~~~~~~~~~~~~~~~~    
-LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsUInt8 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
-{
-    fun_maniCallback(recordType, callback);    
-    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_UCHAR, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
-}
-//~~~~~~~~~~~~~~~~~~~~~~~
-LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsInt16 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
-{
-    fun_maniCallback(recordType, callback); 
-    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_SHORT, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
-}
-//~~~~~~~~~~~~~~~~~~~~~~~
-LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsUInt16 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
-{
-    fun_maniCallback(recordType, callback); 
-    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_USHORT, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
-}
-//~~~~~~~~~~~~~~~~~~~~~~~
-LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsInt32 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
-{
-    fun_maniCallback(recordType, callback); 
-    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_LONG, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
-}
-//~~~~~~~~~~~~~~~~~~~~~~~
-LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsUInt32 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
-{
-    fun_maniCallback(recordType, callback); 
-    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_ULONG, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
-}
-//~~~~~~~~~~~~~~~~~~~~~~~
-LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsFloat32 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
-{
-    fun_maniCallback(recordType, callback); 
-    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_FLOAT, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
-}
-//~~~~~~~~~~~~~~~~~~~~~~~
-LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsFloat64 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
-{
-    fun_maniCallback(recordType, callback); 
-    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_DOUBLE, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
-}
-//~~~~~~~~~~~~~~~~~~~~~~~
-LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsOldString *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
-{
-    fun_maniCallback(recordType, callback);
-    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_OLDSTRING, rCallback, wCallback, mutexId, eventId, recordType, scanType);
 }
 
 //-----------------------------------------------
