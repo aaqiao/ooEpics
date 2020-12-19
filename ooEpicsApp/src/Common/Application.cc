@@ -19,16 +19,21 @@ namespace OOEPICS {
 //-----------------------------------------------
 Application::Application(const char *appName) 
 {
-    if(!appName || !appName[0])
-        cout << "ERROR:Application::Application: Illegal application name!\n";
-    else
+    if(!appName || !appName[0]) {
+        cout << "ERROR: Application::Application: Illegal module name!\n";
+    } else {
         strcpy(name, appName);
+        cout << "INFO: Application::Application: Module " << name << " created." << endl;
+    }
 }
 
 //-----------------------------------------------
-// distruction
+// destruction
 //-----------------------------------------------
-Application::~Application() {}
+Application::~Application()
+{
+    cout << "INFO: Application::~Application: Module " << name << " deleted!" << endl;
+}
 
 }
 //******************************************************

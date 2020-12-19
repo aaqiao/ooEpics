@@ -72,7 +72,7 @@ static void epicsExitDelete(void *ptr)
         if(mod -> domDevice)    delete mod -> domDevice;
         if(mod -> app)          delete mod -> app;
 
-        cout << "INFO:ModuleManager: module " << mod -> moduleName << " deleted!" << endl;
+        cout << "INFO: ModuleManager: module " << mod -> moduleName << " deleted!" << endl;
         
         delete mod;   
     }
@@ -81,7 +81,7 @@ static void epicsExitDelete(void *ptr)
     while((modType = (ModuleType *)ellLast(&gvar_moduleTypeList))) {
 
         ellDelete(&gvar_moduleTypeList, &modType -> node);
-        cout << "INFO:ModuleManager: module type " << modType -> moduleTypeName << " deleted!" << endl;       
+        cout << "INFO: ModuleManager: module type " << modType -> moduleTypeName << " deleted!" << endl;       
         delete modType;   
     }
 }
@@ -102,12 +102,12 @@ void moduleTypeRegister(const char *moduleTypeName, ModuleConfig *modConfig)
 {
     // check the input parameters
     if(!moduleTypeName || !moduleTypeName[0]) {
-        cout << "ERROR:moduleTypeRegister: Invalid module type name!\n";
+        cout << "ERROR: moduleTypeRegister: Invalid module type name!\n";
         return;
     }
 
     if(!modConfig) {
-        cout << "ERROR:moduleTypeRegister: Invalid module config object for the type of " << moduleTypeName << "!\n";
+        cout << "ERROR: moduleTypeRegister: Invalid module config object for the type of " << moduleTypeName << "!\n";
         return;
     }
 
@@ -128,7 +128,7 @@ void moduleTypeRegister(const char *moduleTypeName, ModuleConfig *modConfig)
         modtype -> modConfig = modConfig;                       // get the configure API object    
         ellAdd(&gvar_moduleTypeList, &modtype -> node);
     } else {
-        cout << "ERROR:moduleTypeRegister: Failed to create module type node for " << moduleTypeName << "!\n";
+        cout << "ERROR: moduleTypeRegister: Failed to create module type node for " << moduleTypeName << "!\n";
     }
 }
  
@@ -168,7 +168,7 @@ ModuleManager::~ModuleManager()
     }
 */
 
-    cout << "INFO:ModuleManager: Module Manager object deleted!" << endl;
+    cout << "INFO: ModuleManager: Module Manager object deleted!" << endl;
 }
 
 //-----------------------------------------------
@@ -176,8 +176,6 @@ ModuleManager::~ModuleManager()
 //-----------------------------------------------
 void ModuleManager::moduleInstanceRegister(const char *moduleTypeName, ModuleConfig *modConfig, const char *moduleName, void *module, int modCategory)
 {
-    moduleInstanceListMutex.lock();
-   
     ModuleInstance *mod = new ModuleInstance;
 
     if(mod) {
@@ -201,12 +199,12 @@ void ModuleManager::moduleInstanceRegister(const char *moduleTypeName, ModuleCon
             mod -> app          = (Application *)module;        
         }
 
+        moduleInstanceListMutex.lock();
         ellAdd(&moduleInstanceList, &mod -> node);
+        moduleInstanceListMutex.unlock();
     } else {
-        cout << "ERROR:ModuleManager::moduleInstanceRegister: Failed to register the module " << moduleName << " with type of " << moduleTypeName <<"!" << endl;
+        cout << "ERROR: ModuleManager::moduleInstanceRegister: Failed to register the module " << moduleName << " with type of " << moduleTypeName <<"!" << endl;
     }
-
-    moduleInstanceListMutex.unlock();
 }
 
 //-----------------------------------------------
@@ -229,7 +227,7 @@ void ModuleManager::createModule(const char *moduleTypeName, const char *moduleN
 
     // ---- create new module instance with the API ----
     if(mtypeFound) pmtype -> modConfig -> moduleCreate(moduleName, moduleInfo, priority);
-    else cout << "ERROR:ModuleManager::createModule: Module type of " << moduleTypeName << " not found!" << endl;
+    else cout << "ERROR: ModuleManager::createModule: Module type of " << moduleTypeName << " not found!" << endl;
 }
 
 //-----------------------------------------------
@@ -244,7 +242,7 @@ void ModuleManager::initModule(const char *moduleName)
     if(mod)
         mod -> modConfig -> moduleInit(mod);
     else 
-        cout << "ERROR:ModuleManager::initModule: Cannot find the module of " << moduleName << "!" << endl; 
+        cout << "ERROR: ModuleManager::initModule: Cannot find the module of " << moduleName << "!" << endl; 
 }
 
 //-----------------------------------------------
@@ -259,7 +257,7 @@ void ModuleManager::setModule(const char *moduleName, const char *cmd, char **da
     if(mod)
         mod -> modConfig -> moduleSet(mod, cmd, data);
     else 
-        cout << "ERROR:ModuleManager::setModule: Cannot find the module of " << moduleName << "!" << endl;  
+        cout << "ERROR: ModuleManager::setModule: Cannot find the module of " << moduleName << "!" << endl;  
 }
 
 //-----------------------------------------------
@@ -271,8 +269,6 @@ ModuleInstance *ModuleManager::getModuleInstance(const char *moduleName)
 
     ModuleInstance *mod = 0;
 
-    moduleInstanceListMutex.lock();
-
     for(mod = (ModuleInstance *)ellFirst(&moduleInstanceList);
         mod;
         mod = (ModuleInstance *)ellNext(&mod -> node)) {
@@ -282,8 +278,6 @@ ModuleInstance *ModuleManager::getModuleInstance(const char *moduleName)
         }
     }
     
-    moduleInstanceListMutex.unlock();
-
     if(modFound) return mod;
     else return 0;
 }
@@ -385,21 +379,21 @@ static const iocshArg        setModule_Arg15   = {"data14", iocshArgString};
 static const iocshArg        setModule_Arg16   = {"data15", iocshArgString};
 static const iocshArg        setModule_Arg17   = {"data16", iocshArgString};
 static const iocshArg *const setModule_Args[18] = {&setModule_Arg0,  &setModule_Arg1,  &setModule_Arg2,  &setModule_Arg3,  &setModule_Arg4,  &setModule_Arg5,
-                                                   &setModule_Arg6,  &setModule_Arg7,  &setModule_Arg8,  &setModule_Arg9,  &setModule_Arg10, &setModule_Arg11,
-                                                   &setModule_Arg12, &setModule_Arg13, &setModule_Arg14, &setModule_Arg15, &setModule_Arg16, &setModule_Arg17};
+												   &setModule_Arg6,  &setModule_Arg7,  &setModule_Arg8,  &setModule_Arg9,  &setModule_Arg10, &setModule_Arg11,
+												   &setModule_Arg12, &setModule_Arg13, &setModule_Arg14, &setModule_Arg15, &setModule_Arg16, &setModule_Arg17};
 static const iocshFuncDef    setModule_FuncDef  = {"setModule", 18, setModule_Args};
 static void  setModule_CallFunc(const iocshArgBuf *args) 
 {
-    int i, arg_num;
-    char *data[OOEPICS_MAX_CMD_DATA_NUM];
+	int i, arg_num;
+	char *data[OOEPICS_MAX_CMD_DATA_NUM];
 
-    if(OOEPICS_MAX_CMD_DATA_NUM < 16) arg_num = OOEPICS_MAX_CMD_DATA_NUM;
-    else                                 arg_num = 16;
+	if(OOEPICS_MAX_CMD_DATA_NUM < 16) arg_num = OOEPICS_MAX_CMD_DATA_NUM;
+	else 					  	      arg_num = 16;
 
-    for(i = 0; i < arg_num; i ++)
-        data[i] = args[i+2].sval;
-    
-    setModule(args[0].sval, args[1].sval, data);
+	for(i = 0; i < arg_num; i ++)
+		data[i] = args[i+2].sval;
+	
+	setModule(args[0].sval, args[1].sval, data);
 }
 
 static const iocshFuncDef   printModuleType_FuncDef = {"printModuleType", 0, NULL};

@@ -28,6 +28,7 @@ namespace OOEPICS {
 // construction for LocalPV 
 // The data node will be deleted by the INTD module when EPICS exits
 //-----------------------------------------------
+//~~~~~~~~~~~~~~~~~~~~~~~
 LocalPV::LocalPV()
 {
     // init all variables
@@ -55,6 +56,70 @@ LocalPV::LocalPV()
     ptr_dataBuf         = NULL; 
 
     var_onceCreated     = 0;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~
+LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsInt8 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
+{
+    ptr_dataBuf = NULL; 
+    fun_maniCallback(recordType, callback); 
+    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_CHAR, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
+}
+//~~~~~~~~~~~~~~~~~~~~~~~    
+LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsUInt8 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
+{
+    ptr_dataBuf = NULL;
+    fun_maniCallback(recordType, callback);    
+    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_UCHAR, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
+}
+//~~~~~~~~~~~~~~~~~~~~~~~
+LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsInt16 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
+{
+    ptr_dataBuf = NULL;
+    fun_maniCallback(recordType, callback); 
+    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_SHORT, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
+}
+//~~~~~~~~~~~~~~~~~~~~~~~
+LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsUInt16 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
+{
+    ptr_dataBuf = NULL;
+    fun_maniCallback(recordType, callback); 
+    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_USHORT, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
+}
+//~~~~~~~~~~~~~~~~~~~~~~~
+LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsInt32 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
+{
+    ptr_dataBuf = NULL;
+    fun_maniCallback(recordType, callback); 
+    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_LONG, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
+}
+//~~~~~~~~~~~~~~~~~~~~~~~
+LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsUInt32 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
+{
+    ptr_dataBuf = NULL;
+    fun_maniCallback(recordType, callback); 
+    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_ULONG, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
+}
+//~~~~~~~~~~~~~~~~~~~~~~~
+LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsFloat32 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
+{
+    ptr_dataBuf = NULL;
+    fun_maniCallback(recordType, callback); 
+    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_FLOAT, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
+}
+//~~~~~~~~~~~~~~~~~~~~~~~
+LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsFloat64 *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
+{
+    ptr_dataBuf = NULL;
+    fun_maniCallback(recordType, callback); 
+    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_DOUBLE, rCallback, wCallback, mutexId, eventId, recordType, scanType);  
+}
+//~~~~~~~~~~~~~~~~~~~~~~~
+LocalPV::LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsOldString *dataPtr, unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId)
+{
+    ptr_dataBuf = NULL;
+    fun_maniCallback(recordType, callback);
+    node = INTD_API_createDataNode(moduleName, dataName, supStr, unitStr, (void *)(dataPtr), privatePtr, pointNum, ioIntScan, INTD_OLDSTRING, rCallback, wCallback, mutexId, eventId, recordType, scanType);
 }
 
 //-----------------------------------------------
@@ -258,6 +323,36 @@ string LocalPV::getValueString()
     return strOut;
 }
 
+double LocalPV::getField(string fieldName)
+{
+    int status;
+    char data[128];
+
+    // check 
+    if(!node || fieldName.empty()) 
+        return -1.0e12;
+
+    // get one value
+    status = INTD_API_getFieldData(node, fieldName.c_str(), (void *)data, 1);
+
+    if(status == 0)
+        return *((double *)data);
+    else
+        return -1.0e13;
+}
+
+int LocalPV::putField(string fieldName, double data)
+{
+    double localData = data;
+
+    // check 
+    if(!node || fieldName.empty()) 
+        return 1;
+
+    // put the field
+    return INTD_API_putFieldData(node, fieldName.c_str(), &localData, 1);
+}
+
 //-----------------------------------------------
 // set value of a scalar input PV, the input data will be converted to the datatype of the PV.
 // here epicsFloat64 type is used as the argument because any input type will be first
@@ -285,6 +380,33 @@ int LocalPV::setValue(epicsFloat64 dataIn)
     }
 
     if(var_mutexId) epicsMutexUnlock(var_mutexId);
+
+    return status;
+}
+
+//-----------------------------------------------
+// same as the function above but also set the alarm based on the value of BI record
+// so this function can only be used on BI records
+// return:
+//      0 - success; 1 - failure
+//-----------------------------------------------
+int LocalPV::setValue(epicsFloat64 dataIn, LPV_enum_BIAlarm alarmSel)
+{
+    int status;
+
+    // set the data first
+    status = setValue(dataIn);
+    if(status != 0)
+        return status;
+
+    // if data setting is OK, raise alarm
+    if(short(dataIn) == 0) {
+        if(alarmSel == LPV_BI_ALARM)    status = raiseAlarm(STATE_ALARM, MAJOR_ALARM);
+        else                            status = raiseAlarm(STATE_ALARM, NO_ALARM);
+    } else {
+        if(alarmSel == LPV_BI_ALARM)    status = raiseAlarm(STATE_ALARM, NO_ALARM);
+        else                            status = raiseAlarm(STATE_ALARM, MAJOR_ALARM);
+    }
 
     return status;
 }
@@ -640,6 +762,38 @@ unsigned int LocalPV::fun_getDataSize(INTD_enum_dataType dataType)
     }
 
     return dsize;
+}
+
+int LocalPV::setDesc(const char *descStr)
+{
+    if(!descStr || !node)
+        return 1;
+
+    return INTD_API_setDescription(node, descStr);
+}
+
+int LocalPV::setPrec(unsigned int prec)
+{
+    if(!node)
+        return 1;    
+
+    return INTD_API_setPrecision(node, prec);
+}
+
+int LocalPV::setAlias(const char *aliasStr)
+{
+    if(!aliasStr || !node)
+        return 1;
+
+    return INTD_API_setAlias(node, aliasStr);
+}
+
+int LocalPV::setAsg(const char *asgStr)
+{
+    if(!asgStr || !node)
+        return 1;
+
+    return INTD_API_setAsg(node, asgStr);
 }
 
 } 

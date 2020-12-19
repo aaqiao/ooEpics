@@ -64,7 +64,7 @@ class Application;
 class ModuleType
 {
 public:
-    ELLNODE           node;
+    ELLNODE	       node;
     char           moduleTypeName[OOEPICS_NAMESTR_LEN];     // unique name of the module type
     ModuleConfig  *modConfig;                               // configuration API object for the module type
 };
@@ -75,7 +75,7 @@ public:
 class ModuleInstance
 {
 public:
-    ELLNODE           node;
+    ELLNODE	       node;
     char           moduleTypeName[OOEPICS_NAMESTR_LEN];     // module type of this instance
     ModuleConfig  *modConfig;                               // configuration API object for the module type
     char           moduleName[OOEPICS_NAMESTR_LEN];         // module instance name

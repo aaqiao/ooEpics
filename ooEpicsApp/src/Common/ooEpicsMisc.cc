@@ -51,7 +51,7 @@ void eraseChar(string *str, const char *c)
     
     while((charPos = str -> find(c)) != (int)string::npos) {    
         str -> erase(charPos, 1);
-    }      
+    }  	
 }
 
 //-----------------------------------------------
@@ -63,7 +63,7 @@ void replaceChar(string *str, const char *c1, const char *c2)
     
     while((charPos = str -> find(c1)) != (int)string::npos) {    
         str -> replace(charPos, 1, c2);
-    }          
+    }  		
 }
         
 //-----------------------------------------------
@@ -84,8 +84,8 @@ void stringToUpper(string *str)
         t2[0] = capChar[i];
         t2[1] = '\0';
         
-        replaceChar(str, t1, t2);        
-    }                
+        replaceChar(str, t1, t2);    	
+    }            	
 }
 
 //-----------------------------------------------
@@ -106,8 +106,8 @@ int pvTimeGetCurrentDouble(double *pTime)
     epicsTimeStamp stamp;
 
     *pTime = 0.0;
-    if(epicsTimeGetCurrent(&stamp) == epicsTimeERROR)
-    return -1;
+    if(epicsTimeGetCurrent(&stamp) != epicsTimeOK)
+	return -1;
 
     *pTime = (double)stamp.secPastEpoch + ((double)stamp.nsec / 1e9);
     return 0;

@@ -12,19 +12,47 @@
  ****************************************************/
 #include "recordGenerate.h"
 
-void INTD_RECORD_AO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, char *outStr)
+void INTD_RECORD_AO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, const char *descStr, unsigned int precVal, const char *aliasStr, const char *asgStr, char *outStr)
 {
+    int al;
+    char precStr[3];    
+    char als[128] = "";
+
     if(!recName || !scanMethod || !outStr) return;
+
+    sprintf(precStr, "%d", precVal);
+
+    if(strlen(aliasStr) > 0)    al = 1;
+    else                        al = 0;
+
+    if(al) {
+        strcpy(als, "$(name_space)$(module_name)-");
+        strcat(als, aliasStr);
+    }    
 
     strcpy(outStr, "record(ao, $(name_space)");
     strcat(outStr, "$(module_name)");
     strcat(outStr, subModName);
     strcat(outStr, ":");
     strcat(outStr, recName);
-    strcat(outStr, ") {\n        field(SCAN, \"");
+    strcat(outStr, ") {\n");        
+
+    if(al) {
+        strcat(outStr, "        alias(");
+        strcat(outStr, als);
+        strcat(outStr, ")\n");
+    }
+
+    strcat(outStr,      "        field(DESC, \"");
+    strcat(outStr, descStr);
+    strcat(outStr, "\")\n        field(SCAN, \"");
     strcat(outStr, scanMethod);
+    strcat(outStr, "\")\n        field(ASG, \"");
+    strcat(outStr, asgStr);
     strcat(outStr, "\")\n        field(EGU, \"");
     strcat(outStr, unitStr);
+    strcat(outStr, "\")\n        field(PREC, \"");
+    strcat(outStr, precStr);
     strcat(outStr, "\")\n        field(DTYP, \"InternalData\")\n        field(OUT, \"@");
     strcat(outStr, "$(module_name)");
     strcat(outStr, ".");
@@ -32,19 +60,47 @@ void INTD_RECORD_AO(const char *datName, const char *subModName, const char *rec
     strcat(outStr, "\")\n}");     
 }
 
-void INTD_RECORD_AI(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, char *outStr)
+void INTD_RECORD_AI(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, const char *descStr, unsigned int precVal, const char *aliasStr, const char *asgStr, char *outStr)
 {
+    int al;
+    char precStr[3];    
+    char als[128] = "";
+
     if(!recName || !scanMethod || !outStr) return;
+
+    sprintf(precStr, "%d", precVal);
+
+    if(strlen(aliasStr) > 0)    al = 1;
+    else                        al = 0;
+
+    if(al) {
+        strcpy(als, "$(name_space)$(module_name)-");
+        strcat(als, aliasStr);
+    }    
 
     strcpy(outStr, "record(ai, $(name_space)");
     strcat(outStr, "$(module_name)");
     strcat(outStr, subModName);
     strcat(outStr, ":");
     strcat(outStr, recName);
-    strcat(outStr, ") {\n        field(SCAN, \"");
+    strcat(outStr, ") {\n");        
+
+    if(al) {
+        strcat(outStr, "        alias(");
+        strcat(outStr, als);
+        strcat(outStr, ")\n");
+    }
+
+    strcat(outStr,      "        field(DESC, \"");
+    strcat(outStr, descStr);
+    strcat(outStr, "\")\n        field(SCAN, \"");
     strcat(outStr, scanMethod);
+    strcat(outStr, "\")\n        field(ASG, \"");
+    strcat(outStr, asgStr);
     strcat(outStr, "\")\n        field(EGU, \"");
     strcat(outStr, unitStr);
+    strcat(outStr, "\")\n        field(PREC, \"");
+    strcat(outStr, precStr);
     strcat(outStr, "\")\n        field(DTYP, \"InternalData\")\n        field(INP, \"@");
     strcat(outStr, "$(module_name)");
     strcat(outStr, ".");    
@@ -52,14 +108,24 @@ void INTD_RECORD_AI(const char *datName, const char *subModName, const char *rec
     strcat(outStr, "\")\n}");     
 }
 
-void INTD_RECORD_BO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr, char *outStr)
+void INTD_RECORD_BO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr,  const char *descStr, const char *aliasStr, const char *asgStr, char *outStr)
 {
+    int al;
+    char als[128] = "";
 	char strOne[128]  = "";
 	char strZero[128] = "";
 	char *pfh = NULL;
 	char *ped = NULL;
 
     if(!recName || !scanMethod || !outStr) return;
+
+    if(strlen(aliasStr) > 0)    al = 1;
+    else                        al = 0;
+
+    if(al) {
+        strcpy(als, "$(name_space)$(module_name)-");
+        strcat(als, aliasStr);
+    }    
 
 	/* get the strings for bo */
     pfh = strchr(supStr, ';');
@@ -76,8 +142,20 @@ void INTD_RECORD_BO(const char *datName, const char *subModName, const char *rec
     strcat(outStr, subModName);
     strcat(outStr, ":");
     strcat(outStr, recName);
-    strcat(outStr, ") {\n        field(SCAN, \"");
+    strcat(outStr, ") {\n");        
+
+    if(al) {
+        strcat(outStr, "        alias(");
+        strcat(outStr, als);
+        strcat(outStr, ")\n");
+    }
+
+    strcat(outStr,      "        field(DESC, \"");
+    strcat(outStr, descStr);
+    strcat(outStr, "\")\n        field(SCAN, \"");
     strcat(outStr, scanMethod);
+    strcat(outStr, "\")\n        field(ASG, \"");
+    strcat(outStr, asgStr);
     strcat(outStr, "\")\n        field(DTYP, \"InternalData\")\n        field(OUT, \"@");
     strcat(outStr, "$(module_name)");
     strcat(outStr, ".");
@@ -89,14 +167,24 @@ void INTD_RECORD_BO(const char *datName, const char *subModName, const char *rec
     strcat(outStr, "\")\n}");
 }
 
-void INTD_RECORD_BI(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr, char *outStr)
+void INTD_RECORD_BI(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr,  const char *descStr, const char *aliasStr, const char *asgStr, char *outStr)
 {
+    int al;
+    char als[128] = "";
 	char strOne[128]  = "";
 	char strZero[128] = "";
 	char *pfh = NULL;
 	char *ped = NULL;
 
     if(!recName || !scanMethod || !outStr) return;
+
+    if(strlen(aliasStr) > 0)    al = 1;
+    else                        al = 0;
+
+    if(al) {
+        strcpy(als, "$(name_space)$(module_name)-");
+        strcat(als, aliasStr);
+    }    
 
 	/* get the strings for bi */
     pfh = strchr(supStr, ';');
@@ -113,8 +201,20 @@ void INTD_RECORD_BI(const char *datName, const char *subModName, const char *rec
     strcat(outStr, subModName);
     strcat(outStr, ":");
     strcat(outStr, recName);
-    strcat(outStr, ") {\n        field(SCAN, \"");
+    strcat(outStr, ") {\n");        
+
+    if(al) {
+        strcat(outStr, "        alias(");
+        strcat(outStr, als);
+        strcat(outStr, ")\n");
+    }
+
+    strcat(outStr,      "        field(DESC, \"");
+    strcat(outStr, descStr);
+    strcat(outStr, "\")\n        field(SCAN, \"");
     strcat(outStr, scanMethod);
+    strcat(outStr, "\")\n        field(ASG, \"");
+    strcat(outStr, asgStr);
     strcat(outStr, "\")\n        field(DTYP, \"InternalData\")\n        field(INP, \"@");
     strcat(outStr, "$(module_name)");
     strcat(outStr, ".");
@@ -126,17 +226,40 @@ void INTD_RECORD_BI(const char *datName, const char *subModName, const char *rec
     strcat(outStr, "\")\n}");    
 }
 
-void INTD_RECORD_LO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, char *outStr)
+void INTD_RECORD_LO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, const char *descStr, const char *aliasStr, const char *asgStr, char *outStr)
 {
+    int al;
+    char als[128] = "";
+	
     if(!recName || !scanMethod || !outStr) return;
+
+    if(strlen(aliasStr) > 0)    al = 1;
+    else                        al = 0;
+
+    if(al) {
+        strcpy(als, "$(name_space)$(module_name)-");
+        strcat(als, aliasStr);
+    }    
 
     strcpy(outStr, "record(longout, $(name_space)");
     strcat(outStr, "$(module_name)");
     strcat(outStr, subModName);
     strcat(outStr, ":");
     strcat(outStr, recName);
-    strcat(outStr, ") {\n        field(SCAN, \"");
+    strcat(outStr, ") {\n");        
+
+    if(al) {
+        strcat(outStr, "        alias(");
+        strcat(outStr, als);
+        strcat(outStr, ")\n");
+    }
+
+    strcat(outStr,      "        field(DESC, \"");
+    strcat(outStr, descStr);
+    strcat(outStr, "\")\n        field(SCAN, \"");
     strcat(outStr, scanMethod);
+    strcat(outStr, "\")\n        field(ASG, \"");
+    strcat(outStr, asgStr);
     strcat(outStr, "\")\n        field(EGU, \"");
     strcat(outStr, unitStr);
     strcat(outStr, "\")\n        field(DTYP, \"InternalData\")\n        field(OUT, \"@");
@@ -146,17 +269,40 @@ void INTD_RECORD_LO(const char *datName, const char *subModName, const char *rec
     strcat(outStr, "\")\n}");     
 }
 
-void INTD_RECORD_LI(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, char *outStr)
+void INTD_RECORD_LI(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, const char *descStr, const char *aliasStr, const char *asgStr, char *outStr)
 {
+    int al;
+    char als[128] = "";
+	
     if(!recName || !scanMethod || !outStr) return;
+
+    if(strlen(aliasStr) > 0)    al = 1;
+    else                        al = 0;
+
+    if(al) {
+        strcpy(als, "$(name_space)$(module_name)-");
+        strcat(als, aliasStr);
+    }    
 
     strcpy(outStr, "record(longin, $(name_space)");
     strcat(outStr, "$(module_name)");
     strcat(outStr, subModName);
     strcat(outStr, ":");
     strcat(outStr, recName);
-    strcat(outStr, ") {\n        field(SCAN, \"");
+    strcat(outStr, ") {\n");        
+
+    if(al) {
+        strcat(outStr, "        alias(");
+        strcat(outStr, als);
+        strcat(outStr, ")\n");
+    }
+
+    strcat(outStr,      "        field(DESC, \"");
+    strcat(outStr, descStr);
+    strcat(outStr, "\")\n        field(SCAN, \"");
     strcat(outStr, scanMethod);
+    strcat(outStr, "\")\n        field(ASG, \"");
+    strcat(outStr, asgStr);
     strcat(outStr, "\")\n        field(EGU, \"");
     strcat(outStr, unitStr);
     strcat(outStr, "\")\n        field(DTYP, \"InternalData\")\n        field(INP, \"@");
@@ -166,14 +312,25 @@ void INTD_RECORD_LI(const char *datName, const char *subModName, const char *rec
     strcat(outStr, "\")\n}");     
 }
 
-void INTD_RECORD_MBBO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr, char *outStr)
+void INTD_RECORD_MBBO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr,  const char *descStr, const char *aliasStr, const char *asgStr, char *outStr)
 {
+    int al;
+    char als[128] = "";
+	
 	int i;
 	char strSel[16][128] = {""};
 	char subSupStr[1024] = "";
 	char *pfh = NULL;
 
     if(!recName || !scanMethod || !outStr) return;
+
+    if(strlen(aliasStr) > 0)    al = 1;
+    else                        al = 0;
+
+    if(al) {
+        strcpy(als, "$(name_space)$(module_name)-");
+        strcat(als, aliasStr);
+    }    
 
 	/* get the strings for mbbo */
 	strcpy(subSupStr, supStr);
@@ -195,8 +352,20 @@ void INTD_RECORD_MBBO(const char *datName, const char *subModName, const char *r
     strcat(outStr, subModName);
     strcat(outStr, ":");
     strcat(outStr, recName);
-    strcat(outStr, ") {\n        field(SCAN, \"");
+    strcat(outStr, ") {\n");        
+
+    if(al) {
+        strcat(outStr, "        alias(");
+        strcat(outStr, als);
+        strcat(outStr, ")\n");
+    }
+
+    strcat(outStr,      "        field(DESC, \"");
+    strcat(outStr, descStr);
+    strcat(outStr, "\")\n        field(SCAN, \"");
     strcat(outStr, scanMethod);
+    strcat(outStr, "\")\n        field(ASG, \"");
+    strcat(outStr, asgStr);
     strcat(outStr, "\")\n        field(DTYP, \"InternalData\")\n        field(OUT, \"@");
     strcat(outStr, "$(module_name)");
     strcat(outStr, ".");
@@ -236,14 +405,25 @@ void INTD_RECORD_MBBO(const char *datName, const char *subModName, const char *r
     strcat(outStr, "\")\n}");     
 }
 
-void INTD_RECORD_MBBI(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr, char *outStr)
+void INTD_RECORD_MBBI(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr,  const char *descStr, const char *aliasStr, const char *asgStr, char *outStr)
 {
+    int al;
+    char als[128] = "";
+	
 	int i;
 	char strSel[16][128] = {""};
 	char subSupStr[1024] = "";
 	char *pfh = NULL;
 
     if(!recName || !scanMethod || !outStr) return;
+
+    if(strlen(aliasStr) > 0)    al = 1;
+    else                        al = 0;
+
+    if(al) {
+        strcpy(als, "$(name_space)$(module_name)-");
+        strcat(als, aliasStr);
+    }    
 
 	/* get the strings for mbbi */
 	strcpy(subSupStr, supStr);
@@ -265,8 +445,20 @@ void INTD_RECORD_MBBI(const char *datName, const char *subModName, const char *r
     strcat(outStr, subModName);
     strcat(outStr, ":");
     strcat(outStr, recName);
-    strcat(outStr, ") {\n        field(SCAN, \"");
+    strcat(outStr, ") {\n");        
+
+    if(al) {
+        strcat(outStr, "        alias(");
+        strcat(outStr, als);
+        strcat(outStr, ")\n");
+    }
+
+    strcat(outStr,      "        field(DESC, \"");
+    strcat(outStr, descStr);
+    strcat(outStr, "\")\n        field(SCAN, \"");
     strcat(outStr, scanMethod);
+    strcat(outStr, "\")\n        field(ASG, \"");
+    strcat(outStr, asgStr);
     strcat(outStr, "\")\n        field(DTYP, \"InternalData\")\n        field(INP, \"@");
     strcat(outStr, "$(module_name)");
     strcat(outStr, ".");
@@ -306,17 +498,40 @@ void INTD_RECORD_MBBI(const char *datName, const char *subModName, const char *r
     strcat(outStr, "\")\n}");     
 }
 
-void INTD_RECORD_WFO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *pno, const char *dataType, const char *unitStr, char *outStr)
+void INTD_RECORD_WFO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *pno, const char *dataType, const char *unitStr, const char *descStr, const char *aliasStr, const char *asgStr, char *outStr)
 {
+    int al;
+    char als[128] = "";
+	
     if(!recName || !scanMethod || !pno || !dataType || !outStr) return;
+
+    if(strlen(aliasStr) > 0)    al = 1;
+    else                        al = 0;
+
+    if(al) {
+        strcpy(als, "$(name_space)$(module_name)-");
+        strcat(als, aliasStr);
+    }    
 
     strcpy(outStr, "record(waveform, $(name_space)");
     strcat(outStr, "$(module_name)");
     strcat(outStr, subModName);
     strcat(outStr, ":");
     strcat(outStr, recName);
-    strcat(outStr, ") {\n        field(DESC, \"[W]\")\n        field(SCAN, \"");
+    strcat(outStr, ") {\n");        
+
+    if(al) {
+        strcat(outStr, "        alias(");
+        strcat(outStr, als);
+        strcat(outStr, ")\n");
+    }
+
+    strcat(outStr,      "        field(DESC, \"[W]");
+    strcat(outStr, descStr);
+    strcat(outStr, "\")\n        field(SCAN, \"");
     strcat(outStr, scanMethod);
+    strcat(outStr, "\")\n        field(ASG, \"");
+    strcat(outStr, asgStr);
     strcat(outStr, "\")\n        field(EGU, \"");
     strcat(outStr, unitStr);
     strcat(outStr, "\")\n        field(NELM, \"");
@@ -330,17 +545,40 @@ void INTD_RECORD_WFO(const char *datName, const char *subModName, const char *re
     strcat(outStr, "\")\n}");    
 }
 
-void INTD_RECORD_WFI(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *pno, const char *dataType, const char *unitStr, char *outStr)
+void INTD_RECORD_WFI(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *pno, const char *dataType, const char *unitStr, const char *descStr, const char *aliasStr, const char *asgStr, char *outStr)
 {
+    int al;
+    char als[128] = "";
+	
     if(!recName || !scanMethod || !pno || !dataType || !outStr) return;
+
+    if(strlen(aliasStr) > 0)    al = 1;
+    else                        al = 0;
+
+    if(al) {
+        strcpy(als, "$(name_space)$(module_name)-");
+        strcat(als, aliasStr);
+    }    
 
     strcpy(outStr, "record(waveform, $(name_space)");
     strcat(outStr, "$(module_name)");
     strcat(outStr, subModName);
     strcat(outStr, ":");
     strcat(outStr, recName);
-    strcat(outStr, ") {\n        field(SCAN, \"");
+    strcat(outStr, ") {\n");        
+
+    if(al) {
+        strcat(outStr, "        alias(");
+        strcat(outStr, als);
+        strcat(outStr, ")\n");
+    }
+
+    strcat(outStr,      "        field(DESC, \"");
+    strcat(outStr, descStr);
+    strcat(outStr, "\")\n        field(SCAN, \"");
     strcat(outStr, scanMethod);
+    strcat(outStr, "\")\n        field(ASG, \"");
+    strcat(outStr, asgStr);
     strcat(outStr, "\")\n        field(EGU, \"");
     strcat(outStr, unitStr);
     strcat(outStr, "\")\n        field(NELM, \"");
@@ -354,17 +592,40 @@ void INTD_RECORD_WFI(const char *datName, const char *subModName, const char *re
     strcat(outStr, "\")\n}");    
 }
 
-void INTD_RECORD_SO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, char *outStr)
+void INTD_RECORD_SO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *descStr, const char *aliasStr, const char *asgStr, char *outStr)
 {
+    int al;
+    char als[128] = "";
+	
     if(!recName || !scanMethod || !outStr) return;
+
+    if(strlen(aliasStr) > 0)    al = 1;
+    else                        al = 0;
+
+    if(al) {
+        strcpy(als, "$(name_space)$(module_name)-");
+        strcat(als, aliasStr);
+    }    
 
     strcpy(outStr, "record(stringout, $(name_space)");
     strcat(outStr, "$(module_name)");
     strcat(outStr, subModName);
     strcat(outStr, ":");
     strcat(outStr, recName);
-    strcat(outStr, ") {\n        field(SCAN, \"");
+    strcat(outStr, ") {\n");        
+
+    if(al) {
+        strcat(outStr, "        alias(");
+        strcat(outStr, als);
+        strcat(outStr, ")\n");
+    }
+
+    strcat(outStr,      "        field(DESC, \"");
+    strcat(outStr, descStr);
+    strcat(outStr, "\")\n        field(SCAN, \"");
     strcat(outStr, scanMethod);
+    strcat(outStr, "\")\n        field(ASG, \"");
+    strcat(outStr, asgStr);
     strcat(outStr, "\")\n        field(DTYP, \"InternalData\")\n        field(OUT, \"@");
     strcat(outStr, "$(module_name)");
     strcat(outStr, ".");
@@ -372,17 +633,40 @@ void INTD_RECORD_SO(const char *datName, const char *subModName, const char *rec
     strcat(outStr, "\")\n}");     
 }
 
-void INTD_RECORD_SI(const char *datName, const char *subModName, const char *recName, const char *scanMethod, char *outStr)
+void INTD_RECORD_SI(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *descStr, const char *aliasStr, const char *asgStr, char *outStr)
 {
+    int al;
+    char als[128] = "";
+	
     if(!recName || !scanMethod || !outStr) return;
+
+    if(strlen(aliasStr) > 0)    al = 1;
+    else                        al = 0;
+
+    if(al) {
+        strcpy(als, "$(name_space)$(module_name)-");
+        strcat(als, aliasStr);
+    }    
 
     strcpy(outStr, "record(stringin, $(name_space)");
     strcat(outStr, "$(module_name)");
     strcat(outStr, subModName);
     strcat(outStr, ":");
     strcat(outStr, recName);
-    strcat(outStr, ") {\n        field(SCAN, \"");
+    strcat(outStr, ") {\n");        
+
+    if(al) {
+        strcat(outStr, "        alias(");
+        strcat(outStr, als);
+        strcat(outStr, ")\n");
+    }
+
+    strcat(outStr,      "        field(DESC, \"");
+    strcat(outStr, descStr);
+    strcat(outStr, "\")\n        field(SCAN, \"");
     strcat(outStr, scanMethod);
+    strcat(outStr, "\")\n        field(ASG, \"");
+    strcat(outStr, asgStr);
     strcat(outStr, "\")\n        field(DTYP, \"InternalData\")\n        field(INP, \"@");
     strcat(outStr, "$(module_name)");
     strcat(outStr, ".");    

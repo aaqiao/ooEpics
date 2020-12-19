@@ -43,9 +43,7 @@ namespace OOEPICS {
 //-----------------------------------------------
 // tools Macros
 //-----------------------------------------------
-//#define OOEPICS_DEL_EXIST(A) if((A)) delete (A)
-
-#define OOEPICS_DEL_EXIST(A) (delete (A))
+#define OOEPICS_DEL_EXIST(A) if(A){delete(A);}
 
 //-----------------------------------------------
 // tools routines

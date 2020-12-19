@@ -42,7 +42,7 @@ ChannelAccess::ChannelAccess(string                    pvNameIn,
                              CAUSR_CALLBACK            wtUserCallbackIn,
                              void                     *dataPtrIn,
                              void                     *userPtrIn,
-                             EPICSLIB_type_mutexId     mutexIdIn,
+							 EPICSLIB_type_mutexId     mutexIdIn,
                              EPICSLIB_type_eventId     connEventIn,
                              EPICSLIB_type_eventId     rdEventIn,
                              EPICSLIB_type_eventId     wtEventIn,  
@@ -50,7 +50,7 @@ ChannelAccess::ChannelAccess(string                    pvNameIn,
 {
     // check the input parameters
     if(pvNameIn.empty())
-        cout << "ERROR:ChannelAccess::ChannelAccess: Wrong initial settings!\n";
+        cout << "ERROR: ChannelAccess::ChannelAccess: Wrong initial settings!\n";
 
     // init the CA configurations
     strncpy(pvName, pvNameIn.c_str(), CA_STRING_LEN);       // remember the name
@@ -64,7 +64,7 @@ ChannelAccess::ChannelAccess(string                    pvNameIn,
     wtUserCallback      = wtUserCallbackIn;
     dataBufMonitor      = dataPtrIn;
     userPtr             = userPtrIn;
-    mutexId                = mutexIdIn;
+	mutexId				= mutexIdIn;
     connEvent           = connEventIn;
     rdEvent             = rdEventIn;
     wtEvent             = wtEventIn;
@@ -114,6 +114,59 @@ ChannelAccess::~ChannelAccess()
 }
 
 //-----------------------------------------------
+// get the PV value (old interface, do not use in new development)
+// this is used for the mode CA_READ_PULL
+// return:
+//    0 - success; 1 - failed
+//-----------------------------------------------
+int ChannelAccess::getValue(void *dataBuf)
+{
+    // check the input
+    if(!dataBuf || ca_state(channelID) != cs_conn) 
+        return 1;
+
+    // get the data with pulling
+    if(rdCtrl == CA_READ_PULL) {
+        caStatus = ca_array_get(dbrTypeWrite, reqElemsRead, channelID, dataBuf);    // the DBR type use the naked type same as for writing
+    } else {
+        return 1;
+    }
+
+    // check the return
+    if(caStatus == ECA_NORMAL) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+//-----------------------------------------------
+// put the PV value (old interface, do not use in new development)
+// this is used for the mode of CA_WRITE_PULL
+// return:
+//    0 - success; 1 - failed
+//-----------------------------------------------
+int ChannelAccess::putValue(void *dataBuf)
+{
+    // check the input
+    if(!dataBuf || ca_state(channelID) != cs_conn) 
+        return 1;
+
+    // put the data with different style
+    if(wtCtrl == CA_WRITE_PULL) {
+        caStatus = ca_array_put(dbrTypeWrite, nElems, channelID, dataBuf);          // write the number of element as remote PV
+    } else {
+        return 1;
+    }
+
+    // check the return
+    if(caStatus == ECA_NORMAL)
+        return 0;
+    else 
+        return 1;
+}
+
+//-----------------------------------------------
 // do the connection
 //-----------------------------------------------
 void ChannelAccess::connect()
@@ -126,13 +179,13 @@ void ChannelAccess::connect()
         if(caStatus == ECA_NORMAL) 
             return;
         else if(caStatus == ECA_BADTYPE)
-            cout << "ERROR:ChannelAccess::connect: Failed (invalid DBR type) to create CA channel for " << pvName << ".\n";
+            cout << "ERROR: ChannelAccess::connect: Failed (invalid DBR type) to create CA channel for " << pvName << ".\n";
         else if(caStatus == ECA_STRTOBIG)
-            cout << "ERROR:ChannelAccess::connect: Failed (unusually large string) to create CA channel for " << pvName << ".\n";
+            cout << "ERROR: ChannelAccess::connect: Failed (unusually large string) to create CA channel for " << pvName << ".\n";
         else if(caStatus == ECA_ALLOCMEM)
-            cout << "ERROR:ChannelAccess::connect: Failed (unable to allocate memory) to create CA channel for " << pvName << ".\n";
+            cout << "ERROR: ChannelAccess::connect: Failed (unable to allocate memory) to create CA channel for " << pvName << ".\n";
         else
-            cout << "ERROR:ChannelAccess::connect: Failed (unknown reason) to create CA channel for " << pvName << ".\n";   
+            cout << "ERROR: ChannelAccess::connect: Failed (unknown reason) to create CA channel for " << pvName << ".\n";   
     }
 }
 
@@ -666,13 +719,13 @@ void ChannelAccess::callBackFunc_connection(struct connection_handler_args arg)
                 if(pv -> caStatus == ECA_NORMAL) 
                     pv -> onceConnected = 1;                                                                        // just repeat to avoid warning
                 else if(pv -> caStatus == ECA_BADCHID)
-                    cout << "ERROR:ChannelAccess::callBackFunc_connection: Failed (invalid CHID) to create CA monitor subscription for " << pv -> pvName << ".\n";
+                    cout << "ERROR: ChannelAccess::callBackFunc_connection: Failed (invalid CHID) to create CA monitor subscription for " << pv -> pvName << ".\n";
                 else if(pv -> caStatus == ECA_BADTYPE)
-                    cout << "ERROR:ChannelAccess::callBackFunc_connection: Failed (invalid DBR type) to create CA monitor subscription for " << pv -> pvName << ".\n";
+                    cout << "ERROR: ChannelAccess::callBackFunc_connection: Failed (invalid DBR type) to create CA monitor subscription for " << pv -> pvName << ".\n";
                 else if(pv -> caStatus == ECA_ALLOCMEM)
-                    cout << "ERROR:ChannelAccess::callBackFunc_connection: Failed (unable to allocate memory) to create CA monitor subscription for " << pv -> pvName << ".\n";
+                    cout << "ERROR: ChannelAccess::callBackFunc_connection: Failed (unable to allocate memory) to create CA monitor subscription for " << pv -> pvName << ".\n";
                 else
-                    cout << "ERROR:ChannelAccess::callBackFunc_connection: Failed (unknown reason) to create CA monitor subscription for " << pv -> pvName << ".\n";
+                    cout << "ERROR: ChannelAccess::callBackFunc_connection: Failed (unknown reason) to create CA monitor subscription for " << pv -> pvName << ".\n";
             }
         }
 
@@ -682,7 +735,7 @@ void ChannelAccess::callBackFunc_connection(struct connection_handler_args arg)
         pv -> caConnected = 0;
         pv -> caStatus    = ECA_DISCONN;
 
-        cout << "ERROR:ChannelAccess::callBackFunc_connection: Connection broken for CA channel for " << pv -> pvName << "\n";
+        cout << "ERROR: ChannelAccess::callBackFunc_connection: Connection broken for CA channel for " << pv -> pvName << "\n";
     }
 
     // execute the user call back
@@ -709,9 +762,9 @@ void ChannelAccess::callBackFunc_readAndMonitor(struct event_handler_args arg)
         pv -> nElems  = arg.count;
 
         if(pv -> dataBufRead) {
-            if(pv -> mutexId) EPICSLIB_func_mutexMustLock(pv -> mutexId);
+			if(pv -> mutexId) EPICSLIB_func_mutexMustLock(pv -> mutexId);
             memcpy(pv -> dataBufRead, arg.dbr, dbr_size_n(arg.type, arg.count));
-            if(pv -> mutexId) EPICSLIB_func_mutexUnlock(pv -> mutexId);
+			if(pv -> mutexId) EPICSLIB_func_mutexUnlock(pv -> mutexId);
         }
     }
 
@@ -772,13 +825,13 @@ ChannelAccessContext::ChannelAccessContext(CA_enum_contextCtrl contextCtrl)
     // show the status
     if(caContextStatus == ECA_NORMAL) {
         caContext = ca_current_context();
-        cout << "INFO:ChannelAccessContext::ChannelAccessContext: Succeed to created the CA context.\n";
+        cout << "INFO: ChannelAccessContext::ChannelAccessContext: Succeed to created the CA context.\n";
     } else if(caContextStatus == ECA_NOTTHREADED) {
-        cout << "ERROR:ChannelAccessContext::ChannelAccessContext: Failed (a nonpreemptive CA context exists) to created the CA context!\n";
+        cout << "ERROR: ChannelAccessContext::ChannelAccessContext: Failed (a nonpreemptive CA context exists) to created the CA context!\n";
     } else if(caContextStatus == ECA_ALLOCMEM) {
-        cout << "ERROR:ChannelAccessContext::ChannelAccessContext: Failed (memory allocation error) to created the CA context!\n";
+        cout << "ERROR: ChannelAccessContext::ChannelAccessContext: Failed (memory allocation error) to created the CA context!\n";
     } else {
-        cout << "ERROR:ChannelAccessContext::ChannelAccessContext: Failed (unknown reason) to created the CA context!\n";    
+        cout << "ERROR: ChannelAccessContext::ChannelAccessContext: Failed (unknown reason) to created the CA context!\n";    
     }
 }
 
@@ -800,13 +853,13 @@ int ChannelAccessContext::attachCurrentThread()
 
     // show the status
     if(caContextStatus == ECA_NORMAL) {
-        cout << "INFO:ChannelAccessContext::attachCurrentThread: Succeed to attach to the CA context.\n";
+        cout << "INFO: ChannelAccessContext::attachCurrentThread: Succeed to attach to the CA context.\n";
     } else if(caContextStatus == ECA_NOTTHREADED) {
-        cout << "ERROR:ChannelAccessContext::attachCurrentThread: Failed (CA context not preemptive) to attach to the CA context!\n";
+        cout << "ERROR: ChannelAccessContext::attachCurrentThread: Failed (CA context not preemptive) to attach to the CA context!\n";
     } else if(caContextStatus == ECA_ISATTACHED) {
-        cout << "ERROR:ChannelAccessContext::attachCurrentThread: Failed (already attached) to attach to the CA context!\n";
+        cout << "ERROR: ChannelAccessContext::attachCurrentThread: Failed (already attached) to attach to the CA context!\n";
     } else {
-        cout << "ERROR:ChannelAccessContext::attachCurrentThread: Failed (unknow reason) to attach to the CA context!\n";    
+        cout << "ERROR: ChannelAccessContext::attachCurrentThread: Failed (unknow reason) to attach to the CA context!\n";    
     }
 
     return caContextStatus;

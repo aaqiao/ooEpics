@@ -20,16 +20,21 @@ namespace OOEPICS {
 //-----------------------------------------------
 DomainDevice::DomainDevice(const char *deviceName) 
 {
-    if(!deviceName || !deviceName[0])
-        cout << "ERROR:DomainDevice::DomainDevice: Illegal device name!\n";
-    else
+    if(!deviceName || !deviceName[0]) {
+        cout << "ERROR: DomainDevice::DomainDevice: Illegal module name!\n";
+    } else {
         strcpy(name,  deviceName);
+        cout << "INFO: DomainDevice::DomainDevice: Module " << name << " created." << endl;
+    }
 }
 
 //-----------------------------------------------
 // distruction
 //-----------------------------------------------
-DomainDevice::~DomainDevice() {}
+DomainDevice::~DomainDevice() 
+{
+    cout << "INFO: DomainDevice::~DomainDevice: Module " << name << " deleted!" << endl;
+}
 
 } 
 //******************************************************

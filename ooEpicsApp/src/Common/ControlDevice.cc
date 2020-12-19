@@ -20,16 +20,21 @@ namespace OOEPICS {
 //-----------------------------------------------
 ControlDevice::ControlDevice(const char *deviceName) 
 {
-    if(!deviceName || !deviceName[0])
-        cout << "ERROR:ControlDevice::ControlDevice: Illegal device name!\n";
-    else
+    if(!deviceName || !deviceName[0]) {
+        cout << "ERROR: ControlDevice::ControlDevice: Illegal module name!\n";
+    } else {
         strcpy(name,  deviceName);
+        cout << "INFO: ControlDevice::ControlDevice: Module " << name << " created." << endl;
+    }
 }
 
 //-----------------------------------------------
 // distruction
 //-----------------------------------------------
-ControlDevice::~ControlDevice() {}
+ControlDevice::~ControlDevice() 
+{
+    cout << "INFO: ControlDevice::~ControlDevice: Module " << name << " deleted!" << endl;
+}
 
 }
 //******************************************************

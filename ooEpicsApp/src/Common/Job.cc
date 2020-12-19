@@ -22,9 +22,14 @@ Job::Job(const char *modNameIn, const char *jobNameIn)
     // remember the input
     strncpy(modName, modNameIn, JOB_STRING_LEN);
     strncpy(jobName, jobNameIn, JOB_STRING_LEN);
+
+    cout << "INFO: Job::Job: Object " << jobName << " for module " << modName << " created." << endl;
 }
 
-Job::~Job() {}
+Job::~Job() 
+{
+    cout << "INFO: Job::~Job: Object " << jobName << " for module " << modName << " deleted!" << endl;
+}
 
 //-----------------------------------------------
 // implement the local functions

@@ -153,7 +153,7 @@ public:
                          CAUSR_CALLBACK            wtUserCallbackIn,            // user callback when writing is done if the writing callback is enabled
                          void                     *dataPtrIn,                   // this is used for the PV with monitring reading
                          void                     *userPtrIn,                   // user pointer that will be passed to the user callback functions
-                         EPICSLIB_type_mutexId     mutexIdIn,                    // used to lock the data buffer when monitoring or callback reading have data arrived
+                         EPICSLIB_type_mutexId     mutexIdIn,				    // used to lock the data buffer when monitoring or callback reading have data arrived
                          EPICSLIB_type_eventId     connEventIn,                 // optional event that will be fired with the connection callback
                          EPICSLIB_type_eventId     rdEventIn,                   // optional event that will be fired with the reading callback
                          EPICSLIB_type_eventId     wtEventIn);                  // optional event that will be fired with the writing callback                 
@@ -165,6 +165,10 @@ public:
                          EPICSLIB_type_eventId     eventIn);                    // general event for connection, read and write callbacks
 
     void deleteCA       ();
+
+    // routines to get values and put values (old interface for CA access, should not be used in new development)
+    int  getValue       (void *dataBuf);
+    int  putValue       (void *dataBuf); 
 
     // interfaces for CA access (direct wrapper of Channel Access methods)
     int caReadRequest       ();

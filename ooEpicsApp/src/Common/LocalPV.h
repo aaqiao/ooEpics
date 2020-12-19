@@ -22,8 +22,8 @@
 // Modified by Zheqiao Geng on 21.03.2016
 // Extended the implementation to provide the possibility with internal data buffers
 //
-// Modified by Zheqiao Geng on 27.05.2016
-// Deleted the old interfaces
+// Modified by Zheqiao Geng on 08.08.2016
+// For the setValue function, add another implementation for BI allowing alarm generation
 //=========================================================
 #ifndef LOCALPV_H
 #define LOCALPV_H
@@ -43,13 +43,33 @@ using namespace std;
 namespace OOEPICS {
 
 //-----------------------------------------------
+// alarm strategy for BI value
+//-----------------------------------------------
+typedef enum {
+    LPV_BI_ALARM,           // BI value: 1 no alarm, 0 major alarm
+    LPV_BI_ALARM_INV        // BI value: 0 no alarm, 1 major alarm
+} LPV_enum_BIAlarm;
+
+//-----------------------------------------------
 // the class definition for local PV. It is an OO wrapper for the InternalData,
 // now only support a subset of the functions 
 //-----------------------------------------------
 class LocalPV
 {
 public:
-    LocalPV();    
+    LocalPV();
+    
+    // these are old interfaces, do not use them for the new design
+    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsInt8       *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
+    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsUInt8      *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
+    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsInt16      *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
+    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsUInt16     *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
+    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsInt32      *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
+    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsUInt32     *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
+    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsFloat32    *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
+    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsFloat64    *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
+    LocalPV(const char *moduleName, const char *dataName, const char *supStr, const char *unitStr, volatile epicsOldString  *dataPtr,  unsigned int pointNum, void *privatePtr, INTD_CALLBACK callback, INTD_enum_recordType recordType, INTD_enum_scanType scanType, IOSCANPVT *ioIntScan, epicsMutexId mutexId, epicsEventId eventId);
+
    ~LocalPV();
 
     // force the value of the output PV (AO, BO, LO, MBBO, WFO) to change (also process the PV)
@@ -91,7 +111,11 @@ public:
     int             getValueString  (char *strOut);
     string          getValueString  ();
 
+    double          getField        (string fieldName);
+    int             putField        (string fieldName, double data);
+
     int setValue (epicsFloat64 dataIn);                                 // set value of a input PV with data conversion
+    int setValue (epicsFloat64 dataIn, LPV_enum_BIAlarm alarmSel);                   
     int setString(char *strIn);                                         // set value of a stringin record
     int setString(string strIn);
 
@@ -114,6 +138,11 @@ public:
     int setValues   (epicsUInt32   *dataIn, unsigned int pointNum);
     int setValues   (epicsFloat32  *dataIn, unsigned int pointNum);
     int setValues   (epicsFloat64  *dataIn, unsigned int pointNum);
+
+    int setDesc     (const char *descStr);
+    int setPrec     (unsigned int prec);
+    int setAlias    (const char *aliasStr);
+    int setAsg      (const char *asgStr);
 
 private:
     INTD_CALLBACK rCallback;

@@ -26,12 +26,16 @@ ModuleConfig::ModuleConfig(const char *moduleTypeName)
 {
     // ---- check the input parameters ----  
     if(!moduleTypeName || !moduleTypeName[0]) {
-        cout << "ERROR:ModuleConfig::ModuleConfig: Illegal module type!\n";
+        cout << "ERROR: ModuleConfig::ModuleConfig: Illegal module type name!\n";
         return;
     }
 
     // ---- register the device type ----  
     moduleTypeRegister(moduleTypeName, this);
+
+    strcpy(typeName, moduleTypeName);
+
+    cout << "INFO: ModuleConfig::ModuleConfig: Object for module type " << typeName << " created." << endl;
 }
 
 //-----------------------------------------------
@@ -39,6 +43,7 @@ ModuleConfig::ModuleConfig(const char *moduleTypeName)
 //-----------------------------------------------
 ModuleConfig::~ModuleConfig()
 {
+    cout << "INFO: ModuleConfig::~ModuleConfig: Object for module type " << typeName << " deleted!" << endl;
 }
 
 } 

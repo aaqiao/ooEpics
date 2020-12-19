@@ -23,33 +23,38 @@ Coordinator::Coordinator(const char *modNameIn, const char *crdNameIn)
 
     // check the input
     if(!modNameIn || !modNameIn[0] || !crdNameIn || !crdNameIn[0])
-        cout << "ERROR:Coordinator::Coordinator: Wrong Coordinator name!\n";
+        cout << "ERROR: Coordinator::Coordinator: Wrong coordinator name!\n";
 
     // remember the input
-    strncpy(modName, modNameIn, CRD_STRING_LEN);
+	strncpy(modName, modNameIn, CRD_STRING_LEN);
     strncpy(crdName, crdNameIn, CRD_STRING_LEN);
  
-    for(i = 0; i < CRD_MAX_NUM_JOBS; i ++)
-        jobSet[i] = NULL;
+	for(i = 0; i < CRD_MAX_NUM_JOBS; i ++)
+		jobSet[i] = NULL;
+
+    cout << "INFO: Coordinator::Coordinator: Object " << crdName << " for module " << modName << " created." << endl;
 }
 
-Coordinator::~Coordinator() {}
+Coordinator::~Coordinator() 
+{
+    cout << "INFO: Coordinator::~Coordinator: Object " << crdName << " for module " << modName << " deleted!" << endl;
+}
 
 //-----------------------------------------------
 // register and execute the job
 //-----------------------------------------------
 void Coordinator::registerJob(Job *job, int jobCode) 
 {
-    if(jobCode >= 0 && jobCode < CRD_MAX_NUM_JOBS) 
-        jobSet[jobCode] = job;
+	if(jobCode >= 0 && jobCode < CRD_MAX_NUM_JOBS) 
+		jobSet[jobCode] = job;
 }
 
 int  Coordinator::executeJob(int jobCode, int flag) 
 {
-    if(jobCode >= 0 && jobCode < CRD_MAX_NUM_JOBS && jobSet[jobCode]) 
-        return jobSet[jobCode] -> execute(flag);
-    else 
-        return -1;
+	if(jobCode >= 0 && jobCode < CRD_MAX_NUM_JOBS && jobSet[jobCode]) 
+		return jobSet[jobCode] -> execute(flag);
+	else 
+		return -1;
 }
 
 void Coordinator::enableAllJobs(int enabled)

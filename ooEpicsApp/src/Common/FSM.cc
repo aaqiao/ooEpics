@@ -24,12 +24,11 @@ namespace OOEPICS {
 // construction
 //-----------------------------------------------
 FSMEvent::FSMEvent() : 
-    msgQ(FSM_EVENT_MAX_MSG_NUM, FSM_EVENT_MAX_MSG_LEN)
+	msgQ(FSM_EVENT_MAX_MSG_NUM, FSM_EVENT_MAX_MSG_LEN)
 {   
-    cout << "INFO:FSMEvent::FSMEvent: Create the event, msgQ and mutex...";
+    cout << "INFO: FSMEvent::FSMEvent: Create the event and msgQ...";
 
     eventId = EPICSLIB_func_eventMustCreate(epicsEventEmpty);
-    mutexId = EPICSLIB_func_mutexMustCreate();
 
     cout << "Done!\n";
 }
@@ -42,21 +41,18 @@ FSMEvent::~FSMEvent()
     if(eventId)
         EPICSLIB_func_eventDestroy(eventId);
 
-    if(mutexId)
-        EPICSLIB_func_mutexDestroy(mutexId);
+    cout << "INFO: FSMEvent::~FSMEvent: deleted!" << endl;
 }
 
 //-----------------------------------------------
-// send event (protected by mutex)
+// send event
 //-----------------------------------------------
 int FSMEvent::sendEvent()
 {
     if(eventId) {
-        EPICSLIB_func_mutexMustLock(mutexId);
         EPICSLIB_func_eventSignal(eventId);  
-        EPICSLIB_func_mutexUnlock(mutexId);                           
     } else {
-           return FSM_EV_ERR;
+       	return FSM_EV_ERR;
     }
 
     return FSM_EV_OK;    
@@ -70,11 +66,9 @@ int FSMEvent::sendEvent(int eventCodeIn, int cmdIn, int subCmdIn)
     FSMEventMsg msg;
     msg.eventCode = eventCodeIn;
     msg.cmd       = cmdIn;
-    msg.subCmd       = subCmdIn;
+	msg.subCmd 	  = subCmdIn;
 
-    EPICSLIB_func_mutexMustLock(mutexId);
     msgQ.send((void *)&msg, sizeof(FSMEventMsg)); 
-    EPICSLIB_func_mutexUnlock(mutexId);    
 
     return FSM_EV_OK;
 }
@@ -101,8 +95,8 @@ void FSMEvent::recvEvent(int *eventCodeOut, int *cmdOut, int *subCmdOut)
         *eventCodeOut = msg.eventCode;
     if(cmdOut)
         *cmdOut       = msg.cmd;
-    if(subCmdOut)
-        *subCmdOut    = msg.subCmd;
+	if(subCmdOut)
+		*subCmdOut    = msg.subCmd;
 }
 
 //-----------------------------------------------
@@ -127,8 +121,8 @@ void FSMEvent::recvEventWithTimeout(int *eventCodeOut, int *cmdOut, int *subCmdO
         *eventCodeOut = msg.eventCode;
     if(cmdOut)
         *cmdOut       = msg.cmd;
-    if(subCmdOut)
-        *subCmdOut    = msg.subCmd;
+	if(subCmdOut)
+		*subCmdOut    = msg.subCmd;
 }
 
 //-----------------------------------------------
@@ -149,19 +143,24 @@ State::State(int stateCodeIn, const char *stateNameIn)
 {
     // check the input
     if(stateCodeIn < 0 || !stateNameIn || !stateNameIn[0])
-        cout << "ERROR:State::State: Wrong state code or name!\n";
+        cout << "ERROR: State::State: Wrong state code or name!\n";
 
     // remember the input
     strncpy(stateName, stateNameIn, FSM_STRING_LEN);
     stateCode           = stateCodeIn;
     sourceStateCode     = stateCodeIn;
-    destStateCode       = stateCodeIn;    
+    destStateCode       = stateCodeIn;	
 
     entryTime           = 0.0;
     timeExpectEvent     = 0.0;
+
+    cout << "INFO: State::State: Object " << stateName << " created." << endl;
 }
 
-State::~State() {}
+State::~State() 
+{
+    cout << "INFO: State::~State: Object " << stateName << " deleted!" << endl;
+}
 
 //-----------------------------------------------
 // print the info of the state, set the source state 
@@ -234,10 +233,10 @@ FSM::FSM(const char *modNameIn, const char *fsmNameIn)
 
     // check the input
     if(!modNameIn || !modNameIn[0] || !fsmNameIn || !fsmNameIn[0])
-        cout << "ERROR:FSM::FSM: Wrong FSM name!\n";
+        cout << "ERROR: FSM::FSM: Wrong FSM name!\n";
 
     // remember the input
-    strncpy(modName, modNameIn, FSM_STRING_LEN);
+	strncpy(modName, modNameIn, FSM_STRING_LEN);
     strncpy(fsmName, fsmNameIn, FSM_STRING_LEN);
 
     // init private variables
@@ -249,12 +248,14 @@ FSM::FSM(const char *modNameIn, const char *fsmNameIn)
     for(i = 0; i < FSM_MAX_NUM_STATES; i ++)
         stateSet[i] = NULL;
 
-    for(i = 0; i < FSM_MAX_NUM_JOBS; i ++)
-        jobSet[i] = NULL;
+	for(i = 0; i < FSM_MAX_NUM_JOBS; i ++)
+		jobSet[i] = NULL;
 
     // create the timer
     var_timerQueue = epicsTimerQueueAllocate(1, epicsThreadPriorityScanHigh);
     var_timer      = epicsTimerQueueCreateTimer(var_timerQueue, fun_timerCallback, (void *)&var_event);
+
+    cout << "INFO: FSM::FSM: Object" << fsmName << " for module " << modName << " created." << endl;
 }
 
 //-----------------------------------------------
@@ -263,8 +264,10 @@ FSM::FSM(const char *modNameIn, const char *fsmNameIn)
 FSM::~FSM() 
 {
     // destroy the timer
-    epicsTimerQueueDestroyTimer(var_timerQueue, var_timer);
+    //epicsTimerQueueDestroyTimer(var_timerQueue, var_timer);
     epicsTimerQueueRelease(var_timerQueue);
+
+    cout << "INFO: FSM::~FSM: Object " << fsmName << " for module " << modName << " deleted!" << endl;
 }
 
 //-----------------------------------------------
@@ -272,7 +275,7 @@ FSM::~FSM()
 //-----------------------------------------------
 int FSM::executeFSM()
 {
-    int status = FSM_EXE_SUCCESS;
+	int status = FSM_EXE_SUCCESS;
     double timeExpectEvent = 0.0;
 
     // entry of a new state
@@ -316,21 +319,21 @@ int FSM::executeFSM()
     }
     
     // determine the transition state and avoid transferring to undefined state
-    if(nextStateCode >= 0 && nextStateCode < FSM_MAX_NUM_STATES) {
-        curState = stateSet[nextStateCode];
+	if(nextStateCode >= 0 && nextStateCode < FSM_MAX_NUM_STATES) {
+	    curState = stateSet[nextStateCode];
 
-        if(!curState) {
-            if(preState) {
-                curState = preState;                    // first choise, do not transient
-                status   = FSM_EXE_ERR_NOTRANS;
-            } else if(defaultState) {
-                curState = defaultState;                // second choice, go to the default state
-                status   = FSM_EXE_ERR_TODEFAULT;
-            } else {
-                curState = getFirstValidState();        // third choice, transfer to the first valid state in the set
-                status   = FSM_EXE_ERR_TO1STVALID;
-            }                    
-        }
+	    if(!curState) {
+		    if(preState) {
+			    curState = preState;                    // first choise, do not transient
+			    status   = FSM_EXE_ERR_NOTRANS;
+		    } else if(defaultState) {
+			    curState = defaultState;                // second choice, go to the default state
+			    status   = FSM_EXE_ERR_TODEFAULT;
+		    } else {
+			    curState = getFirstValidState();        // third choice, transfer to the first valid state in the set
+			    status   = FSM_EXE_ERR_TO1STVALID;
+		    }					
+	    }
     } else {
         status = FSM_EXE_ERR_NOTRANS;
     }
@@ -348,7 +351,7 @@ int FSM::executeFSM()
     // execute the extended function
     executeExtFunc();
 
-    return status;
+	return status;
 }
 
 //-----------------------------------------------
@@ -443,16 +446,16 @@ int FSM::getCurrentStateCode()
 //-----------------------------------------------
 void FSM::registerJob(Job *job, int jobCode) 
 {
-    if(jobCode >= 0 && jobCode < FSM_MAX_NUM_JOBS) 
-        jobSet[jobCode] = job;
+	if(jobCode >= 0 && jobCode < FSM_MAX_NUM_JOBS) 
+		jobSet[jobCode] = job;
 }
 
 int  FSM::executeJob(int jobCode, int flag) 
 {
-    if(jobCode >= 0 && jobCode < FSM_MAX_NUM_JOBS && jobSet[jobCode]) 
-        return jobSet[jobCode] -> execute(flag);
-    else 
-        return -1;
+	if(jobCode >= 0 && jobCode < FSM_MAX_NUM_JOBS && jobSet[jobCode]) 
+		return jobSet[jobCode] -> execute(flag);
+	else 
+		return -1;
 }
 
 void FSM::enableAllJobs(int enabled)
@@ -479,23 +482,24 @@ void FSM::waitEvent              (int *eventCode, int *cmd, int *subCmd)        
 void FSM::waitEventWithTimeout   (double timeout)                                           {var_event.recvEventWithTimeout(timeout);}
 void FSM::waitEventWithTimeout   (int *eventCode, int *cmd, int *subCmd, double timeout)    {var_event.recvEventWithTimeout(eventCode, cmd, subCmd, timeout);}
 int  FSM::withPendingEvents      ()                                                         {return var_event.getUnsolvedMsgNum() > 0 ? 1 : 0;}
+int  FSM::isMsgQFull             ()                                                         {return var_event.getUnsolvedMsgNum() > FSM_EVENT_MAX_MSG_NUM-2 ? 1 : 0;}
 
 //-----------------------------------------------
 // private functions
 //-----------------------------------------------
 State *FSM::getFirstValidState() 
 {
-    int i;
-    State *stat = NULL;
+	int i;
+	State *stat = NULL;
 
     for(i = 0; i < FSM_MAX_NUM_STATES; i ++) {
         if(stateSet[i]) {
             stat = stateSet[i];  
-            break;     
-        }
+			break;     
+		}
     }
 
-    return stat;
+	return stat;
 }
 
 //-----------------------------------------------

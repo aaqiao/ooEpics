@@ -38,8 +38,8 @@
  * Added the function to generate save/restore request file and archiver conf file with different
  * module name string
  *
- * Modified by Zheqiao Geng on 27.05.2016
- * Deleted the "oldstring" type because it is obsolete
+ * Modified by Zheqiao Geng on 30.09.2015
+ * Added the function for PV description and display precision
  ****************************************************/
 #ifndef INTERNAL_DATA_H
 #define INTERNAL_DATA_H
@@ -78,7 +78,8 @@ typedef enum {
     INTD_LONG,
     INTD_ULONG,
     INTD_FLOAT,
-    INTD_DOUBLE
+    INTD_DOUBLE,
+    INTD_OLDSTRING
 } INTD_enum_dataType;
 
 /**
@@ -127,9 +128,13 @@ typedef struct {
     char                 recName[128];           /* record name - used for db generation */
     char                 supStr[256];			 /* additional string for bi,bi,mbbi or mbbo */
     char                 unitStr[16];            /* unit string */
+    char                 desc[128];              /* description of the PV */
+    char                 alias[128];
+    char                 asg[128];
     void                *dataPtr;                /* pointer to the data (use volatile, later the module may be extended to allow dynamic internal variable association) */
     void                *privateData;            /* private data that might be useful in the call back functions */
     unsigned int         pno;                    /* number of the points */
+    unsigned int         prec;                   /* precision for displaying */
     IOSCANPVT           *ioIntScan;              /* pointer of the ioscanpvt */
     INTD_enum_dataType   dataType;               /* data type */
     INTD_CALLBACK        readCallback;           /* call back function when reading the data */
@@ -178,6 +183,15 @@ int INTD_API_syncWithRecords(int enaCallback);
 int INTD_API_forceOPVValue(INTD_struc_node *dataNode, void *dataPtr);
 int INTD_API_forcePVProcess(INTD_struc_node *dataNode);
 int INTD_API_raiseAlarm(INTD_struc_node *dataNode, epicsEnum16 nsta, epicsEnum16 nsevr);
+
+int INTD_API_setDescription(INTD_struc_node *dataNode, const char *descStr);
+int INTD_API_setPrecision(INTD_struc_node *dataNode, unsigned int precVal);
+int INTD_API_setAlias(INTD_struc_node *dataNode, const char *aliasStr);
+int INTD_API_setAsg(INTD_struc_node *dataNode, const char *asgStr);
+
+int INTD_API_getFieldInfo(INTD_struc_node *dataNode, const char *fieldName, short *dbrType, long *nelm);
+int INTD_API_getFieldData(INTD_struc_node *dataNode, const char *fieldName, void *data,   long pno);
+int INTD_API_putFieldData(INTD_struc_node *dataNode, const char *fieldName, double *data, long pno);
 
 int INTD_API_getIocInitStatus();
 

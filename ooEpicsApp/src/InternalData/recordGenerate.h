@@ -6,6 +6,9 @@
  * Created by: Zheqiao Geng, gengzq@slac.stanford.edu
  * Created on: 2011.06.30
  * Description: Initial creation
+ *
+ * Modified by Zheqiao Geng on 30.09.2016
+ * Added the description string and display precision
  ****************************************************/
 #ifndef RECORD_GENERATE_H
 #define RECORD_GENERATE_H
@@ -21,18 +24,18 @@ extern "C" {
 /**
  * Routines for record generation
  */
-void INTD_RECORD_AO(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, char *outStr);
-void INTD_RECORD_AI(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, char *outStr);
-void INTD_RECORD_BO(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr, char *outStr);
-void INTD_RECORD_BI(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr, char *outStr);
-void INTD_RECORD_LO(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, char *outStr);
-void INTD_RECORD_LI(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, char *outStr);
-void INTD_RECORD_MBBO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr, char *outStr);
-void INTD_RECORD_MBBI(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr, char *outStr);
-void INTD_RECORD_WFO( const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *pno, const char *dataType, const char *unitStr, char *outStr);
-void INTD_RECORD_WFI( const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *pno, const char *dataType, const char *unitStr, char *outStr);
-void INTD_RECORD_SO(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, char *outStr);
-void INTD_RECORD_SI(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, char *outStr);
+void INTD_RECORD_AO(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, const char *descStr, unsigned int precVal, const char *aliasStr, const char *asgStr, char *outStr);
+void INTD_RECORD_AI(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, const char *descStr, unsigned int precVal, const char *aliasStr, const char *asgStr, char *outStr);
+void INTD_RECORD_BO(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr,  const char *descStr, const char *aliasStr, const char *asgStr, char *outStr);
+void INTD_RECORD_BI(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr,  const char *descStr, const char *aliasStr, const char *asgStr, char *outStr);
+void INTD_RECORD_LO(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, const char *descStr, const char *aliasStr, const char *asgStr, char *outStr);
+void INTD_RECORD_LI(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, const char *descStr, const char *aliasStr, const char *asgStr, char *outStr);
+void INTD_RECORD_MBBO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr,  const char *descStr, const char *aliasStr, const char *asgStr, char *outStr);
+void INTD_RECORD_MBBI(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *supStr,  const char *descStr, const char *aliasStr, const char *asgStr, char *outStr);
+void INTD_RECORD_WFO( const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *pno, const char *dataType, const char *unitStr, const char *descStr, const char *aliasStr, const char *asgStr, char *outStr);
+void INTD_RECORD_WFI( const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *pno, const char *dataType, const char *unitStr, const char *descStr, const char *aliasStr, const char *asgStr, char *outStr);
+void INTD_RECORD_SO(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *descStr, const char *aliasStr, const char *asgStr, char *outStr);
+void INTD_RECORD_SI(  const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *descStr, const char *aliasStr, const char *asgStr, char *outStr);
 
 #ifdef __cplusplus
 }

@@ -44,6 +44,9 @@
  * Modified by Zheqiao Geng on 09.03.2016
  * Changed the archiver configuration file "MONITOR" to "Monitor". Later need to pass the string
  * from external world instead of hard coding
+ *
+ * Modified by Zheqiao Geng on 12.10.2018
+ * Updated the output PV archiver method from "Monitor Monitor Monitor" to "None None Monitor"
  ****************************************************/
 #include <dbAccess.h>					/* there is conflicts in db_access.h (used by cadef.h) and dbFldTypes.h for the DBR_xxx definitions. So only use dbAccess.h locally */
 #include "InternalData.h"
@@ -103,6 +106,10 @@ static int INTD_func_getDataSize(INTD_enum_dataType dataType)
 
         case INTD_DOUBLE:
             var_dataSize = sizeof(epicsFloat64);
+            break;
+            
+        case INTD_OLDSTRING:
+            var_dataSize = sizeof(epicsOldString);
             break;
 
         default:
@@ -235,10 +242,14 @@ INTD_struc_node *INTD_API_createDataNode(const char *moduleName,
     strcpy(ptr_dataNode -> recName,         dataName_recPart);    
     strcpy(ptr_dataNode -> supStr,          supStr);
     strcpy(ptr_dataNode -> unitStr,         unitStr);
+    strcpy(ptr_dataNode -> desc,            "");
+    strcpy(ptr_dataNode -> alias,           "");
+    strcpy(ptr_dataNode -> asg,             "");
     
     ptr_dataNode -> dataPtr         = dataPtr;
     ptr_dataNode -> privateData     = privateData;
     ptr_dataNode -> pno             = pno;
+    ptr_dataNode -> prec            = 0;
     ptr_dataNode -> ioIntScan       = ioIntScan;
     ptr_dataNode -> dataType        = dataType;
     ptr_dataNode -> readCallback    = readCallback;
@@ -256,6 +267,42 @@ INTD_struc_node *INTD_API_createDataNode(const char *moduleName,
     ellAdd(&INTD_gvar_dataList, &ptr_dataNode -> node);
 
     return ptr_dataNode;
+}
+
+/**
+ * set missing parameters of the PV: description and display precision,
+ * they are optional compared to other fields
+ */
+int INTD_API_setDescription(INTD_struc_node *dataNode, const char *descStr)
+{
+    if(dataNode) 
+        strcpy(dataNode -> desc, descStr);
+
+    return 0;
+}
+
+int INTD_API_setPrecision(INTD_struc_node *dataNode, unsigned int precVal)
+{
+    if(dataNode)
+        dataNode -> prec = precVal;
+
+    return 0;
+}
+
+int INTD_API_setAlias(INTD_struc_node *dataNode, const char *aliasStr)
+{
+    if(dataNode) 
+        strcpy(dataNode -> alias, aliasStr);
+
+    return 0;    
+}
+
+int INTD_API_setAsg(INTD_struc_node *dataNode, const char *asgStr)
+{
+    if(dataNode) 
+        strcpy(dataNode -> asg, asgStr);
+
+    return 0;    
 }
 
 /**
@@ -322,25 +369,25 @@ int INTD_API_getData(INTD_struc_node *dataNode, unsigned int pno, void *data)
     int var_dataSize;
 
     /* Check the input */
-    if(!dataNode || !data || !dataNode -> dataPtr || pno <= 0) return -1;
-
-    /* Lock the mutex if it is specified */
-    if(dataNode -> mutexId) epicsMutexMustLock(dataNode -> mutexId);
+    if(!dataNode || !data || !dataNode -> dataPtr || pno <= 0) 
+        return -1;
 
     /* Execute the call back if defined */
-    if(dataNode -> readCallback && dataNode -> enableCallback) (*dataNode -> readCallback)(dataNode -> privateData);
+    if(dataNode -> readCallback && dataNode -> enableCallback) 
+        (*dataNode -> readCallback)(dataNode -> privateData);
     
     if(!dataNode -> enableCallback)
         dataNode -> enableCallback = 1;
 
+    /* Get the data size */
+    var_dataSize = INTD_func_getDataSize(dataNode -> dataType);
+
     /* Get the data based on the size */
-    if(pno > 1) {                                                   /* array */
+    if(dataNode -> mutexId) epicsMutexMustLock(dataNode -> mutexId);
 
-        var_dataSize = INTD_func_getDataSize(dataNode -> dataType);
+    if(pno > 1) {                                                   /* array */       
         memcpy(data, dataNode -> dataPtr, pno * var_dataSize);
-
     } else if(pno == 1) {                                           /* single value (these code to remove the overhead from memcpy) */
-
         switch(dataNode -> dataType) {
             case INTD_CHAR:     *((epicsInt8    *)data) = *((epicsInt8    *)dataNode -> dataPtr); break;
             case INTD_UCHAR:    *((epicsUInt8   *)data) = *((epicsUInt8   *)dataNode -> dataPtr); break;
@@ -352,12 +399,11 @@ int INTD_API_getData(INTD_struc_node *dataNode, unsigned int pno, void *data)
             case INTD_ULONG:    *((epicsUInt32  *)data) = *((epicsUInt32  *)dataNode -> dataPtr); break;
             case INTD_FLOAT:    *((epicsFloat32 *)data) = *((epicsFloat32 *)dataNode -> dataPtr); break;
             case INTD_DOUBLE:   *((epicsFloat64 *)data) = *((epicsFloat64 *)dataNode -> dataPtr); break;
+            case INTD_OLDSTRING: *((char        *)data) = *((char         *)dataNode -> dataPtr); break;
             default: break;
         }
-
     }
 
-    /* Unlock the mutex if it is specified */
     if(dataNode -> mutexId) epicsMutexUnlock(dataNode -> mutexId);
 
     /* Signal the event if it is specified */
@@ -381,19 +427,18 @@ int INTD_API_putData(INTD_struc_node *dataNode, unsigned int pno, void *data)
     int var_dataSize;
 
     /* Check the input */
-    if(!dataNode || !data || !dataNode -> dataPtr || pno <= 0) return -1;
+    if(!dataNode || !data || !dataNode -> dataPtr || pno <= 0) 
+        return -1;
 
-    /* Lock the mutex if it is specified */
-    if(dataNode -> mutexId) epicsMutexMustLock(dataNode -> mutexId);
+    /* Get the data size */
+    var_dataSize = INTD_func_getDataSize(dataNode -> dataType);
 
     /* Put the data based on the size */
+    if(dataNode -> mutexId) epicsMutexMustLock(dataNode -> mutexId);
+
     if(pno > 1) {                                                   /* array */
-
-        var_dataSize = INTD_func_getDataSize(dataNode -> dataType);
         memcpy(dataNode -> dataPtr, data, pno * var_dataSize);
-
     } else if(pno == 1) {                                           /* single value (these code to remove the overhead from memcpy) */
-
         switch(dataNode -> dataType) {
             case INTD_CHAR:     *((epicsInt8    *)dataNode -> dataPtr) = *((epicsInt8    *)data); break;
             case INTD_UCHAR:    *((epicsUInt8   *)dataNode -> dataPtr) = *((epicsUInt8   *)data); break;
@@ -405,19 +450,19 @@ int INTD_API_putData(INTD_struc_node *dataNode, unsigned int pno, void *data)
             case INTD_ULONG:    *((epicsUInt32  *)dataNode -> dataPtr) = *((epicsUInt32  *)data); break;
             case INTD_FLOAT:    *((epicsFloat32 *)dataNode -> dataPtr) = *((epicsFloat32 *)data); break;
             case INTD_DOUBLE:   *((epicsFloat64 *)dataNode -> dataPtr) = *((epicsFloat64 *)data); break;
+            case INTD_OLDSTRING: *((char        *)dataNode -> dataPtr) = *((char         *)data); break;
             default: break;
         }
-
     }
 
+    if(dataNode -> mutexId) epicsMutexUnlock(dataNode -> mutexId);
+
     /* Execute the call back if defined */    
-    if(dataNode -> writeCallback && dataNode -> enableCallback) (*dataNode -> writeCallback)(dataNode -> privateData);    
+    if(dataNode -> writeCallback && dataNode -> enableCallback) 
+        (*dataNode -> writeCallback)(dataNode -> privateData);    
 
     if(!dataNode -> enableCallback)
         dataNode -> enableCallback = 1;
-
-    /* Unlock the mutex if it is specified */
-    if(dataNode -> mutexId) epicsMutexUnlock(dataNode -> mutexId);
 
     /* Signal the event if it is specified */
     if(dataNode -> eventId) epicsEventSignal(dataNode -> eventId);
@@ -449,8 +494,10 @@ int INTD_API_genRecord(const char *moduleName, const char *path, const char *dbF
     char var_dataType[128]     = "";
     char var_supStr[1024]      = "";
     char var_unitStr[16]       = "";
-
-    char *timeStr;
+    char var_descStr[128]      = "";
+    char var_aliasStr[128]     = "";
+    char var_asgStr[128]       = "";
+    unsigned int var_prec      = 0;
 
     FILE *var_outFile = NULL;
 
@@ -476,13 +523,11 @@ int INTD_API_genRecord(const char *moduleName, const char *path, const char *dbF
     }
 
     /* write to file */
-    timeStr = getSystemTime();
 
     fprintf(var_outFile, "#-------------------------------------------------------------------------------------\n");
     fprintf(var_outFile, "# %s\n", dbFileName);
     fprintf(var_outFile, "# EPICS database file for the module instance of %s\n", moduleName);
     fprintf(var_outFile, "# Auto generated by InternalData module! Do not modify...\n");
-    fprintf(var_outFile, "# Generated at %s", timeStr);
     fprintf(var_outFile, "#-------------------------------------------------------------------------------------\n");
     fprintf(var_outFile, "\n");
 
@@ -496,9 +541,13 @@ int INTD_API_genRecord(const char *moduleName, const char *path, const char *dbF
         strncpy(var_subModName, ptr_dataNode -> subModuleName,                      128);   /* sub module name */
         strncpy(var_recName,    ptr_dataNode -> recName,                            128);   /* record name */
         strncpy(var_supStr,     ptr_dataNode -> supStr,                             256);	/* extra string */
-        strncpy(var_unitStr,    ptr_dataNode -> unitStr,                            16);    /* extra string */
+        strncpy(var_unitStr,    ptr_dataNode -> unitStr,                            16);    /* unit string */
+        strncpy(var_descStr,    ptr_dataNode -> desc,                               128);
+        strncpy(var_aliasStr,   ptr_dataNode -> alias,                              128);
+        strncpy(var_asgStr,     ptr_dataNode -> asg,                                128);
         strncpy(var_scanMethod, INTD_gvar_scanStrs[(int)ptr_dataNode -> scanType],  128);   /* scan method */
         sprintf(var_pno, "%d", ptr_dataNode -> pno);                                        /* point number (only used for waveform) */
+        var_prec = ptr_dataNode -> prec;
         
         switch(ptr_dataNode -> dataType) {                                                  /* field data type (only used for waveform) */
             case INTD_CHAR:     strcpy(var_dataType, "CHAR");   break;
@@ -511,23 +560,24 @@ int INTD_API_genRecord(const char *moduleName, const char *path, const char *dbF
             case INTD_ULONG:    strcpy(var_dataType, "ULONG");  break;
             case INTD_FLOAT:    strcpy(var_dataType, "FLOAT");  break;
             case INTD_DOUBLE:   strcpy(var_dataType, "DOUBLE"); break;
+            case INTD_OLDSTRING: strcpy(var_dataType, "STRING"); break;
             default:            strcpy(var_dataType, "");       break;
         }
         
         /* generate the string for record */
         switch(ptr_dataNode -> recordType) {
-            case INTD_AO:       INTD_RECORD_AO(  var_datName, var_subModName, var_recName, var_scanMethod, var_unitStr, var_recStr);    break;
-            case INTD_AI:       INTD_RECORD_AI(  var_datName, var_subModName, var_recName, var_scanMethod, var_unitStr, var_recStr);    break;
-            case INTD_BO:       INTD_RECORD_BO(  var_datName, var_subModName, var_recName, var_scanMethod, var_supStr, var_recStr);     break;
-            case INTD_BI:       INTD_RECORD_BI(  var_datName, var_subModName, var_recName, var_scanMethod, var_supStr, var_recStr);     break;
-            case INTD_LO:       INTD_RECORD_LO(  var_datName, var_subModName, var_recName, var_scanMethod, var_unitStr, var_recStr);    break;
-            case INTD_LI:       INTD_RECORD_LI(  var_datName, var_subModName, var_recName, var_scanMethod, var_unitStr, var_recStr);    break;
-            case INTD_MBBO:     INTD_RECORD_MBBO(var_datName, var_subModName, var_recName, var_scanMethod, var_supStr, var_recStr);     break;
-            case INTD_MBBI:     INTD_RECORD_MBBI(var_datName, var_subModName, var_recName, var_scanMethod, var_supStr, var_recStr);     break;
-            case INTD_WFO:      INTD_RECORD_WFO( var_datName, var_subModName, var_recName, var_scanMethod, var_pno, var_dataType, var_unitStr, var_recStr); break;
-            case INTD_WFI:      INTD_RECORD_WFI( var_datName, var_subModName, var_recName, var_scanMethod, var_pno, var_dataType, var_unitStr, var_recStr); break;
-            case INTD_SO:       INTD_RECORD_SO(  var_datName, var_subModName, var_recName, var_scanMethod, var_recStr);    break;
-            case INTD_SI:       INTD_RECORD_SI(  var_datName, var_subModName, var_recName, var_scanMethod, var_recStr);    break;
+            case INTD_AO:       INTD_RECORD_AO(  var_datName, var_subModName, var_recName, var_scanMethod, var_unitStr, var_descStr, var_prec, var_aliasStr, var_asgStr, var_recStr); break;
+            case INTD_AI:       INTD_RECORD_AI(  var_datName, var_subModName, var_recName, var_scanMethod, var_unitStr, var_descStr, var_prec, var_aliasStr, var_asgStr, var_recStr); break;
+            case INTD_BO:       INTD_RECORD_BO(  var_datName, var_subModName, var_recName, var_scanMethod, var_supStr,  var_descStr, var_aliasStr, var_asgStr, var_recStr); break;
+            case INTD_BI:       INTD_RECORD_BI(  var_datName, var_subModName, var_recName, var_scanMethod, var_supStr,  var_descStr, var_aliasStr, var_asgStr, var_recStr); break;
+            case INTD_LO:       INTD_RECORD_LO(  var_datName, var_subModName, var_recName, var_scanMethod, var_unitStr, var_descStr, var_aliasStr, var_asgStr, var_recStr); break;
+            case INTD_LI:       INTD_RECORD_LI(  var_datName, var_subModName, var_recName, var_scanMethod, var_unitStr, var_descStr, var_aliasStr, var_asgStr, var_recStr); break;
+            case INTD_MBBO:     INTD_RECORD_MBBO(var_datName, var_subModName, var_recName, var_scanMethod, var_supStr,  var_descStr, var_aliasStr, var_asgStr, var_recStr); break;
+            case INTD_MBBI:     INTD_RECORD_MBBI(var_datName, var_subModName, var_recName, var_scanMethod, var_supStr,  var_descStr, var_aliasStr, var_asgStr, var_recStr); break;
+            case INTD_WFO:      INTD_RECORD_WFO( var_datName, var_subModName, var_recName, var_scanMethod, var_pno, var_dataType, var_unitStr, var_descStr, var_aliasStr, var_asgStr, var_recStr); break;
+            case INTD_WFI:      INTD_RECORD_WFI( var_datName, var_subModName, var_recName, var_scanMethod, var_pno, var_dataType, var_unitStr, var_descStr, var_aliasStr, var_asgStr, var_recStr); break;
+            case INTD_SO:       INTD_RECORD_SO(  var_datName, var_subModName, var_recName, var_scanMethod, var_descStr, var_aliasStr, var_asgStr, var_recStr); break;
+            case INTD_SI:       INTD_RECORD_SI(  var_datName, var_subModName, var_recName, var_scanMethod, var_descStr, var_aliasStr, var_asgStr, var_recStr); break;
             default: strcpy(var_recStr, "");
         }
             
@@ -567,8 +617,6 @@ int INTD_API_genSRReqt(const char *moduleName, const char *path, const char *req
     char var_scanMethod[128]        = "";
     char var_pno[128]               = "";
 
-	char *timeStr = NULL;
-
     FILE *var_outFile_sr = NULL;
     INTD_struc_node *ptr_dataNode = NULL;
     
@@ -599,7 +647,6 @@ int INTD_API_genSRReqt(const char *moduleName, const char *path, const char *req
     }
 
     /* write to file */
-	timeStr = getSystemTime();
 
     fprintf(var_outFile_sr, "#//UPDATE-FREQ=60\n");
     fprintf(var_outFile_sr, "#ENABLE-PASS=1\n");
@@ -607,7 +654,6 @@ int INTD_API_genSRReqt(const char *moduleName, const char *path, const char *req
     fprintf(var_outFile_sr, "# %s\n", reqFileName);
     fprintf(var_outFile_sr, "# Autosave request file for the module instance of %s\n", moduleName); 
     fprintf(var_outFile_sr, "# Auto generated by InternalData module!\n");
-    fprintf(var_outFile_sr, "# Generated at %s", timeStr);
     fprintf(var_outFile_sr, "#-------------------------------------------------------------------------------------\n");
     fprintf(var_outFile_sr, "\n");
 
@@ -740,8 +786,6 @@ int INTD_API_genArchive(const char *moduleName, const char *path, const char *co
     char var_OPVArchiveMethod[128]  = "";
     char var_IPVArchiveMethod[128]  = "";
 
-	char *timeStr = NULL;
-
     FILE *var_outFile_conf = NULL;
     INTD_struc_node *ptr_dataNode = NULL;
     
@@ -767,7 +811,7 @@ int INTD_API_genArchive(const char *moduleName, const char *path, const char *co
        - for input PVs for results, if it is updated periodically, use the assigned method
     */
     if(sel == 3) {                                                  /* combined */
-        strcpy(var_OPVArchiveMethod, "Monitor Monitor Monitor");
+        strcpy(var_OPVArchiveMethod, "None None Monitor");
         strcpy(var_IPVArchiveMethod, methodStr);                    /* here method string should have 3 items seperated with space */
     } else {
         strcpy(var_OPVArchiveMethod, "Monitor");
@@ -783,13 +827,11 @@ int INTD_API_genArchive(const char *moduleName, const char *path, const char *co
     }
 
     /* write to file */
-	timeStr = getSystemTime();
 
     fprintf(var_outFile_conf, "#-------------------------------------------------------------------------------------\n");
     fprintf(var_outFile_conf, "# %s\n", confFileName);
     fprintf(var_outFile_conf, "# Archiver configure file for the module instance of %s\n", moduleName); 
     fprintf(var_outFile_conf, "# Auto generated by InternalData module!\n");
-    fprintf(var_outFile_conf, "# Generated at %s", timeStr);
     fprintf(var_outFile_conf, "#-------------------------------------------------------------------------------------\n");
     fprintf(var_outFile_conf, "\n");
 
@@ -987,7 +1029,6 @@ int INTD_API_genDbList(const char *moduleName, const char *path, const char *lst
     char var_pno[128]        = "";
     char var_dataType[128]   = "";
 
-	char *timeStr = NULL;
 
     FILE *var_outFile       = NULL;
 
@@ -1014,13 +1055,11 @@ int INTD_API_genDbList(const char *moduleName, const char *path, const char *lst
     }
 
     /* write to file */
-	timeStr = getSystemTime();
 
     fprintf(var_outFile, "#-------------------------------------------------------------------------------------\n");
     fprintf(var_outFile, "# %s\n", lstFileName);
     fprintf(var_outFile, "# Generate the list of records for the module instance of %s\n", moduleName);
     fprintf(var_outFile, "# Auto generated by InternalData module!\n");
-    fprintf(var_outFile, "# Generated at %s", timeStr);
     fprintf(var_outFile, "#\n");
     fprintf(var_outFile, "# variable-id string, record type, scan type, data type, num of point\n"); 
     fprintf(var_outFile, "#-------------------------------------------------------------------------------------\n");
@@ -1048,6 +1087,7 @@ int INTD_API_genDbList(const char *moduleName, const char *path, const char *lst
             case INTD_ULONG:    strcpy(var_dataType, "ULONG");  break;
             case INTD_FLOAT:    strcpy(var_dataType, "FLOAT");  break;
             case INTD_DOUBLE:   strcpy(var_dataType, "DOUBLE"); break;
+            case INTD_OLDSTRING:   strcpy(var_dataType, "STRING"); break;
             default:            strcpy(var_dataType, "");       break;
         }
         
@@ -1103,7 +1143,6 @@ int INTD_API_syncWithRecords(int enaCallback)
                 scanOnce(ptr_dataNode -> epicsRecord);
             }
         }
-
     }    
 
     return 0;
@@ -1138,6 +1177,7 @@ int INTD_API_forceOPVValue(INTD_struc_node *dataNode, void *dataPtr)
         case INTD_ULONG:	dbrType = DBR_ULONG; 	break;		
         case INTD_FLOAT:	dbrType = DBR_FLOAT; 	break;		
         case INTD_DOUBLE:	dbrType = DBR_DOUBLE; 	break;
+        case INTD_OLDSTRING:	dbrType = DBR_STRING; 	break;		
         default:                dbrType = DBR_DOUBLE;   break;
     }
 
@@ -1182,6 +1222,92 @@ int INTD_API_getIocInitStatus()
 {
 	return INTD_gvar_iocInitDone;
 }
+
+/**
+ * Run time function: Get the value of a field
+ */
+int INTD_API_getFieldInfo(INTD_struc_node *dataNode, const char *fieldName, short *dbrType, long *nelm)
+{
+	struct dbAddr paddr;    
+    char  fullName[128] = "";
+
+	// check the input
+	if(!dataNode || !fieldName || !dataNode -> epicsRecord) return -1;
+
+    // get the full name
+    strcpy(fullName, dataNode -> epicsRecord -> name);
+    strcat(fullName, ".");
+    strcat(fullName, fieldName);
+
+	// use dbGetField
+	dbNameToAddr(fullName, &paddr);
+
+    if(dbrType) *dbrType = paddr.dbr_field_type;
+    if(nelm)    *nelm    = paddr.no_elements;
+
+    return 0;
+}
+
+int INTD_API_getFieldData(INTD_struc_node *dataNode, const char *fieldName, void *data, long pno)
+{
+	struct dbAddr paddr;    
+    long  options       = 0;
+    long  nelm          = 0;
+    char  fullName[128] = "";
+
+	// check the input
+	if(!dataNode || !fieldName || !data || !dataNode -> epicsRecord || pno <= 0) return -1;
+
+    // get the full name
+    strcpy(fullName, dataNode -> epicsRecord -> name);
+    strcat(fullName, ".");
+    strcat(fullName, fieldName);
+
+	// use dbGetField
+	dbNameToAddr(fullName, &paddr);
+
+    nelm = paddr.no_elements;
+    if(nelm > pno) nelm = pno;
+
+    return dbGetField(&paddr, paddr.dbr_field_type, data, &options, &nelm, NULL);
+}
+
+int INTD_API_putFieldData(INTD_struc_node *dataNode, const char *fieldName, double *data, long pno)
+{
+	struct dbAddr paddr;    
+    long  nelm          = 0;
+    char  fullName[128] = "";
+
+	// check the input
+	if(!dataNode || !fieldName || !data || !dataNode -> epicsRecord || pno <= 0) return -1;
+
+    // get the full name
+    strcpy(fullName, dataNode -> epicsRecord -> name);
+    strcat(fullName, ".");
+    strcat(fullName, fieldName);
+
+	// use dbPutField
+	dbNameToAddr(fullName, &paddr);
+
+    nelm = paddr.no_elements;
+    if(nelm > pno) nelm = pno;
+
+    return dbPutField(&paddr, DBR_DOUBLE, data, nelm);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

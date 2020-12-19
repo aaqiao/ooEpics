@@ -73,7 +73,7 @@ RemotePVList::~RemotePVList()
         delete pvName;   
     }    
 
-    cout << "INFO:RemotePVList: remote PV name list deleted!" << endl;
+    cout << "INFO: RemotePVList::~RemotePVList: remote PV name list deleted!" << endl;
 
     // delete the PV data node
     while((pvNode = (RemotePVNode *)ellLast(&pvNodeList))) {
@@ -81,7 +81,7 @@ RemotePVList::~RemotePVList()
         delete pvNode;   
     }    
 
-    cout << "INFO:RemotePVList: remote PV list deleted!" << endl;
+    cout << "INFO: RemotePVList::~RemotePVList: remote PV list deleted!" << endl;
 }
 
 //-----------------------------------------------
@@ -107,12 +107,12 @@ int RemotePVList::getPVNameList(string fileName, string localMacros)
     MAC_HANDLE *macHandle = NULL;
     char       **macPairs = NULL;
 
-    char strMacroed1[256];
-    char strMacroed2[256];
+	char strMacroed1[256];
+	char strMacroed2[256];
 
     // test if the filename is Ok or not
     if(fileName.empty()) {
-        cout << "ERROR:RemotePVList::getPVNameList: Wrong file name!" << endl;
+        cout << "ERROR: RemotePVList::getPVNameList: Wrong file name!" << endl;
         return 1;
     }
 
@@ -120,25 +120,25 @@ int RemotePVList::getPVNameList(string fileName, string localMacros)
     ifstream sourceFile(fileName.c_str(), ios::in);
 
     if(!sourceFile.good()) {
-        cout << "ERROR:RemotePVList::getPVNameList: Bad file of " << fileName << endl;
+        cout << "ERROR: RemotePVList::getPVNameList: Bad file of " << fileName << endl;
         return 1;
     }
 
-    // make up the macro for this mapping file (study if there is memory leakge or not! 20150914)
-    if(!localMacros.empty()) {
+	// make up the macro for this mapping file (study if there is memory leakge or not! 20150914)
+	if(!localMacros.empty()) {
         if(macCreateHandle(&macHandle, NULL) == 0) {
             macParseDefns(macHandle, localMacros.c_str(), &macPairs);
             if(macPairs == NULL) {
-                macDeleteHandle(macHandle);
-                macHandle = NULL;
-            } else {
-                macInstallMacros(macHandle, macPairs);
-                free((void *)macPairs);
-            }
-        }        
-    }
+	    		macDeleteHandle(macHandle);
+	    		macHandle = NULL;
+			} else {
+				macInstallMacros(macHandle, macPairs);
+				free((void *)macPairs);
+			}
+        }		
+	}
 
-    cout << "INFO:RemotePVList::getPVNameList: load from file " << fileName << ", with specific macros of " << localMacros << endl;
+    cout << "INFO: RemotePVList::getPVNameList: load from file " << fileName << ", with specific macros of " << localMacros << endl;
     //cout << "-----------------------------------------------------------" << endl;
 
     // read the file
@@ -192,15 +192,15 @@ int RemotePVList::getPVNameList(string fileName, string localMacros)
             pvName -> pvNameStr.assign("");
             EPICSLIB_func_LinkedListInsert(pvNameList, pvName -> node);
 
-            //cout << "INFO:RemotePVList::getPVNameList: with local subs " << pvName -> pvLocalIdStrWithMacro << " <> " << pvName -> pvNameStrWithMacro << endl;
+            //cout << "INFO: RemotePVList::getPVNameList: with local subs " << pvName -> pvLocalIdStrWithMacro << " <> " << pvName -> pvNameStrWithMacro << endl;
         }
     }
 
-    // close the file
+	// close the file
     sourceFile.close();  
 
-    // delete the macro staff
-    if(macHandle) macDeleteHandle(macHandle);
+	// delete the macro staff
+	if(macHandle) macDeleteHandle(macHandle);
 
     return 0;
 }
@@ -219,7 +219,7 @@ int RemotePVList::addPVNodeList(RemotePV *pv)
 
     // check the input
     if(!pv) {
-        cout << "ERROR:RemotePVList::addPVNodeList: Illegal RemotePV object!" << endl;
+        cout << "ERROR: RemotePVList::addPVNodeList: Illegal RemotePV object!" << endl;
         return 1;
     }
 
@@ -251,22 +251,22 @@ int RemotePVList::mapPVNodeNames(string macros)
     MAC_HANDLE *macHandle = NULL;
     char       **macPairs = NULL;
 
-    char strMacroed1[256];
-    char strMacroed2[256];
+	char strMacroed1[256];
+	char strMacroed2[256];
 
-    // make up the macro (study if there is memory leakge or not! 20150914)
-    if(!macros.empty()) {
+	// make up the macro (study if there is memory leakge or not! 20150914)
+	if(!macros.empty()) {
         if(macCreateHandle(&macHandle, NULL) == 0) {
             macParseDefns(macHandle, macros.c_str(), &macPairs);
             if(macPairs == NULL) {
-                macDeleteHandle(macHandle);
-                macHandle = NULL;
-            } else {
-                macInstallMacros(macHandle, macPairs);
-                free((void *)macPairs);
-            }
-        }        
-    }
+	    		macDeleteHandle(macHandle);
+	    		macHandle = NULL;
+			} else {
+				macInstallMacros(macHandle, macPairs);
+				free((void *)macPairs);
+			}
+        }		
+	}
 
     // apply the macro to the pvNameList
     if(macHandle) {
@@ -280,7 +280,7 @@ int RemotePVList::mapPVNodeNames(string macros)
             pvName -> pvLocalIdStr.assign(strMacroed1);
             pvName -> pvNameStr.assign(strMacroed2);
 
-            //cout << "INFO:RemotePVList::mapPVNodeNames: map " << strMacroed1 << " to " << strMacroed2 << endl;
+            //cout << "INFO: RemotePVList::mapPVNodeNames: map " << strMacroed1 << " to " << strMacroed2 << endl;
         }
     } else {
         for(pvName = (RemotePVName *)EPICSLIB_func_LinkedListFindFirst(pvNameList);
@@ -292,8 +292,8 @@ int RemotePVList::mapPVNodeNames(string macros)
         }
     }
 
-    // delete the macro staff
-    if(macHandle) macDeleteHandle(macHandle);
+	// delete the macro staff
+	if(macHandle) macDeleteHandle(macHandle);
 
     // clean the map counter
     cntRemotePVMapped = 0;
@@ -308,7 +308,7 @@ int RemotePVList::mapPVNodeNames(string macros)
                 pvNode -> pv -> pvNameStr = pvNameStr;
                 cntRemotePVMapped ++;
 
-                //cout << "INFO:RemotePVList::mapPVNodeNames: Find remote PV " << pvNode -> pv -> pvNameStr << " for " << pvNode -> pv -> pvLocalIdStr << endl; 
+                //cout << "INFO: RemotePVList::mapPVNodeNames: Find remote PV " << pvNode -> pv -> pvNameStr << " for " << pvNode -> pv -> pvLocalIdStr << endl; 
             }
         }
     }    
@@ -385,7 +385,7 @@ int RemotePVList::savPVNodeList(string fileName)
 
     // test if the filename is Ok or not
     if(fileName.empty()) {
-        cout << "ERROR:RemotePVList::savPVNodeList: Wrong file name!" << endl;
+        cout << "ERROR: RemotePVList::savPVNodeList: Wrong file name!" << endl;
         return 1;
     }
 
@@ -393,7 +393,7 @@ int RemotePVList::savPVNodeList(string fileName)
     ofstream outFile(fileName.c_str(), ios::out);
 
     if(!outFile.good()) {
-        cout << "ERROR:RemotePVList::savPVNodeList: Bad file!" << endl;
+        cout << "ERROR: RemotePVList::savPVNodeList: Bad file!" << endl;
         return 1;
     }
 
@@ -644,15 +644,15 @@ int RemotePV::createCA(unsigned long             reqElemsReadIn,
                                         CA_DEFAULT_PRIORITY);
 
         if(pvCAChannel) {
-            pvCAChannel -> connect();       
+	        pvCAChannel -> connect();	   
             return 0;
         } else {
-            cout << "ERROR:RemotePV::createCA: Failed to create " << pvLocalIdStr << " / " << pvNameStr << "!" << endl;
+            cout << "ERROR: RemotePV::createCA: Failed to create " << pvLocalIdStr << " / " << pvNameStr << "!" << endl;
             return 1;
-        }
+	    }
     }
     else
-        cout<< "ERROR:RemotePV::createCA: Empty PV name for " << pvLocalIdStr << endl;
+        cout<< "ERROR: RemotePV::createCA: Empty PV name for " << pvLocalIdStr << endl;
 
     return 1;
 }
@@ -687,15 +687,15 @@ int RemotePV::createCA  (unsigned long             reqElemsReadIn,
                                         CA_DEFAULT_PRIORITY);
 
         if(pvCAChannel) {
-            pvCAChannel -> connect();       
+	        pvCAChannel -> connect();	   
             return 0;
         } else {
-            cout << "ERROR:RemotePV::createCA: Failed to create " << pvLocalIdStr << " / " << pvNameStr << "!" << endl;
+            cout << "ERROR: RemotePV::createCA: Failed to create " << pvLocalIdStr << " / " << pvNameStr << "!" << endl;
             return 1;
-        }
+	    }
     }
     else
-        cout<< "ERROR:RemotePV::createCA: Empty PV name for " << pvLocalIdStr << endl;
+        cout<< "ERROR: RemotePV::createCA: Empty PV name for " << pvLocalIdStr << endl;
 
     return 1;
 }
@@ -710,6 +710,12 @@ void RemotePV::deleteCA()
         pvCAChannel = NULL;
     }
 }
+
+//-----------------------------------------------
+// Old interface for CA access, should not be used in new applications
+//-----------------------------------------------
+int RemotePV::getValue(void *dataBuf) {if(!pvCAChannel) return 1; return pvCAChannel -> getValue(dataBuf);}
+int RemotePV::putValue(void *dataBuf) {if(!pvCAChannel) return 1; return pvCAChannel -> putValue(dataBuf);}
 
 //-----------------------------------------------
 // Interface for CA access (direct wrapper of Channel Access class)

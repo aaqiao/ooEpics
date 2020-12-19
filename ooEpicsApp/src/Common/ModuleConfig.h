@@ -33,8 +33,8 @@
 
 #include "ooEpicsMisc.h"
 
-#define OOEPICS_MAX_MODULE_NUM      1024
-#define OOEPICS_MAX_CMD_DATA_NUM    16
+#define OOEPICS_MAX_MODULE_NUM  	1024
+#define OOEPICS_MAX_CMD_DATA_NUM 	16
 
 //******************************************************
 // NAME SPACE OOEPICS
@@ -59,6 +59,9 @@ public:
     virtual int moduleCreate(const char *moduleName, const char *moduleInfo, int priority)  = 0;                    
     virtual int moduleInit(ModuleInstance *module)                                          = 0;
     virtual int moduleSet(ModuleInstance *module, const char *cmd, char **data)             = 0;
+
+private:
+    char typeName[128];
 };
 
 } 
