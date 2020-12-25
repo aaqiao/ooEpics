@@ -1,7 +1,7 @@
 //=========================================================
 // Application.cc
 //
-// Realize the basic class for the Application 
+// Realize the basic class for the Application
 //
 // Created by Zheqiao Geng (zheqiao.geng@psi.ch) on 2014.04.10
 //=========================================================
@@ -17,7 +17,7 @@ namespace OOEPICS {
 //-----------------------------------------------
 // construction
 //-----------------------------------------------
-Application::Application(const char *appName) 
+Application::Application(const char *appName)
 {
     if(!appName || !appName[0]) {
         cout << "ERROR: Application::Application: Illegal module name!\n";
