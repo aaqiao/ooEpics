@@ -25,7 +25,7 @@ TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
 #SNCSEQ=$(EPICS_BASE)/../modules/soft/seq
 
 # EPICS_BASE usually appears last so other apps can override stuff:
-EPICS_BASE=/home/aqiao/work_root/EPICS_base/base-7.0
+EPICS_BASE=/home/aqiao/epics/base-7.0.7
 
 # Set RULES here if you want to take build rules from somewhere
 # other than EPICS_BASE:

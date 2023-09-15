@@ -14,4 +14,9 @@ iocBoot_DEPEND_DIRS += $(filter %App,$(DIRS))
 
 include $(TOP)/configure/RULES_TOP
 
+# remove the created folder
+clean_all ::
+	rm -rf dbd
+	rm -rf include
+	rm -rf lib
 
