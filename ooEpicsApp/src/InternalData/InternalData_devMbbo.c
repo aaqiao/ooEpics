@@ -51,21 +51,11 @@ static long init_record(mbboRecord *pmbbo)
 { 
     long status;
 
-    char fullStr[512]    = "";
     char moduleName[128] = "";
     char dataName[128]   = "";
 
-    char *pat, *pdt, *ped;
-
-    /* Get the link strings, should be "@moduleName.dataName" */
-    strncpy(fullStr, pmbbo -> out.text, 512);
-
-    pat = strchr(fullStr, '@');
-    pdt = strchr(fullStr, '.');
-    ped = strchr(fullStr, '\0');
-
-    strncpy(moduleName, pat + 1, pdt - pat - 1);
-    strncpy(dataName,   pdt + 1, ped - pdt - 1);
+    /* Get the link strings, should be "moduleName.dataName" */
+    sscanf(pmbbo -> out.value.instio.string, "%127[^.].%127c", moduleName, dataName);
 
     /* Attach to a internal data */
     pmbbo -> dpvt = (void *)INTD_API_findDataNode(moduleName, dataName, (dbCommon *)pmbbo);

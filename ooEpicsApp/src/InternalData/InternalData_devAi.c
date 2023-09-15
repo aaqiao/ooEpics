@@ -55,21 +55,11 @@ epicsExportAddress(dset,devAi_internalData);
 /* Init the record */
 static long init_record(aiRecord *pai)
 {
-    char fullStr[512]    = "";
     char moduleName[128] = "";
     char dataName[128]   = "";
 
-    char *pat, *pdt, *ped;
-
-    /* Get the INP link strings, should be "@moduleName.dataName" */
-    strncpy(fullStr, pai -> inp.text, 512);
-
-    pat = strchr(fullStr, '@');
-    pdt = strchr(fullStr, '.');
-    ped = strchr(fullStr, '\0');
-
-    strncpy(moduleName, pat + 1, pdt - pat - 1);
-    strncpy(dataName,   pdt + 1, ped - pdt - 1);
+    /* Get the link strings, should be "moduleName.dataName" */
+    sscanf(pai -> inp.value.instio.string, "%127[^.].%127c", moduleName, dataName);
 
     /* Make sure record processing routine does not perform any conversion*/
     pai -> linr = 0;

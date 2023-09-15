@@ -26,8 +26,8 @@ Coordinator::Coordinator(const char *modNameIn, const char *crdNameIn)
         cout << "ERROR: Coordinator::Coordinator: Wrong coordinator name!\n";
 
     // remember the input
-	strncpy(modName, modNameIn, CRD_STRING_LEN);
-    strncpy(crdName, crdNameIn, CRD_STRING_LEN);
+	strncpy(modName, modNameIn, CRD_STRING_LEN-1);
+    strncpy(crdName, crdNameIn, CRD_STRING_LEN-1);
  
 	for(i = 0; i < CRD_MAX_NUM_JOBS; i ++)
 		jobSet[i] = NULL;

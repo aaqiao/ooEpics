@@ -50,21 +50,11 @@ epicsExportAddress(dset,devMbbi_internalData);
 /* Init the record */
 static long init_record(mbbiRecord *pmbbi)
 {
-    char fullStr[512]    = "";
     char moduleName[128] = "";
     char dataName[128]   = "";
 
-    char *pat, *pdt, *ped;
-
-    /* Get the OUP link strings, should be "@moduleName.dataName" */
-    strncpy(fullStr, pmbbi -> inp.text, 512);
-
-    pat = strchr(fullStr, '@');
-    pdt = strchr(fullStr, '.');
-    ped = strchr(fullStr, '\0');
-
-    strncpy(moduleName, pat + 1, pdt - pat - 1);
-    strncpy(dataName,   pdt + 1, ped - pdt - 1);
+    /* Get the link strings, should be "moduleName.dataName" */
+    sscanf(pmbbi -> inp.value.instio.string, "%127[^.].%127c", moduleName, dataName);
 
     /* Attach to a internal data */
     pmbbi -> dpvt = (void *)INTD_API_findDataNode(moduleName, dataName, (dbCommon *)pmbbi);

@@ -91,12 +91,15 @@ void FSMEvent::recvEvent(int *eventCodeOut, int *cmdOut, int *subCmdOut)
 
     msgQ.receive((void *)&msg, sizeof(FSMEventMsg));
     
-    if(eventCodeOut)
+    if(eventCodeOut) {
         *eventCodeOut = msg.eventCode;
-    if(cmdOut)
-        *cmdOut       = msg.cmd;
-	if(subCmdOut)
-		*subCmdOut    = msg.subCmd;
+    }
+    if(cmdOut) {
+        *cmdOut = msg.cmd;
+    }
+	if(subCmdOut) {
+		*subCmdOut = msg.subCmd;
+    }
 }
 
 //-----------------------------------------------
@@ -117,12 +120,15 @@ void FSMEvent::recvEventWithTimeout(int *eventCodeOut, int *cmdOut, int *subCmdO
 
     msgQ.receive((void *)&msg, sizeof(FSMEventMsg), timeOut);
     
-    if(eventCodeOut)
+    if(eventCodeOut) {
         *eventCodeOut = msg.eventCode;
-    if(cmdOut)
-        *cmdOut       = msg.cmd;
-	if(subCmdOut)
-		*subCmdOut    = msg.subCmd;
+    }
+    if(cmdOut) {
+        *cmdOut = msg.cmd;
+    }
+	if(subCmdOut) {
+		*subCmdOut = msg.subCmd;
+    }
 }
 
 //-----------------------------------------------
@@ -245,11 +251,12 @@ FSM::FSM(const char *modNameIn, const char *fsmNameIn)
     preState        = NULL;
     defaultState    = NULL;
 
-    for(i = 0; i < FSM_MAX_NUM_STATES; i ++)
+    for(i = 0; i < FSM_MAX_NUM_STATES; i ++) {
         stateSet[i] = NULL;
-
-	for(i = 0; i < FSM_MAX_NUM_JOBS; i ++)
+    }
+	for(i = 0; i < FSM_MAX_NUM_JOBS; i ++) {
 		jobSet[i] = NULL;
+    }
 
     // create the timer
     var_timerQueue = epicsTimerQueueAllocate(1, epicsThreadPriorityScanHigh);

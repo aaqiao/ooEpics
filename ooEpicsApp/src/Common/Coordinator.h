@@ -10,8 +10,7 @@
 //=========================================================
 #ifndef COORDINATOR_H
 #define COORDINATOR_H
-
-#include <iostream>
+#include <iostream>
 #include <fstream>
 
 #include <string.h>
@@ -27,7 +26,7 @@
 //******************************************************
 namespace OOEPICS {
 
-#define CRD_MAX_NUM_JOBS        256
+#define CRD_MAX_NUM_JOBS		256
 #define CRD_STRING_LEN          256
 
 //-----------------------------------------------
@@ -41,8 +40,8 @@ public:
 
     virtual int execute         () = 0;                             // execute the coordinator
 
-    void registerJob            (Job *job, int jobCode);            // register the job
-    int  executeJob             (int jobCode, int flag);            // execute the job
+	void registerJob            (Job *job, int jobCode);		    // register the job
+	int  executeJob             (int jobCode, int flag);		    // execute the job
     void enableAllJobs          (int enabled);                      // enable or disable all jobs
     void enableJob              (int jobCode, int enabled);         // enable or disable a job
 
@@ -54,12 +53,12 @@ public:
     void waitEventWithTimeout   (int *eventCode, int *cmd, int *subCmd, double timeout);    
     int  withPendingEvents      ();
 
-    char modName[CRD_STRING_LEN];
+	char modName[CRD_STRING_LEN];
     char crdName[CRD_STRING_LEN];
 
 private:
     // jobs identified by the job code
-    Job *jobSet[CRD_MAX_NUM_JOBS];
+	Job *jobSet[CRD_MAX_NUM_JOBS];
 
     // event for this FSM
     FSMEvent var_event;

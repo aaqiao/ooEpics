@@ -53,7 +53,7 @@ ChannelAccess::ChannelAccess(string                    pvNameIn,
         cout << "ERROR: ChannelAccess::ChannelAccess: Wrong initial settings!\n";
 
     // init the CA configurations
-    strncpy(pvName, pvNameIn.c_str(), CA_STRING_LEN);       // remember the name
+    strncpy(pvName, pvNameIn.c_str(), CA_STRING_LEN-1);       // remember the name
 
     reqElemsRead        = reqElemsReadIn;
 

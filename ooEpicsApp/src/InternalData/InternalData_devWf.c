@@ -55,21 +55,11 @@ epicsExportAddress(dset,devWf_internalData);
 /* Init the record */
 static long init_record(waveformRecord *pwf)
 {
-    char fullStr[512]    = "";
     char moduleName[128] = "";
     char dataName[128]   = "";
 
-    char *pat, *pdt, *ped;
-
-    /* Get the INP link strings, should be "@moduleName.dataName" */
-    strncpy(fullStr, pwf -> inp.text, 512);
-
-    pat = strchr(fullStr, '@');
-    pdt = strchr(fullStr, '.');
-    ped = strchr(fullStr, '\0');
-
-    strncpy(moduleName, pat + 1, pdt - pat - 1);
-    strncpy(dataName,   pdt + 1, ped - pdt - 1);
+    /* Get the link strings, should be "moduleName.dataName" */
+    sscanf(pwf -> inp.value.instio.string, "%127[^.].%127c", moduleName, dataName);
 
     /* Init value */
     pwf -> nord = 0;
