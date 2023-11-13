@@ -59,6 +59,7 @@ INC += Service.h
 
 # source files
 ooEpics_SRCS += initHooks.c
+ooEpics_SRCS += recordGenerate.c
 ooEpics_SRCS += InternalData.c
 ooEpics_SRCS += InternalData_devAi.c
 ooEpics_SRCS += InternalData_devAo.c
