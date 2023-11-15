@@ -152,7 +152,7 @@ State::State(int stateCodeIn, const char *stateNameIn)
         cout << "ERROR: State::State: Wrong state code or name!\n";
 
     // remember the input
-    strncpy(stateName, stateNameIn, FSM_STRING_LEN);
+    strcpy(stateName, stateNameIn);
     stateCode           = stateCodeIn;
     sourceStateCode     = stateCodeIn;
     destStateCode       = stateCodeIn;	
@@ -242,8 +242,8 @@ FSM::FSM(const char *modNameIn, const char *fsmNameIn)
         cout << "ERROR: FSM::FSM: Wrong FSM name!\n";
 
     // remember the input
-	strncpy(modName, modNameIn, FSM_STRING_LEN);
-    strncpy(fsmName, fsmNameIn, FSM_STRING_LEN);
+	strcpy(modName, modNameIn);
+    strcpy(fsmName, fsmNameIn);
 
     // init private variables
     nextStateCode   = -1;

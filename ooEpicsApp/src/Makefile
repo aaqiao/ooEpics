@@ -22,6 +22,11 @@ USR_DBDFLAGS += -I $(OOEPICS_INTD)
 USR_DBDFLAGS += -I $(OOEPICS_COMMON)
 
 #==================================================
+# avoid "warning: ‘rset’ is deprecated" when compiling with EPICS7
+#==================================================
+CPPFLAGS += -DUSE_TYPED_RSET
+
+#==================================================
 # build a support library
 #==================================================
 # library name

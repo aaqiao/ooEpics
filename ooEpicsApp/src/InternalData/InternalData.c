@@ -122,12 +122,12 @@ static int INTD_func_getDataSize(INTD_enum_dataType dataType)
 /**
  * Get system time
  */
-static char *getSystemTime()
+/*static char *getSystemTime()
 {
     time_t timer;
     timer = time(0);
     return asctime(localtime(&timer));
-}
+}*/
 
 /**
  * Clean the data memory when EPICS exits
@@ -220,7 +220,7 @@ INTD_struc_node *INTD_API_createDataNode(const char *moduleName,
 
     /* get the sub-module name and the data name. The input dataName may contains of a '|' character to pass in the sub-module name which
        is only used to generate the record names. The '|' will be converted to '-' to get the final data name */
-    strncpy(dataName_convert, dataName, 128);
+    strcpy(dataName_convert, dataName);
     
     posVertLine = strchr(dataName_convert, '|'); 
     posEnd      = strchr(dataName_convert, '\0');   
@@ -231,9 +231,8 @@ INTD_struc_node *INTD_API_createDataNode(const char *moduleName,
         strncpy(dataName_recPart,        posVertLine + 1,  posEnd - posVertLine - 1);
         *posVertLine = '-';
     } else {
-        strncpy(dataName_recPart, dataName_convert, 128);
+        strcpy(dataName_recPart, dataName_convert);
     }
-
 
     /* Initalize the data node */
     strcpy(ptr_dataNode -> moduleName,      moduleName);
@@ -536,16 +535,16 @@ int INTD_API_genRecord(const char *moduleName, const char *path, const char *dbF
         ptr_dataNode = (INTD_struc_node *)ellNext(&ptr_dataNode -> node)) {
         
         /* get the necessary information */
-        strncpy(var_modName,    ptr_dataNode -> moduleName,                         128);   /* module name */
-        strncpy(var_datName,    ptr_dataNode -> dataName,                           128);   /* data name */
-        strncpy(var_subModName, ptr_dataNode -> subModuleName,                      128);   /* sub module name */
-        strncpy(var_recName,    ptr_dataNode -> recName,                            128);   /* record name */
-        strncpy(var_supStr,     ptr_dataNode -> supStr,                             256);	/* extra string */
-        strncpy(var_unitStr,    ptr_dataNode -> unitStr,                            16);    /* unit string */
-        strncpy(var_descStr,    ptr_dataNode -> desc,                               128);
-        strncpy(var_aliasStr,   ptr_dataNode -> alias,                              128);
-        strncpy(var_asgStr,     ptr_dataNode -> asg,                                128);
-        strncpy(var_scanMethod, INTD_gvar_scanStrs[(int)ptr_dataNode -> scanType],  128);   /* scan method */
+        strcpy(var_modName,    ptr_dataNode -> moduleName);     /* module name */
+        strcpy(var_datName,    ptr_dataNode -> dataName);       /* data name */
+        strcpy(var_subModName, ptr_dataNode -> subModuleName);  /* sub module name */
+        strcpy(var_recName,    ptr_dataNode -> recName);        /* record name */
+        strcpy(var_supStr,     ptr_dataNode -> supStr);	        /* extra string */
+        strcpy(var_unitStr,    ptr_dataNode -> unitStr);        /* unit string */
+        strcpy(var_descStr,    ptr_dataNode -> desc);
+        strcpy(var_aliasStr,   ptr_dataNode -> alias);
+        strcpy(var_asgStr,     ptr_dataNode -> asg);
+        strcpy(var_scanMethod, INTD_gvar_scanStrs[(int)ptr_dataNode -> scanType]);   /* scan method */
         sprintf(var_pno, "%d", ptr_dataNode -> pno);                                        /* point number (only used for waveform) */
         var_prec = ptr_dataNode -> prec;
         
@@ -636,7 +635,7 @@ int INTD_API_genSRReqt(const char *moduleName, const char *path, const char *req
 
     /* other module name with the same type */
     if(withMacro == 2 && destModuleName && destModuleName[0])
-        strncpy(var_destModName, destModuleName, 128);                                      
+        strcpy(var_destModName, destModuleName);                                      
 
     /* open the file */
     var_outFile_sr  = fopen(var_fullSRFileName, "w");
@@ -662,11 +661,11 @@ int INTD_API_genSRReqt(const char *moduleName, const char *path, const char *req
         ptr_dataNode = (INTD_struc_node *)ellNext(&ptr_dataNode -> node)) {
         
         /* get the necessary information */
-        strncpy(var_modName,        ptr_dataNode -> moduleName,                         128);   /* module name */
-        strncpy(var_subModName,     ptr_dataNode -> subModuleName,                      128);   /* sub module name */
-        strncpy(var_recName,        ptr_dataNode -> recName,                            128);   /* record name */
-        strncpy(var_scanMethod,     INTD_gvar_scanStrs[(int)ptr_dataNode -> scanType],  128);   /* scan method */
-        sprintf(var_pno, "%d", ptr_dataNode -> pno);                                            /* point number (only used for waveform) */      
+        strcpy(var_modName,        ptr_dataNode -> moduleName);     /* module name */
+        strcpy(var_subModName,     ptr_dataNode -> subModuleName);  /* sub module name */
+        strcpy(var_recName,        ptr_dataNode -> recName);        /* record name */
+        strcpy(var_scanMethod,     INTD_gvar_scanStrs[(int)ptr_dataNode -> scanType]);   /* scan method */
+        sprintf(var_pno, "%d", ptr_dataNode -> pno);                                     /* point number (only used for waveform) */      
      
         /* generate the string for record and save to file for this module instance */
 		if(strcmp(moduleName, "MOD_ALL") == 0 || strcmp(moduleName, var_modName) == 0) {
@@ -754,7 +753,8 @@ int INTD_API_genSRReqt(const char *moduleName, const char *path, const char *req
 
             	default: break;
         	}        
-		}        }    
+		}    
+    }    
 
     /* close to file */
     fflush(var_outFile_sr);
@@ -763,7 +763,8 @@ int INTD_API_genSRReqt(const char *moduleName, const char *path, const char *req
     return 0;
 }
 
-/** * Generate archiver configuration file
+/**
+ * Generate archiver configuration file
  * Input:
  *   moduleName:    the module instance that this file for. Please note that the module name will be hardcoded in the file
  *   path:          the path for the file
@@ -803,7 +804,7 @@ int INTD_API_genArchive(const char *moduleName, const char *path, const char *co
 
     /* other module name with the same type */
     if(withMacro == 2 && destModuleName && destModuleName[0])
-        strncpy(var_destModName, destModuleName, 128);
+        strcpy(var_destModName, destModuleName);
 
     /* generate the archive string:
        - for output PVs for parameters setting, always use monitor method
@@ -840,9 +841,9 @@ int INTD_API_genArchive(const char *moduleName, const char *path, const char *co
         ptr_dataNode = (INTD_struc_node *)ellNext(&ptr_dataNode -> node)) {
         
         /* get the necessary information */
-        strncpy(var_modName,    ptr_dataNode -> moduleName,    128);   /* module name */
-        strncpy(var_subModName, ptr_dataNode -> subModuleName, 128);   /* sub module name */
-        strncpy(var_recName,    ptr_dataNode -> recName,       128);   /* record name */
+        strcpy(var_modName,    ptr_dataNode -> moduleName);     /* module name */
+        strcpy(var_subModName, ptr_dataNode -> subModuleName);  /* sub module name */
+        strcpy(var_recName,    ptr_dataNode -> recName);        /* record name */
                
         /* generate the string for record and save to file for this module instance */
 		if(strcmp(moduleName, "MOD_ALL") == 0 || strcmp(moduleName, var_modName) == 0) {
@@ -1000,7 +1001,8 @@ int INTD_API_genArchive(const char *moduleName, const char *path, const char *co
 
             	default: break;
         	}        
-		}        }    
+		}    
+    }    
 
     /* close to file */
     fflush(var_outFile_conf);
@@ -1070,10 +1072,10 @@ int INTD_API_genDbList(const char *moduleName, const char *path, const char *lst
         ptr_dataNode = (INTD_struc_node *)ellNext(&ptr_dataNode -> node)) {
         
         /* get the necessary information */
-        strncpy(var_modName,    ptr_dataNode -> moduleName,                         128);   /* module name */
-        strncpy(var_subModName, ptr_dataNode -> subModuleName,                      128);   /* sub module name */
-        strncpy(var_recName,    ptr_dataNode -> recName,                            128);   /* record name */
-        strncpy(var_scanMethod, INTD_gvar_scanStrs[(int)ptr_dataNode -> scanType],  128);   /* scan method */
+        strcpy(var_modName,    ptr_dataNode -> moduleName);     /* module name */
+        strcpy(var_subModName, ptr_dataNode -> subModuleName);  /* sub module name */
+        strcpy(var_recName,    ptr_dataNode -> recName);        /* record name */
+        strcpy(var_scanMethod, INTD_gvar_scanStrs[(int)ptr_dataNode -> scanType]);          /* scan method */
         sprintf(var_pno, "%d", ptr_dataNode -> pno);                                        /* point number (only used for waveform) */
         
         switch(ptr_dataNode -> dataType) {                                                  /* field data type (only used for waveform) */

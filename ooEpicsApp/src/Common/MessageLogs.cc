@@ -25,7 +25,7 @@ MessageLogs::MessageLogs(const char *modNameIn)
 	int i;
 
     // init variables
-    strncpy(modName, modNameIn, MSGLOG_STR_LEN);
+    strcpy(modName, modNameIn);
 	curStr = 0;
 
 	for(i = 0; i < MSGLOG_MAX_NUM; i ++) {

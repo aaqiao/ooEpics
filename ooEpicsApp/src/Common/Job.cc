@@ -20,8 +20,8 @@ namespace OOEPICS {
 Job::Job(const char *modNameIn, const char *jobNameIn)
 {
     // remember the input
-    strncpy(modName, modNameIn, JOB_STRING_LEN);
-    strncpy(jobName, jobNameIn, JOB_STRING_LEN);
+    strcpy(modName, modNameIn);
+    strcpy(jobName, jobNameIn);
 
     cout << "INFO: Job::Job: Object " << jobName << " for module " << modName << " created." << endl;
 }
