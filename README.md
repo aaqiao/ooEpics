@@ -23,7 +23,7 @@ Follow the steps below to compile the `ooEpics` code as a standard EPICS module:
 `ooEpics` provides templates and a script (based on `sed`) to generate codes as a starting point to implement EPICS modules. Follow the steps below:
 1. Define a Linux environment variable pointing to the path of the folder `ooEpics/template` where the code templates are stored.
    ```
-   export $OOEPICS_TEMPLATE_PATH=[path of ooEpics/template]
+   export OOEPICS_TEMPLATE_PATH=[path of ooEpics/template]
    ```
 2. Make a folder you want to store the generated EPICS modules and enter that folder.
    ```
