@@ -1,0 +1,3 @@
+GUI_PATH=.
+caqtdm -noMsg -graphicssystem native -macro "name_space=,module_name=MODT,gui_path=$GUI_PATH" $GUI_PATH/GUI_Example_Top.ui &
+

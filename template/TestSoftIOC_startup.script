@@ -1,0 +1,30 @@
+#!../../bin/RHEL7-x86_64/ioctest
+#######################################################################
+# Startup script for a softIOC to test the module __MODULE_NAME__
+# Auto created from the template of ooEpics framework
+#######################################################################
+
+# First, you need to change the 1st line above to the path of your IOC binary
+
+< envPaths
+
+cd "${TOP}"
+
+# Register all support components (change "ioctest" to your IOC binary name)
+dbLoadDatabase "dbd/ioctest.dbd"
+ioctest_registerRecordDeviceDriver pdbbase
+
+# define environment variables
+epicsEnvSet("MODULE_INST_NAME", "MODT")         # change to your module instance name
+epicsEnvSet("THREAD_PRIORITY", "10")
+epicsEnvSet("RPVMAP_PATH", "$(__MODULE_NAME__)")
+
+# execute the module script
+cd "${TOP}/iocBoot/${IOC}"
+< $(__MODULE_NAME__)/startup___MODULE_NAME__.cmd
+
+# start the IOC
+iocInit
+
+
+

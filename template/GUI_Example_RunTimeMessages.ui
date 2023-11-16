@@ -1,0 +1,1019 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>629</width>
+    <height>608</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>12</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+
+QWidget#centralWidget {background: rgba(235, 241, 181, 255);}
+
+caTable {
+       font: 10pt;
+       background: cornsilk;
+       alternate-background-color: wheat;
+}
+
+caLineEdit {
+     border-radius: 1px;
+     background: lightyellow;
+     color: black;
+ }
+
+caTextEntry {
+    color: rgb(127, 0, 63);
+    background-color: cornsilk;
+    selection-color: #0a214c;
+    selection-background-color: wheat;
+    border: 1px groove black;
+    border-radius: 1px;
+    padding: 1px;
+}
+
+caTextEntry:focus {
+    padding: 0px;
+    border: 2px groove darkred;
+    border-radius: 1px;
+}
+
+QPushButton {
+      border-color: #00b;
+      border-radius: 2px;
+      padding: 3px;
+      border-width: 1px;
+
+	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,
+						   stop:0   rgba(224, 239, 255, 255),
+						   stop:0.5 rgba(199, 215, 230, 255),
+						   stop:1   rgba(184, 214, 236, 255));
+}
+QPushButton:hover {
+	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,
+						stop:0   rgba(201, 226, 255, 255),
+						stop:0.5 rgba(177, 204, 230, 255),
+						stop:1   rgba(163, 205, 236, 255));
+}
+QPushButton:pressed {
+	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,
+						stop:0   rgba(174, 219, 255, 255),
+						stop:0.5 rgba(165, 199, 230, 255),
+						stop:1   rgba(134, 188, 236, 255));
+}
+
+QPushButton:disabled {
+	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,
+						stop:0   rgba(174, 219, 255, 255),
+						stop:0.5 rgba(165, 199, 230, 255),
+						stop:1   rgba(134, 188, 236, 255));
+}
+
+caChoice {
+      background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                  stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
+                                  stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+}
+
+caChoice &gt; QPushButton {
+      text-align: left;
+      padding: 1px;
+}
+
+/* when font specified, no font sizing is done any more,  font: 10pt; is not bad. You could Enable this when you converted from .adl files
+caRelatedDisplay  &gt; QPushButton {
+font: 10pt;
+}
+
+caShellCommand  &gt; QPushButton {
+font: 10pt;
+}
+*/
+
+caSlider::groove:horizontal {
+border: 1px solid #bbb;
+background: lightgrey;
+height: 20px;
+border-radius: 4px;
+}
+
+caSlider::handle:horizontal {
+background: red;
+border: 1px solid #777;
+width: 13px;
+margin-top: -2px;
+margin-bottom: -2px;
+border-radius: 2px;
+}
+
+
+
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="caLabel" name="calabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>381</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Run-time Message for $(module_name)</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="fontScaleMode">
+     <enum>ESimpleLabel::None</enum>
+    </property>
+    <property name="styleSheet" stdset="0">
+     <string notr="true">background-color: rgba(255, 255, 255, 0); color: rgba(0, 0, 0, 255);</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_73">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>3</y>
+      <width>171</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Sans Serif</family>
+      <pointsize>9</pointsize>
+      <weight>50</weight>
+      <italic>true</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: italic 9pt &quot;Sans Serif&quot;;
+color: rgb(85, 170, 255);</string>
+    </property>
+    <property name="text">
+     <string>Last 32 messages.</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_74">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>570</y>
+      <width>381</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Sans Serif</family>
+      <pointsize>9</pointsize>
+      <weight>50</weight>
+      <italic>true</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: italic 9pt &quot;Sans Serif&quot;;
+color: rgb(85, 170, 255);</string>
+    </property>
+    <property name="text">
+     <string>Alarm colors will be added later to the message...</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>611</width>
+      <height>541</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="verticalSpacing">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="caLineEdit" name="calineedit">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG0</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="caLineEdit" name="calineedit_2">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG1</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="caLineEdit" name="calineedit_3">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG2</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="caLineEdit" name="calineedit_4">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG3</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="caLineEdit" name="calineedit_5">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG4</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="caLineEdit" name="calineedit_6">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG5</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="caLineEdit" name="calineedit_7">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG6</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="caLineEdit" name="calineedit_8">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG7</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="caLineEdit" name="calineedit_9">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG8</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="caLineEdit" name="calineedit_10">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG9</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="0">
+      <widget class="caLineEdit" name="calineedit_11">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG10</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="0">
+      <widget class="caLineEdit" name="calineedit_12">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG11</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="0">
+      <widget class="caLineEdit" name="calineedit_13">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG12</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="0">
+      <widget class="caLineEdit" name="calineedit_14">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG13</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="0">
+      <widget class="caLineEdit" name="calineedit_15">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG14</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="15" column="0">
+      <widget class="caLineEdit" name="calineedit_16">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG15</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="16" column="0">
+      <widget class="caLineEdit" name="calineedit_17">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG16</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="17" column="0">
+      <widget class="caLineEdit" name="calineedit_18">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG17</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="18" column="0">
+      <widget class="caLineEdit" name="calineedit_19">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG18</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="19" column="0">
+      <widget class="caLineEdit" name="calineedit_20">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG19</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="20" column="0">
+      <widget class="caLineEdit" name="calineedit_21">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG20</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="21" column="0">
+      <widget class="caLineEdit" name="calineedit_22">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG21</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="22" column="0">
+      <widget class="caLineEdit" name="calineedit_23">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG22</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="23" column="0">
+      <widget class="caLineEdit" name="calineedit_24">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG23</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="24" column="0">
+      <widget class="caLineEdit" name="calineedit_25">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG24</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="25" column="0">
+      <widget class="caLineEdit" name="calineedit_26">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG25</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="26" column="0">
+      <widget class="caLineEdit" name="calineedit_27">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG26</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="27" column="0">
+      <widget class="caLineEdit" name="calineedit_28">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG27</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="28" column="0">
+      <widget class="caLineEdit" name="calineedit_29">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG28</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="29" column="0">
+      <widget class="caLineEdit" name="calineedit_30">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG29</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="30" column="0">
+      <widget class="caLineEdit" name="calineedit_31">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG30</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="31" column="0">
+      <widget class="caLineEdit" name="calineedit_32">
+       <property name="channel" stdset="0">
+        <string notr="true">$(name_space)$(module_name)-RTST:MON-MSG-LOG31</string>
+       </property>
+       <property name="foreground">
+        <color>
+         <red>0</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="background">
+        <color>
+         <red>89</red>
+         <green>89</green>
+         <blue>89</blue>
+        </color>
+       </property>
+       <property name="colorMode">
+        <enum>caLineEdit::Static</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>caLabel</class>
+   <extends>QLabel</extends>
+   <header>caLabel</header>
+  </customwidget>
+  <customwidget>
+   <class>caLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>caLineEdit</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

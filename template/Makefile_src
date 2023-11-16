@@ -1,0 +1,40 @@
+##########################################################
+# Makefile
+# 
+# Makefile for ooEpics demo module
+# Auto created from the template of ooEpics framework
+##########################################################
+TOP=../..
+
+include $(TOP)/configure/CONFIG
+
+#==================================================
+# build a support library
+#==================================================
+# library name
+LIBRARY_IOC = __MODULE_NAME__
+
+# include files
+INC += Coordinator_Jobs.h
+INC += FSM_Example.h
+INC += Job_Example.h
+INC += ModuleConfig___MODULE_NAME__.h
+INC += ModuleDefs___MODULE_NAME__.h
+INC += Module___MODULE_NAME__.h
+INC += Service_Example.h
+
+# source files
+__MODULE_NAME___SRCS += Coordinator_Jobs.cc
+__MODULE_NAME___SRCS += FSM_Example.cc
+__MODULE_NAME___SRCS += Job_Example.cc
+__MODULE_NAME___SRCS += ModuleConfig___MODULE_NAME__.cc
+__MODULE_NAME___SRCS += Module___MODULE_NAME__.cc
+__MODULE_NAME___SRCS += Service_Example.cc
+
+# EPICS base library
+__MODULE_NAME___LIBS += $(EPICS_BASE_IOC_LIBS)
+
+include $(TOP)/configure/RULES
+
+
+

@@ -1,0 +1,33 @@
+#######################################################################
+# Script to generate autosave and archiver configure files for module __MODULE_NAME__
+# for the test IOC. For different IOCs, this script should be customized
+# 
+# Auto created from the template of ooEpics framework
+#######################################################################
+
+#---------------------------------------------------
+# Load the modules (use the same version as in your start up script)
+#---------------------------------------------------
+require "__MODULE_NAME__","geng_z"
+
+#---------------------------------------------------
+# define macros
+#---------------------------------------------------
+epicsEnvSet("SR_REQ_PATH",      ".")
+epicsEnvSet("AR_CFG_PATH",      ".")
+epicsEnvSet("REQ_FILE_PREFIX",  "saveres")
+epicsEnvSet("CFG_FILE_PREFIX",  "archiver")
+epicsEnvSet("GM",               "SR_REQ_PATH=$(SR_REQ_PATH),AR_CFG_PATH=$(AR_CFG_PATH),REQ_FILE_PREFIX=$(REQ_FILE_PREFIX),CFG_FILE_PREFIX=$(CFG_FILE_PREFIX)")
+
+#---------------------------------------------------
+# Create the template of modules
+#---------------------------------------------------
+# Input: moduleType, moduleName, RFStationType, threadPriority
+createModule("__MODULE_NAME__", "TMPLT_MOD", "", 10)
+
+#---------------------------------------------------
+# Generate files
+#---------------------------------------------------
+runScript $(__MODULE_NAME___DIR)/saveres_request_gen___MODULE_NAME__.cmd, "MODULE_TEMPLATE=TMPLT_MOD,DEST_MODULE=MODT,$(GM)"
+
+

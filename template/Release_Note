@@ -1,0 +1,16 @@
+#==============================================================================
+# Release Note for __MODULE_NAME__
+# Auto created from the template of ooEpics framework
+#
+# Release history:
+#   S_LLRF_HLA_1_11_2   : 09.03.2016,   Zheqiao Geng        (example)
+#==============================================================================
+
+S_LLRF_HLA_1_11_2 (example)
+---------------------------------------------------------------
+- Changed the string for archiver configuration file from "MONITOR" to "Monitor" in the script file
+
+
+
+
+

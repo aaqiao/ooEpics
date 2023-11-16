@@ -1,0 +1,23 @@
+#-------------------------------------------------------------------------------
+# File to map internal remote PV ID and the real remote PV name for __MODULE_NAME__
+# Auto created from the template of ooEpics framework
+# 
+# Format: [Internal Remote PV ID] = [Remote PV Name]
+#-------------------------------------------------------------------------------
+# Remote PVs for Service_Example
+# Please note these PVs are only for testing, be sure not to disturb the running system (especially for output PVs)
+$(module_name)-RTST-SRVEXAM.RPV-SET-BO      = SINEGTS-RHLA-JOBTBL:ENA-AMPLT-STEP
+$(module_name)-RTST-SRVEXAM.RPV-SET-MBBO    = SINEGTS-RHLA-JOBTBL:SET-TABLE-MODE
+$(module_name)-RTST-SRVEXAM.RPV-SET-LO      = SINEGTS-RHLA-JOBTBL:SET-AMPLT-STEP-TIME
+$(module_name)-RTST-SRVEXAM.RPV-SET-AO      = SINEGTS-RHLA-JOBTBL:SET-AMPLT-STEP-RATIO
+$(module_name)-RTST-SRVEXAM.RPV-SET-WFO     = SINEGTS-RHLA-JOBTBL:SET-USR-TABLE-I
+$(module_name)-RTST-SRVEXAM.RPV-SET-SO      = SINEGTS-RHLA-JOBIDK:SET-FILENAME-USER
+ 
+$(module_name)-RTST-SRVEXAM.RPV-MON-BI      = SINEGTS-RSYS:GET-POWER-REACHED
+$(module_name)-RTST-SRVEXAM.RPV-MON-MBBI    = SINEGTS-RSYS:GET-LLRF-STATE
+$(module_name)-RTST-SRVEXAM.RPV-GET-LI      = SINEGTS-RHLA:MON-RPV-NUM
+$(module_name)-RTST-SRVEXAM.RPV-GET-AI      = SINEGTS-RSYS:GET-BEAM-PHASE
+$(module_name)-RTST-SRVEXAM.RPV-MON-WFI-X   = SINEGTS-RLLE-IOC:TIME-AXIS
+$(module_name)-RTST-SRVEXAM.RPV-GET-WFI     = SINEGTS-RIQM-DCP10:FOR-ADCRAW
+$(module_name)-RTST-SRVEXAM.RPV-MON-SI      = SINEGTS-RHLA:VERSION
+
