@@ -1,0 +1,18 @@
+#==============================================================================
+# ooEpics - C++ framework for EPICS module development
+#
+# Author : Zheqiao Geng, gengzheqiao@126.com
+#
+# Release history:
+# 1.0.0 : 14.11.2023, Zheqiao Geng
+#==============================================================================
+
+1.1.0
+---------------------------------------------------------------
+- Added the code templates and the code generation script
+
+1.0.0
+---------------------------------------------------------------
+- Works with standard EPICS module format
+
+
