@@ -1,11 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // DomainDevice.cc
 //
 // Realization of the basic class for domain device 
-//
-// Created by: Zheqiao Geng, zheqiao.geng@psi.ch
-// Created on: 2013.11.12
-//=========================================================
+//===============================================================
 #include "DomainDevice.h"
 
 using namespace std;

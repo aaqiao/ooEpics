@@ -1,15 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // ooEpicsMisc.h
 //
 // All kinds of constant or macro definitions
-//
-// Created by: Zheqiao Geng, gengzq@slac.stanford.edu
-// Created on: Aug. 31, 2010
-//
-// Modified by: Zheqiao Geng
-// Modified on: Sept. 25, 2010
-// Description: remove the definition of the macro for epicsDataControlBlock creation
-//=========================================================
+//===============================================================
 #ifndef OOEPICSMISC_H
 #define OOEPICSMISC_H
 

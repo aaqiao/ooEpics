@@ -1,39 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // RemotePV.cc
 // 
 // Class definition for the remote PV
-// 
-// Created by: Zheqiao Geng
-// Created on: 12/11/2012
-// Description: Initial creation 
-//
-// Modified by Zheqiao Geng on 2014.04.08
-// Description: updated with the new Channel Access implementation
-// 
-// Modified by Zheqiao Geng on 2014.04.16
-// Description: make the files for PV name mapping more formal
-//
-// Modified by Zheqiao Geng on 2014.05.19
-// Applied macro to the remote PV mapping files
-//
-// Modified by Zheqiao Geng on 02.04.2015
-// Disable the message printing when the action is successful
-//
-// Modified by Andreas Hauff on 16+.11.2015
-// Additional constructor to use it without PV mapping
-//
-// Modified by Zheqiao Geng on 26.11.2015
-// 1. Make the macro settings to PV names in two stages, the mapping
-// file specific macros will be substituted when loading the file, 
-// and the general macros tends to be used for dynamic remote PV 
-// connection will be substituted in the function dedicated for macro
-// mapping.
-// 2. Extend the function to print the remote PV mapping details
-//
-// Modified by Zheqiao Geng on 14.12.2015
-// Fixed the problem for empty global macros for remote PV mapping;
-// Added more choices for remote PV list printing
-//=========================================================
+//===============================================================
 #include "RemotePV.h"
 
 using namespace std;

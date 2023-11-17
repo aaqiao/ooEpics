@@ -1,22 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // LocalPV.cc
 // 
 // Class definition for the local PV
-// 
-// Created by: Zheqiao Geng
-// Created on: 12/11/2012
-// Description: Initial creation 
-// 
-// Modified by: Zheqiao Geng
-// Modified on: 12/16/2012
-// Description: Add the function to support point numbers and callback functions
-//
-// Modified by Andreas Hauff on 16.11.2016
-// Added EPICS data type oldString
-//
-// Modified by Zheqiao Geng on 21.03.2016
-// Extended the implementation to provide the possibility with internal data buffers
-//=========================================================
+//===============================================================
 #include "LocalPV.h"
 
 //******************************************************

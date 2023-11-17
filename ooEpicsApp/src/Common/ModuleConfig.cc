@@ -1,14 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // ModuleConfig.cc
 //
 // Realization of the basic class for device config
-//
-// Created by: Zheqiao Geng, gengzq@slac.stanford.edu
-// Created on: Sept. 24, 2010
-//
-// Modified by Zheqiao Geng on 2014.04.02
-// Description: Change the name from DeviceConfig to ModuleConfig
-//=========================================================
+//===============================================================
 #include "ModuleConfig.h"
 #include "ModuleManager.h"                    
 

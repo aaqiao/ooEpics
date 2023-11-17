@@ -1,13 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // MessageLogs.cc
 //
 // Basic class for logging messages
-//
-// Created by Zheqiao Geng (zheqiao.geng@psi.ch) on 2014.06.02
-//
-// Modified by Zheqiao Geng on 27.02.2015
-// Added lock to protect the buffer
-//=========================================================
+//===============================================================
 #include "MessageLogs.h"
 
 using namespace std;

@@ -1,11 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // ControlDevice.cc
 //
 // Realization of the basic class for control device 
-//
-// Created by: Zheqiao Geng, zheqiao.geng@psi.ch
-// Created on: 2013.11.12
-//=========================================================
+//===============================================================
 #include "ControlDevice.h"
 
 using namespace std;

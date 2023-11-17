@@ -1,12 +1,13 @@
-/****************************************************
+/***************************************************************************
+ *  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+ *  All rights reserved.
+ *  Authors: Zheqiao Geng
+ ***************************************************************************/
+/***************************************************************************
  * InternalData_iocShell.c
  * 
  * Define ioc shell commands
- *
- * Created by: Zheqiao Geng, gengzq@slac.stanford.edu
- * Created on: 2011.06.30
- * Description: Initial creation
- ****************************************************/
+ ***************************************************************************/
 #include <epicsTypes.h>
 #include <epicsExport.h>
 #include <iocsh.h>

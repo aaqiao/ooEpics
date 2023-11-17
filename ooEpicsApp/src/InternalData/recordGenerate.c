@@ -1,15 +1,13 @@
-/****************************************************
+/***************************************************************************
+ *  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+ *  All rights reserved.
+ *  Authors: Zheqiao Geng
+ ***************************************************************************/
+/***************************************************************************
  * recordGenerate.c
  * 
  * Source file for generating record from the internal data node
- *
- * Created by: Zheqiao Geng, gengzq@slac.stanford.edu
- * Created on: 2011.06.30
- * Description: Initial creation
- *
- * Modified by Zheqiao Geng on 2014.09.27
- * Introduced sub module name. make the module name also as a substitution
- ****************************************************/
+ ***************************************************************************/
 #include "recordGenerate.h"
 
 void INTD_RECORD_AO(const char *datName, const char *subModName, const char *recName, const char *scanMethod, const char *unitStr, const char *descStr, unsigned int precVal, const char *aliasStr, const char *asgStr, char *outStr)

@@ -1,10 +1,10 @@
-##########################################################
-# Makefile
-# 
-# Makefile for ooEpics module
-# 
-# Created by Zheqiao Geng (gengzheqiao@126.com) on 26.05.2016
-##########################################################
+##############################################################
+#  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+#  All rights reserved.
+#  Authors: Zheqiao Geng
+#
+#  Makefile for ooEpics module
+##############################################################
 TOP=../..
 
 include $(TOP)/configure/CONFIG

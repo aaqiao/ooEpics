@@ -1,30 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // LocalPV.h
 // 
 // Class definition for the local PV
-// 
-// Created by: Zheqiao Geng
-// Created on: 12/11/2012
-// Description: Initial creation 
-// 
-// Modified by: Zheqiao Geng
-// Modified on: 12/16/2012
-// Description: Add the function to support point numbers and callback functions
-//
-// Modified by: Zheqiao Geng
-// Modified on: 2013.11.13
-// Description: 1. Use the epicsTypes to make the code adaptable to both 32-bit and 64-bit machines
-//              2. Implement the localPV to support the I/O interrupt scanning, event and mutex
-//
-// Modified by Andreas Hauff on 16.11.2015
-// Added EPICS data type oldString
-//
-// Modified by Zheqiao Geng on 21.03.2016
-// Extended the implementation to provide the possibility with internal data buffers
-//
-// Modified by Zheqiao Geng on 08.08.2016
-// For the setValue function, add another implementation for BI allowing alarm generation
-//=========================================================
+//===============================================================
 #ifndef LOCALPV_H
 #define LOCALPV_H
 

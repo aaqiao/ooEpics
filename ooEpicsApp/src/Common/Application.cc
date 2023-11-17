@@ -1,10 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // Application.cc
 //
 // Realize the basic class for the Application 
-//
-// Created by Zheqiao Geng (zheqiao.geng@psi.ch) on 2014.04.10
-//=========================================================
+//===============================================================
 #include "Application.h"
 
 using namespace std;

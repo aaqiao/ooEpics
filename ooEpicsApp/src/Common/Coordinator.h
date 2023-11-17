@@ -1,16 +1,17 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // Coordinator.h
 //
 // Basic class for coordinator for job execution
-//
-// Created by Zheqiao Geng (zheqiao.geng@psi.ch) on 29.09.2015
-//
-// Modified by Zheqiao Geng on 14.04.2016
-// Updated the event implementation according to the FSM base class
-//=========================================================
+//===============================================================
 #ifndef COORDINATOR_H
 #define COORDINATOR_H
-#include <iostream>
+
+#include <iostream>
 #include <fstream>
 
 #include <string.h>

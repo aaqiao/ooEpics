@@ -1,15 +1,13 @@
-/****************************************************
+/***************************************************************************
+ *  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+ *  All rights reserved.
+ *  Authors: Zheqiao Geng
+ ***************************************************************************/
+/***************************************************************************
  * recordGenerate.h
  * 
  * Header file for generating record from the internal data node
- *
- * Created by: Zheqiao Geng, gengzq@slac.stanford.edu
- * Created on: 2011.06.30
- * Description: Initial creation
- *
- * Modified by Zheqiao Geng on 30.09.2016
- * Added the description string and display precision
- ****************************************************/
+ ***************************************************************************/
 #ifndef RECORD_GENERATE_H
 #define RECORD_GENERATE_H
 

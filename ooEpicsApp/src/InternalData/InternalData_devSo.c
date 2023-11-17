@@ -1,14 +1,13 @@
-/****************************************************
+/***************************************************************************
+ *  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+ *  All rights reserved.
+ *  Authors: Zheqiao Geng
+ ***************************************************************************/
+/***************************************************************************
  * InternalData_devSo.c
  *
  * Device support for stringout record
- *
- * Created by Zheqiao Geng on 10.03.2015
- * Initial creation. Modified from the devSoSoft.c from the EPICS base
- *
- * Modified by Zheqiao Geng on 16.03.2016
- * Use INST_IO link to pass the string for internal data node
- ****************************************************/
+ ***************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

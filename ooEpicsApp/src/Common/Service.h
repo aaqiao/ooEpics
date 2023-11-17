@@ -1,11 +1,14 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // Service.h
 //
 // Basic class for the Service. The Service normally collect the data and processing algorithms for a device
 // in the applications. So it defines more the remote PVs 
-//
-// Created by Zheqiao Geng (zheqiao.geng@psi.ch) on 2014.04.10
-//=========================================================
+//===============================================================
 #ifndef SERVICE_H
 #define SERVICE_H
 
@@ -31,7 +34,8 @@ class Service
 public:
     Service(const char *moduleName, const char *serviceName);
    ~Service();
-    char modName[OOEPICS_NAMESTR_LEN];              // name of the module
+
+    char modName[OOEPICS_NAMESTR_LEN];              // name of the module
     char srvName[OOEPICS_NAMESTR_LEN];              // name of the service
 };
 

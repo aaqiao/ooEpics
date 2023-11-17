@@ -1,25 +1,14 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // ChannelAccess.cc
 //
-// Basic class for Channel Access. This is an OO version of the Channel Access routines
-//
-// Created by: Zheqiao Geng, gengzq@slac.stanford.edu
-// Created on: Jan. 03, 2011
-//
-// Modified by: Zheqiao Geng
-// Modified on: Jan. 04, 2011
-// Description: add the function to put value
-//
-// Modified by: Zheqiao Geng
-// Modified on: Jan. 06, 2011
-// Description: add the flag for data access status
-//
-// Modified by Zheqiao Geng on 2014.04.07
-// Description: redesign the CA object to use call back functions
-//
-// Modified by Zheqiao Geng on 02.04.2015
-// Disable the message printing when the action is successful
-//=========================================================
+// Basic class for Channel Access. This is an OO version of the 
+// Channel Access routines
+//===============================================================
 #include "ChannelAccess.h"
 
 using namespace std;

@@ -1,11 +1,14 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // ControlDevice.h
 //
-// Basic class for the instrumentation device insterted by the control system for control purpose. 
-//
-// Created by: Zheqiao Geng, zheqiao.geng@psi.ch
-// Created on: 2013.11.12
-//=========================================================
+// Basic class for the instrumentation device insterted by the 
+// control system for control purpose. 
+//===============================================================
 #ifndef CONTROLDEVICE_H
 #define CONTROLDEVICE_H
 

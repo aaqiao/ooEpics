@@ -1,4 +1,9 @@
-/****************************************************
+/***************************************************************************
+ *  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+ *  All rights reserved.
+ *  Authors: Zheqiao Geng
+ ***************************************************************************/
+/***************************************************************************
  * EPICSLib_wrapper.h
  * 
  * Here is the EPICS wrapper for all EPICS functions
@@ -6,7 +11,7 @@
  * Created by: Zheqiao Geng, gengzq@slac.stanford.edu
  * Created on: 2011.07.07
  * Description: Initial creation
- ****************************************************/
+ ***************************************************************************/
 #ifndef EPICSLIB_WRAPPER_H
 #define EPICSLIB_WRAPPER_H
 

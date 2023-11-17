@@ -1,44 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // RemotePV.h
 // 
 // Class definition for the remote PV
-// 
-// Created by: Zheqiao Geng
-// Created on: 12/11/2012
-// Description: Initial creation 
-// 
-// Modified by: Zheqiao Geng
-// Modified on: 2013.11.14
-// Description: 1. Redesign the RemotePVList class
-//              2. Update the data type definition for adpating both the 32-bit and 64-bit machines
-//
-// Modified by Zheqiao Geng on 2014.04.08
-// Description: updated with the new Channel Access implementation
-//
-// Modified by Zheqiao Geng on 2014.05.19
-// Applied macro to the remote PV mapping files
-//
-// Modified by Zheqiao Geng on 28.09.2015
-// Enable dynamic changes of the macros during operation, change the two functions of
-//      int  getPVNameList(string fileName, string macros);
-//      int  mapPVNodeNames();
-// to
-//      int  getPVNameList(string fileName);
-//      int  mapPVNodeNames(string macros);
-// which means, the macro will be only substituted when mapping the remote PV nodes
-//
-// Modified by Zheqiao Geng on 30.09.2015
-// Added the function to provide counter for:
-//   - Remote PVs
-//   - Remote PVs successfully mapped
-//   - Remtoe PVs successfully connected
-//
-// Modified by Andreas Hauff on 16+.11.2015
-// Additional constructor to use it without PV mapping
-//
-// Modified by Zheqiao Geng on 15.12.2015
-// Added in prtPVNodeList function to have more choices for printing
-//=========================================================
+//===============================================================
 #ifndef REMOTEPV_H
 #define REMOTEPV_H
 

@@ -1,16 +1,17 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // MessageLogs.h
 //
 // Basic class for logging messages
-//
-// Created by Zheqiao Geng (zheqiao.geng@psi.ch) on 2014.06.02
-//
-// Modified by Zheqiao Geng on 17.12.2015
-// Changed the implementation to have a 2D char array for saving the message
-//=========================================================
+//===============================================================
 #ifndef MESSAGE_LOGS_H
 #define MESSAGE_LOGS_H
-#include <iostream>
+
+#include <iostream>
 #include <fstream>
 
 #include <string.h>

@@ -1,46 +1,14 @@
-/****************************************************
+/***************************************************************************
+ *  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+ *  All rights reserved.
+ *  Authors: Zheqiao Geng
+ ***************************************************************************/
+/***************************************************************************
  * InternalData.h
  * 
  * Header file for the InternalData module
  * This module acts as the isolation layer between EPICS records and inernal code
- *
- * Created by: Zheqiao Geng, gengzq@slac.stanford.edu
- * Created on: 2011.05.17
- * Description: Initial creation
- *              To be done: Define an interrupt I/O scanning list and API so that the user code could be
- *                able to trigger the scanning of specified records
- *
- * Modified by: Zheqiao Geng
- * Modified on: 2011.06.07
- * Description: Introduce the I/O interrupt scanning
- *
- * Modified by: Zheqiao Geng
- * Modified on: 2/7/2013
- * Description: allow to specify the path for saving the files
- *
- * Modified by Zheqiao Geng on 2014.05.20
- * Upgrade the API for database generateion and add the API for request file and list file gen.
- * Input supplementary string into the data node for bi,bo,mbbi,mbbi strings
- *
- * Modified by Zheqiao Geng on 2014.06.02
- * Added "volatile" keyword for the data pointer (dataPtr)
- *
- * Modified by Zheqiao Geng on 2014.09.27
- * Add optional sub-module name to make up the PV names
- *
- * Modified by Zheqiao Geng on 2015.04.24
- * Added the unit string in the PVs
- *
- * Modified by Andreas Hauff on 16.11.2015
- * Added epicsOldString as data type
- *
- * Modified by Zheqiao Geng on 18.12.2015
- * Added the function to generate save/restore request file and archiver conf file with different
- * module name string
- *
- * Modified by Zheqiao Geng on 30.09.2015
- * Added the function for PV description and display precision
- ****************************************************/
+ ***************************************************************************/
 #ifndef INTERNAL_DATA_H
 #define INTERNAL_DATA_H
 

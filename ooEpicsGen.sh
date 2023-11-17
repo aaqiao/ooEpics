@@ -1,15 +1,16 @@
 #!/bin/bash
-
+#####################################################################
+#  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+#  All rights reserved.
+#  Authors: Zheqiao Geng
+#####################################################################
 # -------------------------------------------------------------------
 # Generate the template of ooEpics based modules
 # 
 # Input arguments:
 #     - Module name
-#
 # Pre-definition:
 #     $OOEPICS_TEMPLATE_PATH    : path to contain the ooEpics template
-#
-# Author: Zheqiao Geng (gengzheqiao@126.com)
 # -------------------------------------------------------------------
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

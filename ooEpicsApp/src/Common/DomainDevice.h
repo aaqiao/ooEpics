@@ -1,11 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // DomainDevice.h
 //
 // Basic class for the physical device in a specific domain that need to be finally controlled 
-//
-// Created by: Zheqiao Geng, zheqiao.geng@psi.ch
-// Created on: 2013.11.12
-//=========================================================
+//===============================================================
 #ifndef DOMAINDEVICE_H
 #define DOMAINDEVICE_H
 

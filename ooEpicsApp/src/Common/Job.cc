@@ -1,10 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // Job.cc
 //
 // Basic class for a job for applications. This corresponding to a procedure
-//
-// Created by Zheqiao Geng (zheqiao.geng@psi.ch) on 2014.05.22
-//=========================================================
+//===============================================================
 #include "Job.h"
 
 using namespace std;

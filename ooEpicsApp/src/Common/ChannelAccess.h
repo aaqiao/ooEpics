@@ -1,31 +1,17 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // ChannelAccess.h
 //
 // Basic class for Channel Access. This is an OO version of the Channel Access routines
-//
-// Created by: Zheqiao Geng, gengzq@slac.stanford.edu
-// Created on: Jan. 03, 2011
-//
-// Modified by: Zheqiao Geng
-// Modified on: Jan. 04, 2011
-// Description: add the function to put value
-//
-// Modified by: Zheqiao Geng
-// Modified on: Jan. 06, 2011
-// Description: add the flag for data access status
-// 
-// Modified by Zheqiao Geng on 2014.04.02
-// Description: redesign the channel access to use the advance feather of CA library
-//
-// Modified by Zheqiao Geng on 23.03.2016
-// The following updates:
-//  - PV name passed by string
-//  - Read time stamp and alarm info
-//  - Provide function to do datatype conversion
-//=========================================================
+//===============================================================
 #ifndef CHANNELACCESS_H
 #define CHANNELACCESS_H
-#include <iostream>
+
+#include <iostream>
 #include <fstream>
 
 #include <string.h>

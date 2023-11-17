@@ -1,30 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // ModuleManager.cc
 //
 // Realization of the class for device manager
-//
-// Created by: Zheqiao Geng, gengzq@slac.stanford.edu
-// Created on: Sept. 24, 2010
-//
-// Modified by: Zheqiao Geng
-// Modified on: Jan 08, 2011
-// Description: add the routine for finding device instance
-//
-// Modified by: Zheqiao Geng
-// Modified on: Feb 04, 2011
-// Description: add the functionality for internal data loop up table
-//
-// To be done: Full exception handling for input parameters...
-//
-// Modified by Zheqiao Geng on 2014.04.02
-// Description: Change the name from DeviceManager to ModuleManager
-//
-// Modified by Zheqiao Geng on 2014.04.10
-// Description: Added the applications in parallel to the ControlDevice and DomainDevice
-//
-// Modified by Zheqiao Geng on 2014.05.19
-// Changed the interface of setModule allowing more data passed by a command
-//=========================================================
+//===============================================================
 #include "epicsTypes.h"
 #include "epicsExport.h"
 #include "iocsh.h"

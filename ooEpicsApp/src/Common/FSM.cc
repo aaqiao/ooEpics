@@ -1,13 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // FSM.cc
 //
 // Basic class for finit state machine and the states
-//
-// Created by Zheqiao Geng (zheqiao.geng@psi.ch) on 2014.04.09
-//
-// Modified by Zheqiao Geng on 2014.05.25
-// Added object of jobs
-//=========================================================
+//===============================================================
 #include "FSM.h"
 
 using namespace std;

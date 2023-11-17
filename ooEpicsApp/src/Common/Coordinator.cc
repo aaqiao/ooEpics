@@ -1,10 +1,13 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // Coordinator.cc
 //
 // Implementation of base class of Coordinator
-//
-// Created by Zheqiao Geng (zheqiao.geng@psi.ch) on 29.09.2015
-//=========================================================
+//===============================================================
 #include "Coordinator.h"
 
 using namespace std;

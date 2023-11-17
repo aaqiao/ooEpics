@@ -1,19 +1,13 @@
-/****************************************************
+/***************************************************************************
+ *  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+ *  All rights reserved.
+ *  Authors: Zheqiao Geng
+ ***************************************************************************/
+/***************************************************************************
  * InternalData_devWf.c
  *
  * Device support for waveform record
- *
- * Created by: Zheqiao Geng, gengzq@slac.stanford.edu
- * Created on: 2011.05.20
- * Description: Initial creation. Modified from the devWfSoft.c from the EPICS base
- *
- * Modified by: Zheqiao Geng
- * Modified on: 2011.06.10
- * Description: Add the functionality to write waveform
- *
- * Modified by Zheqiao Geng on 16.03.2016
- * Use INST_IO link to pass the string for internal data node
- ****************************************************/
+ ***************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

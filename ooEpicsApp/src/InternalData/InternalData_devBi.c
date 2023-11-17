@@ -1,15 +1,13 @@
-/****************************************************
+/***************************************************************************
+ *  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+ *  All rights reserved.
+ *  Authors: Zheqiao Geng
+ ***************************************************************************/
+/***************************************************************************
  * InternalData_devBi.c
  *
  * Device support for Bi record
- *
- * Created by: Zheqiao Geng, gengzq@slac.stanford.edu
- * Created on: 2011.06.22
- * Description: Initial creation. Modified from the devBiSoft.c from the EPICS base
- *
- * Modified by Zheqiao Geng on 16.03.2016
- * Use INST_IO link to pass the string for internal data node
- ****************************************************/
+ ***************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

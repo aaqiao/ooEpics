@@ -1,53 +1,14 @@
-/****************************************************
+/***************************************************************************
+ *  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+ *  All rights reserved.
+ *  Authors: Zheqiao Geng
+ ***************************************************************************/
+/***************************************************************************
  * InternalData.c
  * 
  * Header file for the InternalData module
  * This module acts as the isolation layer between EPICS records and inernal code
- *
- * Created by: Zheqiao Geng, gengzq@slac.stanford.edu
- * Created on: 2011.05.17
- * Description: Initial creation
- *
- * Modified by: Zheqiao Geng
- * Modified on: 2/7/2013
- * Description: allow to specify the path for saving the files
- *
- * Modified by: Zheqiao Geng
- * Modified on: 4/29/2013
- * Description: Change the code to be adaptable to 64bit Linux (use epicsTypes.h)
- * 
- * Modified by Zheqiao Geng (zheqiao.geng@psi.ch) on 2014.04.15
- * Description: In callback functions, pass directly the private pointer, not the whole data node
- *
- * Modified by Zheqiao Geng on 2014.05.20
- * Upgrade the API for database generateion and add the API for request file and list file gen.
- * Input supplementary string into the data node for bi,bo,mbbi,mbbi strings
- *
- * Modified by Zheqiao Geng on 2014.06.02
- * In function of INTD_API_syncWithRecords, use scanOnce to replace the dbProcess for safety
- *
- * Modified by Zheqiao Geng on 2014.09.27
- * Add optional sub-module name to make up the PV names
- *
- * Modified by Zheqiao Geng on 2015.04.22
- * Added the function to clean up the memory when EPICS exits
- *
- * Modified by Zheqiao Geng on 2015.04.27
- * Added the parameter setting limit and alarm limit into the save/restore and archiver file
- *
- * Modified by Andreas Hauff on 16.11.2015
- * Added epicsOldString as data type
- *
- * Modified by Zheqiao Geng on 25.11.2015
- * Extended the length of the buffers for record string in the function to generate database
- *
- * Modified by Zheqiao Geng on 09.03.2016
- * Changed the archiver configuration file "MONITOR" to "Monitor". Later need to pass the string
- * from external world instead of hard coding
- *
- * Modified by Zheqiao Geng on 12.10.2018
- * Updated the output PV archiver method from "Monitor Monitor Monitor" to "None None Monitor"
- ****************************************************/
+ ***************************************************************************/
 #include <dbAccess.h>					/* there is conflicts in db_access.h (used by cadef.h) and dbFldTypes.h for the DBR_xxx definitions. So only use dbAccess.h locally */
 #include "InternalData.h"
 #include "recordGenerate.h"

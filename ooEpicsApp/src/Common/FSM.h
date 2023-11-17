@@ -1,39 +1,17 @@
-//=========================================================
+//===============================================================
+//  Copyright (c) 2023 by Paul Scherrer Institute, Switzerland
+//  All rights reserved.
+//  Authors: Zheqiao Geng
+//===============================================================
+//===============================================================
 // FSM.h
 //
 // Basic class for finit state machine and the states
-//
-// Created by Zheqiao Geng (zheqiao.geng@psi.ch) on 2014.04.09
-//
-// Modified by Zheqiao Geng on 2014.04.15
-// Description: user pure virtual functions
-//
-// Modified by Zheqiao Geng on 2014.05.25
-// Added object of jobs
-// 
-// Modified by Zheqiao Geng on 2014.05.30
-// The state contains pointer of the owner FSM to execute the jobs in the FSM
-//
-// Modified by Zheqiao Geng on 2014.06.13
-// Implement the message queue for the FSMEvent class. Later need to add exception handling
-//
-// Modified by Zheqiao Geng on 19.02.2016
-// Added to the event the option only use event; delete the transient function from the FSM
-//
-// Modified by Zheqiao Geng on 22.03.2016
-// Simplified the event implementation
-//
-// Modified by Zheqiao Geng on 12.04.2016
-//  - Added the function of delay in the state class
-//  - The entry time of a state will be record when the entry() function is executed
-//  - Moved the event function all to the base class of the FSM
-//
-// Modified by Zheqiao Geng on 13.04.2016
-// Implemented a timer in the FSM to be sure there are events sent for withDelay checking
-//=========================================================
+//===============================================================
 #ifndef FSM_H
 #define FSM_H
-#include <iostream>
+
+#include <iostream>
 #include <fstream>
 
 #include <string.h>
