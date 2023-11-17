@@ -36,3 +36,6 @@ Follow the steps below to compile the `ooEpics` code as a standard EPICS module:
    ```
 4. Now the module code has been generated, to compile it, you need to edit the `[module-name]/configure/RELEASE` to assign the correct paths of `EPICS_BASE` and `OOEPICS`.
 
+## Disclaimer
+The `ooEpics` module (including the codes and documents in this repository) comes with absolutely NO warranty. The author of the `ooEpics` module does not take any responsibility for any data loss, damage to equipments, or personnel injury that may result from the use of the `ooEpics` module.
+
