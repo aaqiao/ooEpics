@@ -36,6 +36,15 @@ Follow the steps below to compile the `ooEpics` code as a standard EPICS module:
    ```
 4. Now the module code has been generated, to compile it, you need to edit the `[module-name]/configure/RELEASE` to assign the correct paths of `EPICS_BASE` and `OOEPICS`.
 
-## Disclaimer
-The `ooEpics` module (including the codes and documents in this repository) comes with absolutely NO warranty. The author of the `ooEpics` module does not take any responsibility for any data loss, damage to equipments, or personnel injury that may result from the use of the `ooEpics` module.
+## Disclaimer (see the **LICENSE** file)
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
