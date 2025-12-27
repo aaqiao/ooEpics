@@ -1,6 +1,6 @@
-# Class Documentation for `src/Common`
+# Class Documentation for `ooEpicsApp/src/Common`
 
-This document provides detailed documentation for the C++ classes in the `src/Common` directory of the `ooEpics` project.
+This document provides detailed documentation for the C++ classes in the `ooEpicsApp/src/Common` directory of the `ooEpics` project.
 
 ## 1. Application (`Application.h`)
 **Namespace:** `OOEPICS`
@@ -106,11 +106,16 @@ Object-Oriented wrapper for EPICS Channel Access routines.
   - **Description**: Gets waveform data, converting locally to the requested type one by one.
 
 - `int getConnected()`
+  - **Description**: Gets CA connection status (1 for connected).
 - `int getCAStatus()`
+  - **Description**: Gets CA status defined in EPICS `cadef.h` (https://docs.epics-controls.org/projects/base/en/latest/cadef_h.html). 
 - `epicsTimeStamp getTimeStamp()`
+  - **Description**: Gets the timestamp of the remote PV. The format follows the definitions in https://docs.epics-controls.org/projects/base/en/latest/epicsTime_h.html.
 - `void getTimeStampStr(char *tsStr)`
+  - **Description**: Gets the timestamp string of the remote PV in the format of `%a %b %d %Y %H:%M:%S.%f`.
 - `epicsInt16 getAlarmStatus()`
 - `epicsInt16 getAlarmSeverity()`
+  - **Description**: Gets the alarm status/severity defined in EPICS base dbStatic\alarm.h
 - `unsigned long getRPVElemCount()`
   - **Description**: Accessors for status, timestamp, alarm info, and element count.
 
@@ -448,3 +453,4 @@ Class definition for a Local Process Variable.
 #### Methods
 - `Service(const char *moduleName, const char *serviceName)`
 - `~Service()`
+
