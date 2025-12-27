@@ -107,15 +107,20 @@ Object-Oriented wrapper for EPICS Channel Access routines.
 
 - `int getConnected()`
   - **Description**: Gets CA connection status (1 for connected).
+
 - `int getCAStatus()`
   - **Description**: Gets CA status defined in EPICS `cadef.h` (https://docs.epics-controls.org/projects/base/en/latest/cadef_h.html). 
+
 - `epicsTimeStamp getTimeStamp()`
   - **Description**: Gets the timestamp of the remote PV. The format follows the definitions in https://docs.epics-controls.org/projects/base/en/latest/epicsTime_h.html.
+
 - `void getTimeStampStr(char *tsStr)`
   - **Description**: Gets the timestamp string of the remote PV in the format of `%a %b %d %Y %H:%M:%S.%f`.
+
 - `epicsInt16 getAlarmStatus()`
 - `epicsInt16 getAlarmSeverity()`
   - **Description**: Gets the alarm status/severity defined in EPICS base dbStatic\alarm.h
+
 - `unsigned long getRPVElemCount()`
   - **Description**: Accessors for status, timestamp, alarm info, and element count.
 
@@ -127,8 +132,9 @@ Object-Oriented wrapper for EPICS Channel Access routines.
     - `contextCtrl`: `CA_SINGLE_THREAD` or `CA_MULTIPLE_THREAD`.
 - `~ChannelAccessContext()`
 - `int attachCurrentThread()`
-  - **Description**: Attaches the current thread to this CA context.
+  - **Description**: Attaches the current (caller's) thread to this CA context.
 - `int displayStatus()`
+  - **Description**: Displays the CA context status.
 
 ---
 
