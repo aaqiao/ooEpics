@@ -105,27 +105,27 @@ The ooEpicsApp framework consists of four distinct layers:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│          Layer 4: System Management                       │
-│  ModuleManager, ModuleConfig, ChannelAccess, etc.        │
+│          Layer 4: System Management                     │
+│  ModuleManager, ModuleConfig, ChannelAccess, etc.       │
 └─────────────────────┬───────────────────────────────────┘
                       │
 ┌─────────────────────┴───────────────────────────────────┐
-│          Layer 3: Application Framework                   │
-│  Application, Service, Job, Coordinator, FSM              │
+│          Layer 3: Application Framework                 │
+│  Application, Service, Job, Coordinator, FSM            │
 └─────────────────────┬───────────────────────────────────┘
                       │
 ┌─────────────────────┴───────────────────────────────────┐
-│          Layer 2: Device Abstraction                     │
-│  ControlDevice, DomainDevice, LocalPV, RemotePV          │
+│          Layer 2: Device Abstraction                    │
+│  ControlDevice, DomainDevice, LocalPV, RemotePV         │
 └─────────────────────┬───────────────────────────────────┘
                       │
 ┌─────────────────────┴───────────────────────────────────┐
-│          Layer 1: EPICS Record Layer                      │
-│  InternalData (C API), INTD_struc_node                   │
+│          Layer 1: EPICS Record Layer                    │
+│  InternalData (C API), INTD_struc_node                  │
 └─────────────────────┬───────────────────────────────────┘
                       │
               ┌───────┴───────┐
-              │   EPICS IOC    │
+              │   EPICS IOC   │
               │   Database    │
               └───────────────┘
 ```
@@ -136,164 +136,348 @@ The ooEpicsApp framework consists of four distinct layers:
 
 ### Main Class Relationships
 
-```
-┌──────────────────────┐
-│    Application       │
-│----------------------│
-│ - name[]             │
-└──────────────────────┘
-         ▲
-         │
-         │ uses
-         │
-┌──────────────────────┐
-│   ControlDevice      │
-│----------------------│
-│ - name[]             │
-└──────────────────────┘         ┌──────────────────────┐
-         ▲                        │   DomainDevice      │
-         │                        │----------------------│
-         │                        │ - name[]             │
-         │                        └──────────────────────┘
-         │                                   ▲
-         │                                   │
-         │                        ┌──────────┴──────────┐
-         │                        │                     │
-┌────────┴────────┐      ┌────────┴────────┐  ┌────────┴────────┐
-│   LocalPV       │      │   RemotePV      │  │    Service      │
-└─────────────────┘      └─────────────────┘  └─────────────────┘
-         │                        │
-         │                        │
-         │                        ▼
-         │              ┌─────────────────┐
-         │              │ ChannelAccess   │
-         │              └─────────────────┘
-         │
-         ▼
-┌────────────────────────┐
-│   InternalData (C API) │
-└────────────────────────┘
+```mermaid
+classDiagram
+    class Application {
+        +char name[128]
+        +Application(appName*)
+        +~Application()
+    }
+    
+    class ControlDevice {
+        +char name[128]
+        +ControlDevice(deviceName*)
+        +~ControlDevice()
+    }
+    
+    class DomainDevice {
+        +char name[128]
+        +DomainDevice(deviceName*)
+        +~DomainDevice()
+    }
+    
+    class Service {
+        +char modName[128]
+        +char srvName[128]
+        +Service(moduleName*, serviceName*)
+        +~Service()
+    }
+    
+    class LocalPV {
+        -INTD_struc_node* node
+        +init(...)
+        +getValueFloat64() double
+        +setValue(dataIn) int
+        +forceOPVValue(dataPtr*) int
+        +forcePVProcess() int
+        +raiseAlarm(nsta, nsevr) int
+    }
+    
+    class RemotePV {
+        +string pvLocalIdStr
+        +string pvNameStr
+        -ChannelAccess* pvCAChannel
+        +init(...)
+        +createCA(...)
+        +isConnected() int
+        +getValueFloat64() double
+        +caWriteRequestVal(dataIn) int
+    }
+    
+    class ChannelAccess {
+        -char pvName[256]
+        -chid channelID
+        -CA_enum_readCtrl rdCtrl
+        -CA_enum_writeCtrl wtCtrl
+        -void* dataBufRead
+        -void* dataBufMonitor
+        +connect()
+        +caReadRequest() int
+        +caWriteRequestVal(dataIn) int
+        +getValueFloat64() double
+        +getConnected() int
+    }
+    
+    class InternalData {
+        <<C API>>
+        +createDataNode(...) INTD_struc_node*
+        +findDataNode(...) INTD_struc_node*
+        +getData(...) int
+        +putData(...) int
+        +genRecord(...) int
+    }
+    
+    Application --> ControlDevice : uses
+    ControlDevice --> DomainDevice : uses
+    ControlDevice --> LocalPV : uses
+    DomainDevice --> LocalPV : uses
+    Service --> RemotePV : uses
+    RemotePV --> ChannelAccess : wraps
+    LocalPV --> InternalData : uses
 ```
 
 ### Module Management Classes
 
-```
-┌──────────────────────┐       ┌──────────────────────┐
-│   ModuleManager      │<>────│  ModuleInstance      │
-│----------------------│       │----------------------│
-│ - moduleInstanceList │       │ - moduleTypeName[]   │
-│ - mutex              │       │ - moduleName[]       │
-│----------------------│       │ - ctlDevice*         │
-│ + moduleInstanceReg()│       │ - domDevice*         │
-│ + createModule()     │       │ - app*               │
-│ + initModule()       │       └──────────────────────┘
-│ + setModule()        │                ▲
-│ + getModuleInstance()│                │
-└──────────────────────┘                │ uses
-         ▲                             │
-         │                     ┌────────┴────────┐
-         │                     │   ModuleConfig  │
-         │                     │------------------│
-         │                     │ + moduleCreate() │
-         │                     │ + moduleInit()   │
-         │                     │ + moduleSet()    │
-         │                     └─────────────────┘
-         │
-┌────────┴────────┐
-│  ModuleType     │
-│-----------------│
-│ - moduleTypeName[]
-│ - modConfig*     │
-└─────────────────┘
+```mermaid
+classDiagram
+    class ModuleManager {
+        -ELLLIST moduleInstanceList
+        -epicsMutex moduleInstanceListMutex
+        +moduleInstanceRegister(...)
+        +createModule(...)
+        +initModule(moduleName*)
+        +setModule(moduleName*, cmd*, data**)
+        +getModuleInstance(moduleName*) ModuleInstance*
+        +printModuleType()
+        +printModuleList()
+    }
+    
+    class ModuleInstance {
+        +ELLNODE node
+        +char moduleTypeName[128]
+        +char moduleName[128]
+        +int moduleCategory
+        +ControlDevice* ctlDevice
+        +DomainDevice* domDevice
+        +Application* app
+    }
+    
+    class ModuleConfig {
+        <<abstract>>
+        -char typeName[128]
+        +moduleCreate(...) int*
+        +moduleInit(module*) int*
+        +moduleSet(module*, cmd*, data**) int*
+    }
+    
+    class ModuleType {
+        +ELLNODE node
+        +char moduleTypeName[128]
+        +ModuleConfig* modConfig
+    }
+    
+    ModuleManager *-- ModuleInstance : manages
+    ModuleType --> ModuleConfig : uses
+    ModuleInstance --> ModuleConfig : uses
+    ModuleInstance --> ControlDevice : contains
+    ModuleInstance --> DomainDevice : contains
+    ModuleInstance --> Application : contains
 ```
 
 ### FSM Framework Classes
 
-```
-┌──────────────────────┐
-│        FSM           │
-│----------------------│
-│ - stateSet[]         │
-│ - curState*          │
-│ - preState*          │
-│ - defaultState*      │
-│ - jobSet[]           │
-│ - var_event          │
-│----------------------│
-│ + executeFSM()       │
-│ + registerState()    │
-│ + initCurrentState() │
-│ + setDefaultState()  │
-│ + registerJob()      │
-│ + executeJob()       │
-│ + sendEvent()        │
-│ + waitEvent()        │
-└──────────────────────┘
-         ▲
-         │
-         │ manages
-         │
-┌────────┴────────┐         ┌──────────────────────┐
-│     State       │         │       Job             │
-│----------------│         │----------------------│
-│ - stateCode     │         │ - modName[]           │
-│ - sourceStateCode        │ - jobName[]           │
-│ - destStateCode         │ - jobEnabled          │
-│ - entryTime     │         │----------------------│
-│----------------│         │ + enableJob()         │
-│ + entry()       │         │ + enableJobExt()     │
-│ + do_activity() │         │ + execute()           │
-│ + exit()        │         └──────────────────────┘
-│ + printState()  │
-│ + setSourceStateCode()
-│ + setDestStateCode()
-└─────────────────┘
+```mermaid
+classDiagram
+    class FSM {
+        -State* stateSet[256]
+        -State* curState
+        -State* preState
+        -State* defaultState
+        -Job* jobSet[256]
+        -FSMEvent var_event
+        -epicsTimerQueueId var_timerQueue
+        -epicsTimerId var_timer
+        +executeFSM() int
+        +registerState(state*, stateCode) int
+        +initCurrentState(stateCode, sel) int
+        +setDefaultState(stateCode) int
+        +getCurrentStateCode() int
+        +registerJob(job*, jobCode)
+        +executeJob(jobCode, flag) int
+        +sendEvent()
+        +sendEvent(eventCode, cmd, subCmd)
+        +waitEvent()
+        +waitEvent(eventCode*, cmd*, subCmd*)
+    }
+    
+    class State {
+        <<abstract>>
+        -char stateName[256]
+        -int stateCode
+        -int sourceStateCode
+        -int destStateCode
+        -double entryTime
+        -double timeExpectEvent
+        +entry() int*
+        +do_activity() int*
+        +exit() int*
+        +setSourceStateCode(prevStateCode)
+        +setDestStateCode(nextStateCode)
+        +getStateCode() int
+        +initDelay()
+        +withDelay(timeout) int
+    }
+    
+    class Job {
+        <<abstract>>
+        +char modName[256]
+        +char jobName[256]
+        +short jobEnabled
+        +Job(modName*, jobName*)
+        +enableJob(enabled)
+        +enableJobExt()*
+        +execute(flag) int*
+    }
+    
+    class FSMEvent {
+        -EPICSLIB_type_eventId eventId
+        -EPICSLIB_type_msgQ msgQ
+        -epicsEventWaitStatus status
+        +sendEvent() int
+        +sendEvent(eventCode, cmd, subCmd) int
+        +recvEvent()
+        +recvEvent(eventCode*, cmd*, subCmd*)
+        +recvEventWithTimeout(timeout)
+        +getUnsolvedMsgNum() int
+    }
+    
+    FSM --> State : manages
+    FSM --> Job : manages
+    FSM --> FSMEvent : uses
 ```
 
 ### Channel Access Classes
 
+```mermaid
+classDiagram
+    class ChannelAccess {
+        -char pvName[256]
+        -chid channelID
+        -CA_enum_readCtrl rdCtrl
+        -CA_enum_writeCtrl wtCtrl
+        -CAUSR_CALLBACK connUserCallback
+        -CAUSR_CALLBACK rdUserCallback
+        -CAUSR_CALLBACK wtUserCallback
+        -EPICSLIB_type_mutexId mutexId
+        -EPICSLIB_type_eventId connEvent
+        -EPICSLIB_type_eventId rdEvent
+        -EPICSLIB_type_eventId wtEvent
+        -void* dataBufRead
+        -void* dataBufMonitor
+        +connect()
+        +caReadRequest() int
+        +caWriteRequestVal(dataIn) int
+        +caWriteRequestStr(strIn) int
+        +caWriteRequestWf(dataBufIn*, pointNum) int
+        +getValueInt8() epicsInt8
+        +getValueFloat64() epicsFloat64
+        +getValueString() string
+        +getValues(dataBufOut*, pointNum) int
+        +getConnected() int
+        +getCAStatus() int
+        +getTimeStamp() epicsTimeStamp
+        +getAlarmStatus() epicsInt16
+        +getAlarmSeverity() epicsInt16
+    }
+    
+    class ChannelAccessContext {
+        -struct ca_client_context* caContext
+        -int caContextStatus
+        +attachCurrentThread() int
+        +displayStatus() int
+    }
+    
+    class RemotePV {
+        +string pvLocalIdStr
+        +string pvNameStr
+        -ChannelAccess* pvCAChannel
+        +init(...)
+        +createCA(...) int
+        +deleteCA()
+        +isConnected() int
+        +isOK() int
+        +caReadRequest() int
+        +caWriteRequestVal(dataIn) int
+        +getValueFloat64() double
+        +getValueString() string
+        +getTimeStamp() epicsTimeStamp
+    }
+    
+    RemotePV --> ChannelAccess : wraps
 ```
-┌──────────────────────────────┐
-│    ChannelAccess             │
-│------------------------------│
-│ - pvName[]                   │
-│ - channelID                  │
-│ - rdCtrl                     │
-│ - wtCtrl                     │
-│ - dataBufRead                │
-│ - dataBufMonitor             │
-│------------------------------│
-│ + connect()                  │
-│ + caReadRequest()            │
-│ + caWriteRequestVal()        │
-│ + caWriteRequestStr()        │
-│ + caWriteRequestWf()         │
-│ + getValueInt8()             │
-│ + getValueFloat64()          │
-│ + getValueString()           │
-│ + getValues()                │
-│ + getConnected()             │
-│ + getTimeStamp()             │
-│ + getAlarmStatus()           │
-└──────────────────────────────┘
-             ▲
-             │
-             │ wraps
-             │
-┌────────────┴────────┐       ┌──────────────────────┐
-│  RemotePV            │       │ ChannelAccessContext  │
-│----------------------│       │----------------------│
-│ - pvLocalIdStr        │       │ - caContext          │
-│ - pvNameStr           │       │----------------------│
-│ - pvCAChannel*        │       │ + attachCurrentThread()│
-│----------------------│       │ + displayStatus()    │
-│ + createCA()          │       └──────────────────────┘
-│ + deleteCA()          │
-│ + caReadRequest()     │
-│ + caWriteRequestVal() │
-│ + getValueInt8()      │
-│ + isConnected()       │
-└──────────────────────┘
+
+### Complete System Architecture
+
+```mermaid
+classDiagram
+    class Application {
+        +char name[128]
+    }
+    
+    class ControlDevice {
+        +char name[128]
+    }
+    
+    class DomainDevice {
+        +char name[128]
+    }
+    
+    class Service {
+        +char modName[128]
+        +char srvName[128]
+    }
+    
+    class LocalPV {
+        -INTD_struc_node* node
+    }
+    
+    class RemotePV {
+        -ChannelAccess* pvCAChannel
+    }
+    
+    class ChannelAccess {
+        -chid channelID
+    }
+    
+    class InternalData {
+        <<C API>>
+    }
+    
+    class FSM {
+        -State* curState
+    }
+    
+    class State {
+        -int stateCode
+    }
+    
+    class Job {
+        -short jobEnabled
+    }
+    
+    class Coordinator {
+        -Job* jobSet[256]
+        -FSMEvent var_event
+    }
+    
+    class ModuleManager {
+        -ELLLIST moduleInstanceList
+    }
+    
+    class ModuleConfig {
+        <<abstract>>
+    }
+    
+    class MessageLogs {
+        -char message[32][80]
+    }
+    
+    Application --> ControlDevice : uses
+    Application --> Service : uses
+    ControlDevice --> LocalPV : uses
+    ControlDevice --> RemotePV : uses
+    DomainDevice --> LocalPV : uses
+    Service --> RemotePV : uses
+    LocalPV --> InternalData : wraps
+    RemotePV --> ChannelAccess : wraps
+    FSM --> State : manages
+    FSM --> Job : manages
+    Coordinator --> Job : manages
+    Coordinator --> FSM : uses
+    ModuleManager --> ModuleConfig : manages
+    Application --> ModuleManager : uses
+    ControlDevice --> ModuleManager : uses
+    Service --> MessageLogs : uses
 ```
 
 ---
