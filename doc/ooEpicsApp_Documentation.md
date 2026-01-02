@@ -1,6 +1,6 @@
 # ooEpics Source Code Documentation
 
-**Author:** Generated Documentation (Zheqiao Geng)
+**Author:** Generated Documentation (edited by Zheqiao Geng)
 **Date:** 2026-01-01  
 **Source:** https://github.com/aaqiao/ooEpics
 
@@ -33,7 +33,7 @@ The ooEpics is an Object-Oriented framework for building EPICS Input-Output Cont
 
 ## System Layers
 
-The ooEpics framework consists of four distinct layers:
+The ooEpics framework consists of three distinct layers:
 
 ### Layer 1: EPICS Record Layer (InternalData)
 **Purpose:** Isolation layer between EPICS records and internal code
@@ -51,39 +51,36 @@ The ooEpics framework consists of four distinct layers:
 - Generate autosave request files (.req)
 - Generate archiver configuration files
 
-### Layer 2: Device Abstraction Layer
-**Purpose:** Abstract physical and control devices
+### Layer 2: EPICS Module Layer
+**Purpose:** Abstract EPICS module for control device (instrumentation) control, domain device (physical device) control, and applications (for automations)
 
 **Key Components:**
-- `ControlDevice`: Base class for control system instrumentation
-- `DomainDevice`: Base class for physical devices in specific domains
-- `LocalPV`: OO wrapper for local EPICS PVs
-- `RemotePV`: OO wrapper for remote EPICS PVs via Channel Access
+- `Application`: Base class for high-level applications (top sub-layer)
+- `DomainDevice`: Base class for physical devices in specific domains (middle sub-layer)
+- `ControlDevice`: Base class for control system instrumentation (bottom sub-layer)
+- `Job`: Job class for procedures and tasks (used in all EPICS modules)
+- `Coordinator`: Job execution coordinator (used in all EPICS modules)
+- `FSM`: Finite State Machine framework (used in all EPICS modules)
+- `State`: FSM state base class (used in all EPICS modules)
+- `LocalPV`: OO wrapper for local EPICS PVs (used in all EPICS modules)
+- `Service`: Service class for data collection and processing (mainly used in Application modules)
+- `RemotePV`: OO wrapper for remote EPICS PVs via Channel Access (mainly used in Application modules)
+- `ChannelAccess`: Channel Access wrapper (mainly used in Application modules)
+- `ChannelAccessContext`: CA context management (mainly used in Application modules)
+- `MessageLogs`: Message logging facility (used in all EPICS modules)
 
 **Responsibilities:**
 - Provide device abstraction interfaces
 - Handle both local and remote Process Variables (PVs)
 - Support various data types and record types
 - Manage Channel Access connections
-
-### Layer 3: Application Framework Layer
-**Purpose:** High-level application and service management
-
-**Key Components:**
-- `Application`: Base class for high-level applications
-- `Service`: Service class for data collection and processing
-- `Job`: Job class for procedures and tasks
-- `Coordinator`: Job execution coordinator
-- `FSM`: Finite State Machine framework
-- `State`: FSM state base class
-
-**Responsibilities:**
-- Manage application lifecycle
 - Coordinate job execution
 - Provide state machine capabilities
 - Handle event-driven programming
+- Channel Access context and connection management
+- System-wide logging
 
-### Layer 4: System Management Layer
+### Layer 3: System Management Layer
 **Purpose:** Module and system-level management
 
 **Key Components:**
@@ -91,34 +88,24 @@ The ooEpics framework consists of four distinct layers:
 - `ModuleConfig`: Configuration API for module types
 - `ModuleType`: Module type definition
 - `ModuleInstance`: Module instance definition
-- `ChannelAccess`: Channel Access wrapper
-- `ChannelAccessContext`: CA context management
-- `MessageLogs`: Message logging facility
 
 **Responsibilities:**
 - Module registration and lifecycle management
-- Dynamic module creation
-- Channel Access context and connection management
-- System-wide logging
+- Dynamic module creation and setup
 
 ### Layer Interaction
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│          Layer 4: System Management                     │
-│  ModuleManager, ModuleConfig, ChannelAccess, etc.       │
+│          Layer 3: System Management                     │
+│  ModuleManager, ModuleConfig, etc.                      │
 └─────────────────────┬───────────────────────────────────┘
-                      │
-┌─────────────────────┴───────────────────────────────────┐
-│          Layer 3: Application Framework                 │
-│  Application, Service, Job, Coordinator, FSM            │
-└─────────────────────┬───────────────────────────────────┘
-                      │
-┌─────────────────────┴───────────────────────────────────┐
-│          Layer 2: Device Abstraction                    │
-│  ControlDevice, DomainDevice, LocalPV, RemotePV         │
-└─────────────────────┬───────────────────────────────────┘
-                      │
+                      │                                        ┌─────────────────────────────────────────────────────────┐
+┌─────────────────────┴───────────────────────────────────┐    │         Layer 3.3: Application Module                   │
+│          Layer 2: EPICS Module                          │    │         Layer 3.2: Domain Device Control Module         │
+│ Abstraction of Application, DomainDevice, ControlDevice │<|──│         Layer 3.1: Control Device Control Module        │
+└─────────────────────┬───────────────────────────────────┘    │ Service, Job, Coordinator, FSM, LocalPV, RemotePV, etc. │
+                      │                                        └─────────────────────────────────────────────────────────┘
 ┌─────────────────────┴───────────────────────────────────┐
 │          Layer 1: EPICS Record Layer                    │
 │  InternalData (C API), INTD_struc_node                  │
@@ -414,84 +401,84 @@ classDiagram
 
 ```mermaid
 classDiagram
+    %% Relationships
+    ModuleManager "1" *-- "*" ModuleInstance : manages
+    ModuleInstance --> ModuleConfig : uses
+    ModuleInstance --> ControlDevice : references
+    ModuleInstance --> DomainDevice : references
+    ModuleInstance --> Application : references
+    
+    Application ..> ModuleManager : uses global
+    ControlDevice ..> ModuleManager : uses global
+    DomainDevice ..> ModuleManager : uses global
+    
+    RemotePV *-- ChannelAccess : contains
+    RemotePVList "1" *-- "*" RemotePV : contains
+    RemotePV --> RemotePVList : references
+    
+    FSM "1" *-- "*" State : manages
+    FSM "1" o-- "*" Job : manages
+    FSM *-- FSMEvent : uses
+    
+    Coordinator "1" o-- "*" Job : manages
+    Coordinator *-- FSMEvent : uses
+    
+    %% Class Definitions
     class Application {
-        +char name[128]
+    }
+
+    class ChannelAccess {
     }
     
     class ControlDevice {
-        +char name[128]
-    }
-    
-    class DomainDevice {
-        +char name[128]
-    }
-    
-    class Service {
-        +char modName[128]
-        +char srvName[128]
-    }
-    
-    class LocalPV {
-        -INTD_struc_node* node
-    }
-    
-    class RemotePV {
-        -ChannelAccess* pvCAChannel
-    }
-    
-    class ChannelAccess {
-        -chid channelID
-    }
-    
-    class InternalData {
-        <<C API>>
-    }
-    
-    class FSM {
-        -State* curState
-    }
-    
-    class State {
-        -int stateCode
-    }
-    
-    class Job {
-        -short jobEnabled
     }
     
     class Coordinator {
-        -Job* jobSet[256]
-        -FSMEvent var_event
+        <<Abstract>>
     }
     
-    class ModuleManager {
-        -ELLLIST moduleInstanceList
+    class DomainDevice {
     }
     
-    class ModuleConfig {
-        <<abstract>>
+    class FSM {
+        <<Abstract>>
+    }
+    
+    class State {
+        <<Abstract>>
+    }
+    
+    class FSMEvent {
+    }
+    
+    class Job {
+        <<Abstract>>
+    }
+    
+    class LocalPV {
     }
     
     class MessageLogs {
-        -char message[32][80]
     }
     
-    Application --> ControlDevice : uses
-    Application --> Service : uses
-    ControlDevice --> LocalPV : uses
-    ControlDevice --> RemotePV : uses
-    DomainDevice --> LocalPV : uses
-    Service --> RemotePV : uses
-    LocalPV --> InternalData : wraps
-    RemotePV --> ChannelAccess : wraps
-    FSM --> State : manages
-    FSM --> Job : manages
-    Coordinator --> Job : manages
-    Coordinator --> FSM : uses
-    ModuleManager --> ModuleConfig : manages
-    Application --> ModuleManager : uses
-    ControlDevice --> ModuleManager : uses
-    Service --> MessageLogs : uses
+    class ModuleConfig {
+        <<Abstract>>
+    }
+    
+    class ModuleManager {
+    }
+    
+    class ModuleInstance {
+    }
+    
+    class RemotePV {
+    }
+    
+    class RemotePVList {
+    }
+    
+    class Service {
+    }
 ```
 
 ---
