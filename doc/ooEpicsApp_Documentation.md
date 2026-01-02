@@ -1,8 +1,8 @@
-# ooEpicsApp Source Code Documentation
+# ooEpics Source Code Documentation
 
-**Author:** Generated Documentation  
+**Author:** Generated Documentation (Zheqiao Geng)
 **Date:** 2026-01-01  
-**Source:** C:\Aqiao\Code_public\ooEpics\ooEpicsApp\src
+**Source:** https://github.com/aaqiao/ooEpics
 
 ---
 
@@ -19,7 +19,7 @@
 
 ## Architecture Overview
 
-The ooEpicsApp is an Object-Oriented framework for building EPICS Input/Controller (IOC) applications. It provides a layered architecture that separates concerns between EPICS record management, device control, and application logic.
+The ooEpics is an Object-Oriented framework for building EPICS Input-Output Controller (IOC) modules. It provides a layered architecture that separates concerns between EPICS record management, device control, and application logic.
 
 ### Key Design Principles
 
@@ -33,7 +33,7 @@ The ooEpicsApp is an Object-Oriented framework for building EPICS Input/Controll
 
 ## System Layers
 
-The ooEpicsApp framework consists of four distinct layers:
+The ooEpics framework consists of four distinct layers:
 
 ### Layer 1: EPICS Record Layer (InternalData)
 **Purpose:** Isolation layer between EPICS records and internal code
@@ -138,6 +138,15 @@ The ooEpicsApp framework consists of four distinct layers:
 
 ```mermaid
 classDiagram
+    class EPICSModule {
+        <<Container, not in src codes>>
+        +char moduleName[128]
+    }
+
+    class HardwareTranslation {
+        <<Placeholder, not in the src codes>>
+    }
+
     class Application {
         +char name[128]
         +Application(appName*)
@@ -207,10 +216,15 @@ classDiagram
         +genRecord(...) int
     }
     
+    EPICSModule <|-- Application : extends
+    EPICSModule <|-- ControlDevice : extends
+    EPICSModule <|-- DomainDevice : extends
+    EPICSModule --> LocalPV : uses
     Application --> ControlDevice : uses
-    ControlDevice --> DomainDevice : uses
-    ControlDevice --> LocalPV : uses
-    DomainDevice --> LocalPV : uses
+    Application --> DomainDevice : uses
+    Application --> Service : uses
+    DomainDevice --> ControlDevice : uses
+    ControlDevice --> HardwareTranslation : uses
     Service --> RemotePV : uses
     RemotePV --> ChannelAccess : wraps
     LocalPV --> InternalData : uses
